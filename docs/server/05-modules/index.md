@@ -25,10 +25,8 @@ Luotopia Server 采用模块化单体架构，以下是各核心领域的详细�
 ## 2. 系统支撑模块
 - **[基础设施 (`internal/platform`)](./platform/index.md)**: 
     包含数据库审计日志、缓存服务、Prometheus 指标监控等核心底座。
-- **[通用服务 (`internal/services`)](./services/index.md)**: 
-    跨模块的 AI 翻译/摘要、全文检索接口及异步任务处理中心。
 - **[系统管理 (`internal/system`)](./system.md)**: 
     App 版本管控、远程动态配置及推送设备管理。
 
 ---
-[⬅️ 返回目录](../index.md) | [🏠 返回主库](../../README.md)
+[⬅️ 返回目录](../index.md)
