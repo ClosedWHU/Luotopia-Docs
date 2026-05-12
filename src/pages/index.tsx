@@ -14,7 +14,7 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/">
+            to="/">
             开始查阅文档 - 5min ⏱️
           </Link>
         </div>
@@ -39,7 +39,7 @@ export default function Home(): JSX.Element {
                 基于 Go 语言构建的模块化单体后端。提供 OIDC 身份认证、
                 课程评价引擎、全文搜索及各类校园服务代理。
               </p>
-              <Link to="/docs/server/">查看后端文档 &raquo;</Link>
+              <Link to="/server/">查看后端文档 &raquo;</Link>
             </div>
             <div className="col col--6">
               <h3>客户端 (Client)</h3>
@@ -47,7 +47,7 @@ export default function Home(): JSX.Element {
                 基于 Flutter 开发的跨平台移动端应用。提供极致的 UI/UX 体验，
                 完美对接 Luotopia 生态各项功能。
               </p>
-              <Link to="/docs/client/">查看客户端文档 &raquo;</Link>
+              <Link to="/client/">查看客户端文档 &raquo;</Link>
             </div>
           </div>
         </div>

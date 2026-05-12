@@ -41,6 +41,7 @@ const config: Config = {
       'classic',
       {
         docs: {
+          routeBasePath: '/', // Serve the docs at the site's root
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -89,11 +90,11 @@ const config: Config = {
           items: [
             {
               label: '概览',
-              to: '/docs/',
+              to: '/',
             },
             {
               label: '服务端',
-              to: '/docs/server/',
+              to: '/server/',
             },
           ],
         },
