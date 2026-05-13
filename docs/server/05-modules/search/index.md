@@ -46,12 +46,11 @@ LIMIT 20;
 
 ## 5. 性能优化
 
-- **GIN 索引**: 为搜索字段创建 GIN 索引，查询速度 <50ms
- - **GIN 索引**: 为搜索字段创建 GIN 索引，查询速度 &lt;50ms
+- **GIN 索引**: 为搜索字段创建 GIN 索引，查询速度 &lt;50ms
 - **缓存**: 热门搜索结果缓存 5 分钟
 - **分页**: 强制限制单次查询结果数量（最多100）
 
-详见 [全文搜索引擎](./search_engine.md)、[搜索索引](./indexing.md) 和 [性能调优](../performance_tuning.md)
+详见 [全文搜索引擎](../services/search_engine.md)、[搜索索引](./indexing.md) 和 [性能调优](../../performance_tuning.md)
 
 ---
 
