@@ -1,14 +1,13 @@
-# 本地开发环境搭建 (Local Development Setup)
+# 本地开发环境搭建
 
 本指南将帮助你从零开始搭建 Luotopia Server 的开发环境。
 
-## 1. 前置要求 (Prerequisites)
+## 1. 前置要求
 - **Go**: v1.22+
-- **PostgreSQL**: v14+
-- **Redis**: v6+
-- **Meilisearch**: (可选，用于全文检索)
+- **PostgreSQL**: v14+ （必需，用于数据存储和全文检索）
+- **Redis**: v6+ （必需，用于缓存和任务队列）
 
-## 2. 快速开始 (Quick Start)
+## 2. 快速开始
 
 ### 2.1 克隆仓库
 ```bash
@@ -43,6 +42,17 @@ go run cmd/main.go serve
   air
   ```
 
-## 4. 常见问题 (Troubleshooting)
+## 4. 开发实战：新增一个接口
+
+遵循以下步骤在 Luotopia Server 中增加一个新的业务接口：
+
+1.  **定义模型**: 在对应模块的 `model/` 目录下定义 Request/Response 结构体，并添加 JSON 标签。
+2.  **编写业务逻辑**: 在 `repo/` 或 `service/` 中实现具体逻辑。
+3.  **注册路由**: 
+    - 使用 Huma 的 `huma.Register` 方法。
+    - 定义 `Method`, `Path`, `Summary` 及 `Security` 权限。
+4.  **运行校验**: 启动服务后访问 `/docs` 确认 OpenAPI 文档已自动更新。
+
+## 5. 常见问题
 - **连接超时**: 检查防火墙是否允许访问 PostgreSQL (5432) 和 Redis (6379) 端口。
 - **JWT 错误**: 确保 `config.json` 中的 `jwt_secret` 长度符合安全要求。

@@ -1,4 +1,4 @@
-# 论坛治理与规则 (Forum Governance)
+# 论坛治理与规则
 
 本模块定义了论坛的权力结构、用户行为准则及自动化惩罚机制。
 
@@ -24,7 +24,7 @@
 - **审核 (Review)**: 达到 `DownvoteNumReview`，帖子进入 `PendingReview` 状态，标记为待审。
 - **隐藏 (Hide)**: 达到 `DownvoteNumHide`，帖子对普通用户不可见，需管理员手动恢复。
 
-### 2.2 联合惩罚 (Joint Punishment)
+### 2.2 联合惩罚
 - **阈值**: `JointPunishThreshold`。
 - **逻辑**: 如果一个用户在短时间内有多篇帖子被自动隐藏，系统会自动将其账号设为“限制”状态或清空其邀请码配额。
 

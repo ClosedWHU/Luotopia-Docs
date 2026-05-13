@@ -1,4 +1,4 @@
-# 国际化与翻译服务 (Internationalization)
+# 国际化与翻译服务
 
 Luotopia Server 支持多语言环境，主要通过 `internal/platform/translation` 提供服务。
 
@@ -48,3 +48,14 @@ msg := t.T("zh-CN", "errors.user_not_found")
 1. 在 `dicts/` 目录下创建或修改 JSON 文件。
 2. 确保所有翻译文件的层级结构保持一致。
 3. 如果涉及到动态参数（如 "用户 %s 不存在"），请在翻译字符串中使用 `%s` 并配合 `fmt.Sprintf` 使用。
+
+## 5. 实战：新增一种语言
+
+1.  **创建文件**: 在 `internal/platform/translation/dicts/` 下创建新的 JSON 文件（如 `ja-JP.json`）。
+2.  **填充内容**: 复制 `zh-CN.json` 的结构并翻译所有 Value。
+3.  **注册语言**: 在 `translation.go` 的 `SupportedLanguages` 列表中添加 `ja-JP`。
+4.  **测试校验**: 调用接口时带上 `?lang=ja-JP` 查看返回的错误信息是否已翻译。
+
+---
+[返回目录](../../index.md)
+

@@ -1,0 +1,8 @@
+{
+  "label": "课程服务",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "包含课程检索、评价系统、给分统计及教务同步等核心教学支撑功能。"
+  }
+}

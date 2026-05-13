@@ -1,12 +1,12 @@
-# 身份认证模块 (Identity Module)
+# 身份认证模块
 
 身份认证模块（原 SSO 项目）是 Luotopia 生态系统的核心，提供基于 OIDC 协议的统一身份管理。
 
 ## 1. 详细子文档
-- **[OIDC 协议实现 (OIDC Implementation)](oidc.md)**: 授权码流、令牌发放及客户端管理。
-- **[账户与配置文件 (Account & Profile)](profile.md)**: 用户注册、资料管理及开发者设置。
-- **[安全与防御 (Security)](security.md)**: 签名校验、Turnstile 集成及 Token 加密。
-- **[租户与三方登录 (Tenant & Social)](tenant.md)**: 多租户隔离及第三方社交账号接入。
+- **[OIDC 协议实现](oidc.md)**: 授权码流、令牌发放及客户端管理。
+- **[账户与配置文件](profile.md)**: 用户注册、资料管理及开发者设置。
+- **[安全与防御](security.md)**: 签名校验、Turnstile 集成及 Token 加密。
+- **[租户与三方登录](tenant.md)**: 多租户隔离及第三方社交账号接入。
 
 ## 2. 目录结构
 ```text

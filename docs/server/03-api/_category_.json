@@ -1,0 +1,8 @@
+{
+  "label": "接口文档",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "认证规范、接口列表及错误码定义。"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "label": "基础设施",
+  "position": 32,
+  "link": {
+    "type": "generated-index",
+    "description": "系统底座功能，包括数据库审计、国际化翻译及中间件管理。"
+  }
+}

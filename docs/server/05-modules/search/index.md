@@ -1,40 +1,57 @@
-# 统一检索服务 (Unified Search)
+# PostgreSQL 全文搜索服务
 
-Luotopia Server 的搜索功能由 `internal/services/search` 提供支持，旨在为用户提供跨模块（课程、帖子、评价）的高性能搜索体验。
+Luotopia Server 的搜索功能由 `internal/services/search` 提供支持，采用 PostgreSQL 的内置全文搜索能力（tsvector/tsquery），为用户提供跨模块（课程、教师、评价、帖子）的高性能搜索体验。
 
 ## 1. 架构设计
 
-搜索服务采用 **策略模式 (Strategy Pattern)**，支持多种检索引擎后端。
+搜索服务采用 **策略模式**，通过统一的 `SearchEngine` 接口封装搜索实现。当前使用 PostgreSQL 作为主要的搜索后端：
 
-- **PgSearch (PostgreSQL)**: 使用 Gin 索引和全文检索功能，适用于小规模数据和开发环境。
-- **Meilisearch**: (可选) 高性能、易集成的全文检索服务，支持模糊匹配和即时搜索。
-- **UnifiedSearchService**: 统一封装上述引擎，提供标准化的检索接口。
+- **PgSearchService**: 基于 PostgreSQL 的 tsvector/tsquery 全文搜索实现
+- **SearchEngine 接口**: 提供标准化的搜索接口
+- **UnifiedSearchService**: 统一入口，管理具体实现的选择
 
-## 2. 搜索范围 (Scope)
+## 2. 搜索范围
 
-- `courses`: 课程名称、老师、学分、课程代码。
-- `reviews`: 评价内容、标签。
-- `forum_posts`: 帖子标题、内容。
-- `global`: 跨上述所有领域的全局搜索。
+| 范围 | 表 | 搜索字段 |
+|-----|-----|--------|
+| `courses` | courses | name, code, department, description |
+| `teachers` | teachers | name, department |
+| `posts` | posts | title, content |
+| `reviews` | reviews | title, content |
 
-## 3. 混合检索策略
+## 3. 全文搜索原理
 
-为了平衡实时性与搜索质量，系统采用以下策略：
+PostgreSQL 通过 tsvector（文本向量）和 tsquery（查询）进行全文搜索：
 
-1. **实时索引**: 数据库记录更新时，通过异步 Worker 同步至 Meilisearch。
-2. **Fallback 机制**: 如果 Meilisearch 不可用，系统会自动降级到 PostgreSQL 的模糊查询或全文检索。
-3. **关联聚合**: 在检索结果返回前，系统会根据权限（如匿名性）对敏感数据进行二次聚合或过滤。
+```sql
+-- 创建 GIN 索引加速搜索
+CREATE INDEX idx_posts_tsvector ON posts USING GIN(
+  to_tsvector('simple', title || ' ' || content)
+);
+
+-- 执行搜索
+SELECT * FROM posts
+WHERE to_tsvector('simple', title || ' ' || content) @@ to_tsquery('simple', 'golang:*')
+LIMIT 20;
+```
 
 ## 4. API 接口规范
 
 统一搜索接口支持以下参数：
 
-- `query`: 关键词。
-- `limit`/`offset`: 分页参数。
-- `filters`: 领域特定的过滤器（如课程年份、标签）。
-- `highlight`: 是否对匹配关键词进行高亮标记。
+- `q` 或 `query`: 搜索关键词
+- `scope`: 搜索范围（courses、teachers、posts、reviews、all）
+- `limit`/`offset`: 分页参数
+- 其他过滤参数：根据scope动态支持（如 department、semester等）
 
-## 5. 性能与索引
+## 5. 性能优化
 
-- **异步同步**: 使用任务队列处理索引同步，避免阻塞主业务流程。
-- **权重控制**: 可以针对不同字段配置搜索权重（如标题权重高于内容）。
+- **GIN 索引**: 为搜索字段创建 GIN 索引，查询速度 <50ms
+- **缓存**: 热门搜索结果缓存 5 分钟
+- **分页**: 强制限制单次查询结果数量（最多100）
+
+详见 [全文搜索引擎](./search_engine.md)、[搜索索引](./indexing.md) 和 [性能调优](../performance_tuning.md)
+
+---
+
+[返回目录](../index.md)

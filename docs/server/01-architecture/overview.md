@@ -1,4 +1,4 @@
-# 系统架构概览 (System Architecture Overview)
+# 系统架构概览
 
 Luotopia Server 采用 **模块化单体 (Modular Monolith)** 架构，旨在平衡开发效率与系统的可维护性。
 
@@ -7,7 +7,7 @@ Luotopia Server 采用 **模块化单体 (Modular Monolith)** 架构，旨在平
 - **显式依赖**: 模块间通过定义的 Service 接口或基础库进行通信，严禁循环依赖。
 - **底座统一**: 所有的基础设施（数据库、缓存、监控）由 `internal/platform` 统一管理。
 
-## 2. 系统组件图 (Component Diagram)
+## 2. 系统组件图
 
 ```mermaid
 graph TD

@@ -1,4 +1,4 @@
-# 可观测性与监控 (Observability)
+# 可观测性与监控
 
 Luotopia Server 内置了全面的监控体系，通过 Prometheus 收集多维度的性能指标。
 
@@ -39,7 +39,7 @@ scrape_configs:
       - targets: ['localhost:9090']
 ```
 
-## 4. 日志审计 (Audit Logging)
+## 4. 日志审计
 除了 Prometheus 指标，系统还提供：
 - **操作日志**: 存储在数据库 `admin_logs` 表，记录所有管理行为。
 - **结构化日志**: 使用 `zap` 输出 JSON 格式日志，便于接入 ELK/Loki。

@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Luotopia Docs',
+  title: 'Luotopia 文档',
   tagline: '整合校园服务，构建开源生态',
   favicon: 'img/favicon.ico',
 
@@ -25,8 +25,8 @@ const config: Config = {
   organizationName: 'ClosedWHU', // Usually your GitHub org/user name.
   projectName: 'Luotopia', // Usually your repo name.
 
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'throw',
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -63,9 +63,8 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'Luotopia Docs',
+      title: 'Luotopia 文档',
       logo: {
-        alt: 'Luotopia Logo',
         src: 'img/logo.svg',
       },
       items: [

@@ -1,4 +1,4 @@
-# OIDC 协议实现 (OIDC Implementation)
+# OIDC 协议实现
 
 本模块实现了标准的 OpenID Connect 1.0 协议，支持第三方应用安全接入 Luotopia。
 

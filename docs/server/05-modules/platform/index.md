@@ -1,12 +1,13 @@
-# 基础设施与平台底座 (Platform Infrastructure)
+# 基础设施与平台底座
 
 `internal/platform` 模块是整个系统的基石，提供了所有业务模块共享的基础能力。
 
 ## 1. 核心子文档
 - **[数据库与 ORM](../../01-architecture/overview.md)**: 数据库连接池、GORM 配置及实体建模。
-- **[可观测性](../../04-deployment/monitoring.md)**: Prometheus 指标、健康检查及日志审计。
+- **[日志与审计](./logging.md)**: 基于 Zap 的结构化日志规范与管理员审计。
 - **[国际化服务](./translation.md)**: 多语言字典加载与 Fallback 逻辑。
-- **[安全机制](../../01-architecture/security_policy.md)**: 认证、鉴权、签名校验及防御策略。
+- **[可观测性](../../04-deployment/monitoring.md)**: Prometheus 指标采集与健康检查。
+- **[安全机制](../../01-architecture/security_policy.md)**: 认证、鉴权及防御策略。
 
 ## 2. 核心功能点
 - **配置管理**: 基于 `config.json` 的全局配置中心。

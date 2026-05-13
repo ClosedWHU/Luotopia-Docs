@@ -4,9 +4,9 @@
 
 ---
 
-## 1. 账号与认证 (Identity & Auth)
+## 1. 账号与认证
 
-### 1.1 用户注册 (User Register)
+### 1.1 用户注册
 - **端点**: `POST /api/v1/user/register`
 - **说明**: 注册新账号。
 - **请求体 (Body)**:
@@ -20,7 +20,7 @@
   - `1001`: 输入格式不规范（如用户名太短）。
   - `409`: 用户名或邮箱已存在。
 
-### 1.2 用户登录 (User Login)
+### 1.2 用户登录
 - **端点**: `POST /api/v1/user/login`
 - **说明**: 使用账号密码登录。
 - **请求体 (Body)**:
@@ -30,13 +30,13 @@
 - **错误码**:
   - `401`: 用户名或密码错误。
 
-### 1.3 武大 SSO 单点登录 (WHU SSO)
+### 1.3 武大 SSO 单点登录
 - **开始 SSO**: `GET /api/v1/user/sso/start?provider=whu`
   - 返回 `{ "url": "..." }`，客户端需引导用户跳转至该 URL。
 - **回调**: `GET /api/v1/user/sso/callback`
   - 后端自动处理授权码并建立会话。
 
-### 1.4 设备注册 (Device Registration)
+### 1.4 设备注册
 - **端点**: `POST /api/v1/devices/register`
 - **认证**: Bearer Token
 - **请求体 (Body)**:
@@ -46,21 +46,21 @@
 
 ---
 
-## 2. 课程与评价 (Course & Review)
+## 2. 课程与评价
 
-### 2.1 搜索课程 (Search)
+### 2.1 搜索课程
 - **端点**: `GET /api/v1/search/courses`
 - **参数 (Query)**: `q` (关键词), `page`, `limit`。
 - **返回**: 课程分页列表。
 
-### 2.2 评价管理 (Review Management)
+### 2.2 评价管理
 - **获取评价**: `GET /api/v1/courses/{course_uid}/reviews`
 - **提交评价**: `POST /api/v1/reviews`
   - `Body`: `course_uid`, `teacher_uid`, `title`, `content`, `rating` (1-5), `is_anonymous`。
 - **点赞/踩**: `POST /api/v1/reviews/{uid}/interact`
   - `Body`: `type` (1: 点赞, -1: 点踩, 0: 取消)。
 
-### 2.3 成绩统计 (Grades)
+### 2.3 成绩统计
 - **提交成绩**: `POST /api/v1/course/grades/submit`
   - `Body`: `course_uid`, `total_score`, `usual_score`, `exam_score`, `semester`, `year`。
 - **查看统计**: `GET /api/v1/course/grades/stats/{course_uid}?teacher_uid=...`
@@ -68,9 +68,9 @@
 
 ---
 
-## 3. 校园助手 (Campus Services)
+## 3. 校园助手
 
-### 3.1 空闲教室 (Empty Classroom)
+### 3.1 空闲教室查询
 - **端点**: `GET /api/v1/classrooms/empty`
 - **参数 (Query)**:
   - `campus`: 文理学部 (Main), 信息学部 (Information) 等。
@@ -78,17 +78,17 @@
   - `day_of_week` (1-7), `section` (1-13), `week` (周次)。
 - **返回**: 可用教室列表。
 
-### 3.2 课表同步 (Timetable Sync)
+### 3.2 课表同步
 - **我的课表**: `GET /api/v1/timetable/me`
 - **手动同步**: `POST /api/v1/timetable/sync`
   - 触发后，后端会异步从教务系统抓取。
 
-### 3.3 图书馆查询 (Library Proxy)
+### 3.3 图书馆查询
 - **端点**: `GET /api/v1/campus/library/search?keyword=...`
 
 ---
 
-## 4. 学习资料 (Learning Materials)
+## 4. 学习资料
 
 ### 4.1 搜索与获取
 - **搜索**: `GET /api/v1/materials/search?course_uid=...&q=...`
@@ -101,21 +101,21 @@
 
 ---
 
-## 5. 社区论坛 (Forum)
+## 5. 社区论坛
 
-### 5.1 帖子操作 (Posts)
+### 5.1 帖子操作
 - **获取列表**: `GET /api/v1/forum/posts?category=...&page=...`
 - **发布帖子**: `POST /api/v1/forum/posts`
   - `Body`: `title`, `content`, `category`, `tags`。
 - **帖子详情**: `GET /api/v1/forum/posts/{uid}`
 
-### 5.2 评论 (Comments)
+### 5.2 评论
 - **获取评论**: `GET /api/v1/forum/posts/{uid}/comments`
 - **发布评论**: `POST /api/v1/forum/posts/{uid}/comments`
 
 ---
 
-## 6. 系统与公共接口 (System)
+## 6. 系统与公共接口
 
 ### 6.1 健康检查与配置
 - **健康状态**: `GET /health`
@@ -124,7 +124,7 @@
 
 ---
 
-## 7. 错误码全集 (Error Codes)
+## 7. 错误码全集
 
 | 错误码 | 描述 |
 | :--- | :--- |

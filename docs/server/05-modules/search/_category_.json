@@ -1,0 +1,8 @@
+{
+  "label": "统一搜索",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "基于 PostgreSQL tsvector/tsquery 的全文搜索服务，提供跨模块的高性能检索。"
+  }
+}
