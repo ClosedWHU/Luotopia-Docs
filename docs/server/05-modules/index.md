@@ -1,3 +1,7 @@
+---
+slug: /server/05-modules/
+---
+# 模块详解
 # 模块说明
 
 Luotopia Server 采用模块化单体架构，以下是各核心领域的详细说明：

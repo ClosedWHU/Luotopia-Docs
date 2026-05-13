@@ -1,4 +1,7 @@
 # 论坛模块
+---
+slug: /server/05-modules/forum/
+---
 
 [返回模块总览](./index.md)
 

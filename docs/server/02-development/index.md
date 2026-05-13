@@ -1,5 +1,9 @@
 # 开发指南
 
+---
+slug: /server/02-development/
+---
+
 本章节汇总 Luotopia Server 的开发相关文档，包含环境搭建、测试与贡献指南。
 
 - [本地开发环境搭建](./setup.md)

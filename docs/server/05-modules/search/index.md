@@ -1,4 +1,7 @@
 # PostgreSQL 全文搜索服务
+---
+slug: /server/05-modules/search/
+---
 
 Luotopia Server 的搜索功能由 `internal/services/search` 提供支持，采用 PostgreSQL 的内置全文搜索能力（tsvector/tsquery），为用户提供跨模块（课程、教师、评价、帖子）的高性能搜索体验。
 

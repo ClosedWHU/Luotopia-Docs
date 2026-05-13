@@ -1,4 +1,7 @@
 # 身份认证模块
+---
+slug: /server/05-modules/identity/
+---
 
 身份认证模块（原 SSO 项目）是 Luotopia 生态系统的核心，提供基于 OIDC 协议的统一身份管理。
 
