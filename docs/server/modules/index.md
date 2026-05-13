@@ -1,6 +1,6 @@
 ---
 slug: /server/modules/
-id: server/modules-compat
+id: server-modules-compat
 ---
 
 # 模块索引（兼容路径）
