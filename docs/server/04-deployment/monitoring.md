@@ -21,7 +21,7 @@ Luotopia Server 内置了全面的监控体系，通过 Prometheus 收集多维�
 
 ### 2.3 业务指标
 - **课程业务**: `business_courses_total`, `business_reviews_total`, `business_users_total`。
-- **搜索服务**: 不同引擎（PgSearch/Meili）的搜索耗时及结果计数。
+- **搜索服务**: PostgreSQL 全文搜索（PgSearch）的查询耗时及结果计数。
 - **翻译服务**: 翻译请求量、源/目标语言分布。
 
 ### 2.4 系统与安全

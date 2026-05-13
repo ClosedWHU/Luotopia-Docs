@@ -13,15 +13,17 @@ Provider 是 Riverpod 中的核心概念，用于声明一段逻辑和其产生�
 - **自动刷新**: 当依赖变化时，自动重新计算值
 - **完全类型安全**: 支持完整的类型推断
 
-### 对比 Bloc
+### 与其他模式的比较（仅供参考）
 
-| 特性 | Bloc | Riverpod |
-|-----|------|---------|
-| 定义状态 | Event → Bloc → State | 直接 Provider |
-| 代码行数 | 3 个文件（Event、State、Bloc） | 1 个文件 |
-| 依赖管理 | 手动注入 | 自动注入和缓存 |
-| 异步处理 | Stream、Future 混合 | FutureProvider、StreamProvider |
-| 学习曲线 | 中等 | 低 |
+> 本项目实际使用 `flutter_riverpod` 作为唯一的状态管理库。下表仅为对比参考，帮助读者理解 Riverpod 与其他常见模式（如 Bloc）的差异。
+
+| 特性 | 典型 Bloc 实现 | Riverpod |
+|-----|----------------|---------|
+| 定义状态 | Event → Bloc → State | 直接 Provider/StateNotifier |
+| 代码组织 | 需要定义 Event/State/Bloc 多个文件 | 更少文件，逻辑集中在 Provider/Notifier |
+| 依赖管理 | 通常手动注入或使用 DI | `ref.watch`/`ref.read` 自动管理依赖 |
+| 异步处理 | 使用 Streams/Futures | 提供 `FutureProvider`/`StreamProvider` 等一等抽象 |
+| 学习曲线 | 中等 | 低-中 |
 
 ## 2. Provider 类型详解
 
