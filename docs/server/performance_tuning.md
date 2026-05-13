@@ -450,4 +450,4 @@ echo "GET http://localhost:8080/api/v1/posts" | vegeta attack -duration=30s -rat
 
 ---
 
-[返回开发指南](../02-development/index.md)
+[返回开发指南](./02-development/index.md)
