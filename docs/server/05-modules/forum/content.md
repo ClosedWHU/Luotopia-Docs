@@ -23,7 +23,7 @@
 - 标签检索通过 GORM 的 `@>` (jsonb 包含) 操作符优化。
 
 ## 3. 缓存策略
-为了应对高并发，内容检索深度依赖 Redis：
+为了应对高并发，内容检索主要依赖 Redis 缓存：
 - **Tags 缓存**: 每个板块的标签列表会被缓存。
 - **Key 命名**: `forum:tags:board:{boardID}`。
 - **失效机制**: 当有新标签创建或删除时，调用 `cache.DeletePattern("forum:tags:*")` 全局清理。

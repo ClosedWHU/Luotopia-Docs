@@ -26,14 +26,16 @@ Luotopia Server 提供基于 RESTful 风格的 API 接口，并使用 [Huma v2](
 ### 2.3 SSO 会话
 - 仅限于支持 OIDC 的客户端跳转。
 
-## 3. 交互式文档
+## 3. 自动化 API 文档 (Huma)
 
-Luotopia Server 内置了交互式 API 文档，您可以在本地启动服务后访问：
+Luotopia Server 采用 **Huma v2** 框架，其核心优势是“代码即文档”。所有接口的输入输出模型、参数校验及认证要求均通过 Go 代码中的强类型结构体定义。
 
-- **OpenAPI UI**: [http://localhost:8080/docs](http://localhost:8080/docs)
-- **Scalar UI**: [http://localhost:8080/scalar](http://localhost:8080/scalar)
+系统会自动根据这些定义生成符合 OpenAPI 3.0 规范的交互式文档。您可以在服务器运行状态下通过以下端点进行在线调试：
 
-在这些页面上，您可以直接在线测试接口并查看详细的 Request/Response 结构。
+- **Huma Docs (Swagger UI)**: `http://localhost:8080/docs`
+- **OpenAPI Spec**: `http://localhost:8080/openapi.json`
+
+在调试界面中，您可以点击 "Try it out" 直接发起真实请求，并实时查看符合 Huma 类型约束的 JSON 响应。
 
 ## 4. 速率限制
 - 默认限制: 100 次请求 / 分钟 (按 IP)。

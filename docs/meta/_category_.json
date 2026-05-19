@@ -1,0 +1,9 @@
+{
+  "label": "项目规范与社区",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "slug": "/community",
+    "description": "了解 Luotopia 的文档编写规范、代码贡献要求及社区治理原则。"
+  }
+}

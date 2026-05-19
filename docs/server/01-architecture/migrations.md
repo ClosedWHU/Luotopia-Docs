@@ -1,4 +1,9 @@
-# 数据库迁移指南
+---
+title: 数据库迁移
+slug: migrations
+---
+
+# 数据库迁移 (Migrations)
 
 Luotopia Server 使用 GORM 的 `AutoMigrate` 功能实现全自动的模式 (Schema) 迁移，确保数据库结构始终与代码中的模型定义保持同步。
 

@@ -3,7 +3,7 @@
 本指南将帮助你搭建 Luotopia Flutter 客户端的开发环境。
 
 ## 1. 前置要求
-- **Flutter SDK**: v3.19.x (Stable)
+- **Flutter SDK**: v3.10+
 - **Dart**: v3.3+
 - **IDE**: VS Code (推荐) 或 Android Studio
 - **包管理器**: `flutter pub`

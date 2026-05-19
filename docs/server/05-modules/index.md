@@ -13,10 +13,6 @@ Luotopia Server 采用模块化单体架构，以下是各核心领域的详细�
     基于 OIDC 协议的统一身份中心，支持多租户、社交登录及高强度安全策略。
 - **[课程业务汇总 (`internal/course`)](./course/index.md)**: 
     包含课程检索、评价系统及给分统计等核心支撑能力。
-- **[课程评价系统 (`internal/course`)](./course/review.md)**: 
-    学生对课程质量的感性描述与量化评分。
-- **[课程给分统计 (`internal/course`)](./course/course_grades.md)**: 
-    匿名的真实给分提交与绩点分布聚合统计。
 - **[即时通讯 (`internal/chat`)](./chat.md)**: 
     支持用户间的私聊、消息推送与在线状态管理。
 - **[课表模块 (`internal/timetable`)](./timetable.md)**: 
@@ -30,13 +26,21 @@ Luotopia Server 采用模块化单体架构，以下是各核心领域的详细�
 - **[空闲教室 (`internal/classroom`)](./classroom.md)**: 
     多校区、多维度的实时教室可用性查询。
 - **[校园代理层 (`internal/campus`)](./campus_proxies.md)**: 
-    整合图书馆、体育场馆、天气服务及校车查询的统一桥接层。
+    整合图书馆、体育场馆及校车查询的统一桥接层。
+- **[天气模块 (`internal/weather`)](./campus_proxies.md#3-天气服务-weather)**: 
+    独立的实时天气服务，为校园页提供精准的珞珈山气象信息。
 
 ## 3. 系统支撑模块
+- **[搜索服务 (`internal/search`)](./search/index.md)**: 
+    统一搜索接口，支持课程、帖子、用户及资料的跨模块检索。
+- **[管理后台 (`internal/admin`)](./admin.md)**: 
+    供管理员使用的控制台逻辑，包含用户管控、内容审核、系统配置修改。
 - **[消息通知 (`internal/notification`)](./notification.md)**: 
     支持系统公告、业务通知及第三方推送（如 FCM）。
 - **[基础设施 (`internal/platform`)](./platform/index.md)**: 
     包含数据库审计日志、缓存服务、Prometheus 指标监控等核心底座。
+- **[第三方服务集成 (`internal/services`)](./services/index.md)**: 
+    封装 AI (LLM)、搜索、翻译等外部能力的统一适配层。
 - **[系统管理 (`internal/system`)](./system.md)**: 
     App 版本管控、远程动态配置及推送设备管理。
 

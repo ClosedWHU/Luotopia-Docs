@@ -3,6 +3,7 @@
   "position": 1,
   "link": {
     "type": "generated-index",
+    "slug": "/architecture",
     "description": "了解 Luotopia Server 的模块化单体设计原则、数据库建模及安全策略。"
   }
 }

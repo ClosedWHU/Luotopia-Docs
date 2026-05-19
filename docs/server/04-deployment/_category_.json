@@ -3,6 +3,7 @@
   "position": 4,
   "link": {
     "type": "generated-index",
-    "description": "配置中心详解、监控与审计日志说明。"
+    "slug": "/deployment",
+    "description": "Docker 化、配置中心、CI/CD 及监控运维说明。"
   }
 }

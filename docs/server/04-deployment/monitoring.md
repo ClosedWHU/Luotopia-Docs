@@ -39,7 +39,37 @@ scrape_configs:
       - targets: ['localhost:9090']
 ```
 
-## 4. 日志审计
-除了 Prometheus 指标，系统还提供：
-- **操作日志**: 存储在数据库 `admin_logs` 表，记录所有管理行为。
-- **结构化日志**: 使用 `zap` 输出 JSON 格式日志，便于接入 ELK/Loki。
+## 4. 深度监控指标规范 (Deep Monitoring Specifications)
+ 
+Luotopia 的监控体系深入关键业务链路，由 `MonitoringManager` 统一调度。
+ 
+### 4.1 核心性能指标
+- **数据库查询耗时 (`db_query_duration_seconds`)**: 
+    - 标签: `operation` (读/写/更新/删除), `table` (posts/users 等)。
+    - **实现价值**: 该指标支持精准定位特定业务表的操作瓶颈，为数据库索引优化提供量化依据。
+- **缓存命中率 (`cache_operations_total`)**: 
+    - 标签: `type` (redis/memory), `hit` (true/false)。
+    - **分析价值**: 实时监测缓存效率，及时预警缓存穿透或大 Key 导致的性能抖动。
+ 
+### 4.2 外部服务与异步链路
+- **外部 API 延迟 (`external_api_call_duration_seconds`)**: 
+    - 标签: `service` (Gemini/OpenAI), `endpoint`。
+    - **监控价值**: 实时观测第三方 AI 接口及校园网关代理的可用性与延迟波动。
+- **异步任务积压**: 监控 Worker 队列的入队/出队速率，防止高并发场景下 AI 预审等异步任务发生严重积压。
+ 
+### 4.3 监控采集机制
+系统采用 **Pull + Push** 结合的混合采集模式：
+1. **主动埋点**: 在 Service 与 Repository 层通过 `RecordDatabaseQuery` 实时捕捉低时延操作。
+2. **定时轮询**: `MonitoringManager` 定期汇总静态业务统计（如总用户数、待审申请数）。
+3. **资源隔离**: 监控模块通过 `internal/platform/monitoring` 独立管理其指标库，确保监控逻辑的异常不会干扰核心业务链路。
+
+## 5. 常见问题 (FAQ)
+
+**Q: 如何在 Grafana 中可视化这些数据？**
+A: 我们在 `deployment/monitoring/grafana/` 目录下提供了预定义的 Dashboard 模板，您可以直接导入。
+
+**Q: 开启全量监控是否会显著降低系统性能？**
+A: 不会。Prometheus 指标的更新在内存中完成，仅涉及简单的计数器或直方图累加操作，对业务逻辑的 CPU 开销占比小于 0.5%。
+
+---
+[返回目录](../index.md)

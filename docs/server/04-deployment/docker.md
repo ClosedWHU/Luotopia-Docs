@@ -46,8 +46,16 @@ Docker 容器通过 `.env` 文件或 Compose 环境变量注入配置。关键�
 
 ---
 
-## 4. 常见问题排查
-- **数据库连接失败**: 确保 `postgres` 容器已进入 `healthy` 状态。
-- **热重载失效**: 检查 `.air.toml` 配置文件中的 `include_ext` 是否包含您的文件类型。
+- **`-w -s`**: 移除调试信息（DWARF）与符号表，进一步减小体积并增加反向工程难度。
+- **`-trimpath`**: 移除编译时本地文件路径信息，确保日志输出中的路径是整洁且一致的。
 
+### 5.3 运行安全：非 Root 用户
+```dockerfile
+RUN addgroup -g 1001 -S appuser && \
+    adduser -u 1001 -S appuser -G appuser
+USER appuser
+```
+- **加固建议**: 容器进程以 `appuser` (UID 1001) 运行。这意味着即使容器被攻破，攻击者也无法通过该进程获得宿主机的 root 权限或修改系统级配置文件。
+
+---
 [返回目录](../index.md)

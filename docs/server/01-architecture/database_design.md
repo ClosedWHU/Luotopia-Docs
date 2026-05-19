@@ -1,3 +1,8 @@
+---
+title: 数据库设计
+slug: database-design
+---
+
 # 数据库设计与建模
 
 Luotopia Server 使用 PostgreSQL 作为核心关系型数据库，通过 GORM 进行 ORM 映射。本系统采用统一的模型规范，确保数据一致性与可审计性。

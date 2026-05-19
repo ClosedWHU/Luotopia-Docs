@@ -20,7 +20,8 @@ Luotopia 客户端是基于 **Flutter** 构建的跨平台移动端应用，致�
 2.  **[架构说明](./architecture.md)**: 项目的分层结构与模块划分。
 3.  **[状态管理](./state_management.md)**: 详细解释 Riverpod 在项目中的实践。
 4.  **[UI 组件库](./components.md)**: 基于 Material Design 3 和 shadcn_flutter 的定制化 UI 组件说明。
-5.  **[API 对接指南](./api_integration.md)**: 详细介绍如何配置 HTTP 客户端、生成 API 模型、处理认证和错误。
+5.  **[多端适配与设计规范](./multi_platform.md)**: 针对 Web、桌面端与移动端的适配方案。
+6.  **[API 对接指南](./api_integration.md)**: 详细介绍如何配置 HTTP 客户端、生成 API 模型、处理认证和错误。
 
 ---
 

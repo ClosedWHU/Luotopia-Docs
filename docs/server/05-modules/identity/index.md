@@ -7,6 +7,7 @@ slug: /server/05-modules/identity/
 
 ## 1. 详细子文档
 - **[OIDC 协议实现](oidc.md)**: 授权码流、令牌发放及客户端管理。
+- **[武汉大学强认证 (HAM)](whu_auth.md)**: 针对武大校内的身份集成与 HAM Gateway 对接。
 - **[账户与配置文件](profile.md)**: 用户注册、资料管理及开发者设置。
 - **[安全与防御](security.md)**: 签名校验、Turnstile 集成及 Token 加密。
 - **[租户与三方登录](tenant.md)**: 多租户隔离及第三方社交账号接入。

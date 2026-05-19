@@ -1,60 +1,31 @@
-# PostgreSQL 全文搜索服务
----
-slug: /server/05-modules/search/
----
+# 搜索服务 (Search)
 
-Luotopia Server 的搜索功能由 `internal/services/search` 提供支持，采用 PostgreSQL 的内置全文搜索能力（tsvector/tsquery），为用户提供跨模块（课程、教师、评价、帖子）的高性能搜索体验。
+搜索服务是 Luotopia 的核心中枢之一，负责跨模块的数据检索与智能建议。
 
-## 1. 架构设计
+## 1. 核心架构
+系统采用 **统一搜索服务 (`UnifiedSearchService`)** 模式，屏蔽了底层搜索引擎的差异。目前主要基于 **PostgreSQL 全文检索 (FTS)** 实现。
 
-搜索服务采用 **策略模式**，通过统一的 `SearchEngine` 接口封装搜索实现。当前使用 PostgreSQL 作为主要的搜索后端：
+### 1.1 联合搜索 (Federated Search)
+- **跨模块检索**: 一个接口即可同时搜索课程 (`course`)、帖子 (`forum`)、用户及学习资料。
+- **类型标记**: 搜索结果会自动注入 `_type` 字段，方便客户端按需渲染。
+- **权重排序**: 结果按相关度得分排序，支持分页 (`limit`/`offset`)。
 
-- **PgSearchService**: 基于 PostgreSQL 的 tsvector/tsquery 全文搜索实现
-- **SearchEngine 接口**: 提供标准化的搜索接口
-- **UnifiedSearchService**: 统一入口，管理具体实现的选择
+### 1.2 搜索建议 (Suggestions)
+- **智能联想**: 提供课程名称、教师名称及评价摘要的快速联想。
+- **性能**: 联想接口经过多级缓存优化，支持亚秒级响应。
 
-## 2. 搜索范围
+## 2. 核心接口
+- **`AdvancedSearch`**: 支持多维参数筛选（如按校区、学期、分类）。
+- **`FederatedSearch`**: 全文模糊搜索入口。
+- **`SuggestCourses/Teachers/Reviews`**: 分类联想建议。
 
-| 范围 | 表 | 搜索字段 |
-|-----|-----|--------|
-| `courses` | courses | name, code, department, description |
-| `teachers` | teachers | name, department |
-| `posts` | posts | title, content |
-| `reviews` | reviews | title, content |
+## 3. 技术实现 (`internal/services/search`)
+- **Postgres 适配器**: 利用 `pg_trgm` 和 `tsvector` 实现高效的中英文混合搜索。
+- **索引自动维护**: 服务启动时会自动执行 `SetupIndices()` 确保数据库搜索索引处于最新状态。
 
-## 3. 全文搜索原理
-
-PostgreSQL 通过 tsvector（文本向量）和 tsquery（查询）进行全文搜索：
-
-```sql
--- 创建 GIN 索引加速搜索
-CREATE INDEX idx_posts_tsvector ON posts USING GIN(
-  to_tsvector('simple', title || ' ' || content)
-);
-
--- 执行搜索
-SELECT * FROM posts
-WHERE to_tsvector('simple', title || ' ' || content) @@ to_tsquery('simple', 'golang:*')
-LIMIT 20;
-```
-
-## 4. API 接口规范
-
-统一搜索接口支持以下参数：
-
-- `q` 或 `query`: 搜索关键词
-- `scope`: 搜索范围（courses、teachers、posts、reviews、all）
-- `limit`/`offset`: 分页参数
-- 其他过滤参数：根据scope动态支持（如 department、semester等）
-
-## 5. 性能优化
-
-- **GIN 索引**: 为搜索字段创建 GIN 索引，查询速度 &lt;50ms
-- **缓存**: 热门搜索结果缓存 5 分钟
-- **分页**: 强制限制单次查询结果数量（最多100）
-
-详见 [全文搜索引擎](../services/search_engine.md)、[搜索索引](./indexing.md) 和 [性能调优](../../performance_tuning.md)
+## 4. 后续扩展
+- **Elasticsearch/Meilisearch**: 架构预留了适配器接口，未来可无缝切换至专用搜索引擎以应对海量数据。
+- **AI 语义搜索**: 结合 `internal/services/ai` 的 Embedding 能力，实现基于向量的语义召回。
 
 ---
-
 [返回目录](../index.md)

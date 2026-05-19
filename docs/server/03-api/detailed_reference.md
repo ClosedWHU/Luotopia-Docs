@@ -1,91 +1,132 @@
-# 详细接口调用指南
+---
+title: 业务接口调用规范
+slug: detailed-reference
+---
 
-本文档旨在为前端开发者和集成方提供 Luotopia Server 的业务接口调用逻辑说明。相比 Huma 自动生成的 OpenAPI 文档，本文档更侧重于**业务流程**和**接口选择建议**。
+# 业务接口调用规范
 
-## 1. 账号与认证
+本文档提供 Luotopia Server 核心业务接口的请求与响应规范，旨在帮助开发者准确完成客户端对接。
 
-### 1.1 登录流程
-- **常规登录**: `POST /api/v1/user/login` (使用用户名/密码)。
-- **SSO 登录**: `GET /api/v1/user/sso/start?provider=whu` (引导用户跳转到武大认证)。
-- **设备注册**: `POST /api/v1/user/device/register` (登录后务必调用，用于推送通知)。
+## 1. 认证机制 (Authentication)
 
-### 1.2 认证状态选择
-- 大部分接口需要 `Bearer` Token。
-- 部分校园功能（如课表爬虫）需要用户在 SSO 登录后，通过后端桥接到武大系统获取数据。
+### 1.1 常规认证 (JWT)
+所有受保护的接口均需在 Header 中携带 `Authorization: Bearer <JWT_TOKEN>`。
+
+### 1.2 高级安全认证 (X-Api-Sign)
+针对开放平台或敏感操作，系统要求计算签名以防止重放攻击和数据篡改：
+- `X-Api-Key`: 开发者唯一标识。
+- `X-Api-Ts`: Unix 时间戳（秒）。
+- `X-Api-Sign`: 基于 HMAC-SHA256 的签名摘要。
+
+**签名逻辑示例 (Node.js)**:
+```javascript
+const crypto = require('crypto');
+const ts = Math.floor(Date.now() / 1000);
+const secret = 'your_api_secret';
+const sign = crypto.createHmac('sha256', secret)
+                   .update(`${ts}\n${method}\n${path}`)
+                   .digest('hex');
+```
 
 ---
 
-## 2. 课程评价系统
+## 2. 身份认证接口 (Identity)
 
-### 2.1 搜索课程
-- **场景**: 用户在首页搜索框输入关键词。
-- **推荐接口**: `GET /api/v1/courses/search?q=...` (支持模糊匹配和拼音)。
-- **联想建议**: `GET /api/v1/suggest?q=...` (用户输入时实时联想)。
+### 2.1 用户注册 `POST /api/v1/user/register`
+用于新用户入驻，需提供基础账号信息。
 
-### 2.2 提交评价与评分
-- **场景**: 用户完成一门课后，想要分享心得。
-- **评价提交**: `POST /api/v1/reviews` (需包含 `course_uid`)。
-- **仅评分**: `POST /api/v1/courses/grade` (不需要写评论，仅提交星级)。
-- **匿名逻辑**: 接口支持 `is_anonymous` 字段，保护用户隐私。
+**Request Body**:
+```json
+{
+  "username": "luotopian",
+  "password": "very_secure_password",
+  "email": "student@whu.edu.cn"
+}
+```
 
-### 2.3 互动
-- **点赞/踩**: `POST /api/v1/reviews/{uid}/interact` (Type: 1-赞, -1-踩, 0-取消)。
-- **举报**: `POST /api/v1/reviews/{uid}/report`。
+### 2.2 用户登录 `POST /api/v1/user/login`
+支持用户名/密码验证。登录成功后，服务器会设置 `jwt` Cookie 并返回 Token。
 
----
-
-## 3. 校园助手
-
-### 3.1 教室与课表
-- **查空闲教室**: `GET /api/v1/classrooms/empty?campus=Main&building=B1&day_of_week=1&section=1`。
-- **我的课表**: `GET /api/v1/timetable/me` (从数据库获取已同步的课表)。
-- **同步课表**: `POST /api/v1/timetable/sync` (触发爬虫从教务系统更新)。
-
-### 3.2 代理服务
-- **图书馆搜索**: `GET /api/v1/campus/library/search?keyword=...`。
-- **场馆预约查询**: `GET /api/v1/campus/venue/status`。
+### 2.3 [弃用] 匿名登录 `POST /api/v1/user/login/anonymous`
+> [!WARNING]
+> 该接口计划在未来版本中下线，请优先使用注册账号登录。
 
 ---
 
-## 4. 学习资料
+## 3. 课程评价接口 (Course & Reviews)
 
-### 4.1 资料流转
-- **查看资料**: `GET /api/v1/materials/search?course_uid=...` (获取某门课的所有资料)。
-- **上传资料**: `POST /api/v1/materials/upload` (支持 multipart/form-data)。
-- **下载计数**: `GET /api/v1/materials/{uid}/download` (获取下载地址并增加统计)。
+### 3.1 提交评价 `POST /api/v1/reviews`
+支持用户对课程进行详细维度的评分。需携带 `Authorization` 或 `CF-Turnstile-Response`。
+
+**Request Body**:
+```json
+{
+  "course_uid": "CS101-WHU",
+  "title": "课程作业量适中",
+  "content": "老师讲得很细...",
+  "rating": 4.5,
+  "difficulty": 3,
+  "workload": 4,
+  "teaching_quality": 5,
+  "course_interest": 4,
+  "attendance_review": "每节课点名",
+  "exam_review": "开卷考试",
+  "assignment_review": "三次作业",
+  "semester": "2023-2024-1",
+  "year": 2023,
+  "teacher_uids": ["T12345"],
+  "teacher_names": ["张教授"]
+}
+```
 
 ---
 
-## 5. 系统与维护
+## 4. 论坛接口 (Forum)
 
-### 5.1 启动自检 (App 必调)
-- **版本更新**: `GET /api/v1/system/update?platform=android` (检查是否有新版本及强制更新标志)。
-- **远程配置**: `GET /api/v1/system/config` (获取当前可用的公告、维护状态、动态开关等)。
+### 4.1 获取聚合信息流 `GET /api/v1/forum/feed`
+返回当前全站最热的帖子列表。
+
+### 4.2 发布帖子 `POST /api/v1/forum/posts`
+**Request Body**:
+```json
+{
+  "board_id": "main",
+  "title": "关于选课的讨论",
+  "content": "大家觉得这学期的...",
+  "tag_slugs": ["选课", "求助"]
+}
+```
+
+### 4.3 帖子互动 `POST /api/v1/forum/posts/{id}/reactions`
+**Request Body**:
+```json
+{
+  "value": 1
+}
+```
+`value`: `1` 为点赞，`-1` 为踩。
 
 ---
 
-## 开发建议
-1. **防抖与节流**: 搜索联想建议接口请务必在客户端做 300ms 以上的防抖。
-2. **错误处理**: 统一查看 [错误码文档](./error_codes.md)，重点处理 `1002` (认证失效) 和 `1003` (权限不足)。
-3. **缓存策略**: `/api/v1/system/config` 建议在 App 启动时调用一次并本地持久化，不要频繁调用。
+## 5. 校园数据集成 (HAM Gateway)
+
+该模块负责桥接校内开放数据平台。
+
+### 5.1 课程搜索 `GET /api/v1/external/ham/course/search`
+**Query Parameters**:
+- `keyword`: 搜索关键词（如：计算机）
+- `keyword_type`: `0` 名称，`1` 老师
 
 ---
 
-## 前端实战：统一错误处理
+## 6. 开发建议与集成 FAQ
 
-建议在客户端使用 Axios 或 Dio 拦截器统一处理以下逻辑：
+### 6.1 列表性能优化
+所有列表接口均支持 `page` 和 `limit` 参数。建议在客户端实现无限滚动时，`limit` 保持在 20 左右。
 
-### 1. 会话失效 (401 / 1002)
-当接口返回 `1002` 错误码时，表示 Access Token 已过期。
-- **策略**: 尝试调用 `/api/v1/user/refresh_token`。
-- **成功**: 重新发起失败的原始请求。
-- **失败**: 清除本地存储，引导用户重新登录。
-
-### 2. 权限不足 (403 / 1003)
-- **策略**: 提示用户“无权访问该功能”，不要自动登出。
-
-### 3. 频率限制 (429)
-- **策略**: 提示用户“操作太快，请稍后再试”，并在客户端开启 5-10 秒的倒计时锁定按钮。
+### 6.2 响应异常排查
+**Q: 为什么接口返回 401 但没有具体的错误提示？**
+A: 请检查 `Authorization` Header 格式。如果 Token 已过期，系统会返回业务代码 `1002`。
 
 ---
 [返回目录](../index.md)

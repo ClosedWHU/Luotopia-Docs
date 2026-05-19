@@ -25,7 +25,7 @@ internal/platform/translation/dicts/
 }
 ```
 
-## 2. 使用方法
+## 2. 身份映射逻辑 (Identity Mapping)
 
 ### 2.1 获取翻译
 在代码中注入 `TranslationService`，通过 Key 获取对应语言的内容：
@@ -44,12 +44,7 @@ msg := t.T("zh-CN", "errors.user_not_found")
 1. 尝试从 `default_language` (通常是 `zh-CN`) 中查找。
 2. 如果依然不存在，则直接返回原始 Key。
 
-## 4. 扩展指南
-1. 在 `dicts/` 目录下创建或修改 JSON 文件。
-2. 确保所有翻译文件的层级结构保持一致。
-3. 如果涉及到动态参数（如 "用户 %s 不存在"），请在翻译字符串中使用 `%s` 并配合 `fmt.Sprintf` 使用。
-
-## 5. 实战：新增一种语言
+## 4. 开发指南：新增 API 接口
 
 1.  **创建文件**: 在 `internal/platform/translation/dicts/` 下创建新的 JSON 文件（如 `ja-JP.json`）。
 2.  **填充内容**: 复制 `zh-CN.json` 的结构并翻译所有 Value。

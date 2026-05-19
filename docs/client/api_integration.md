@@ -293,14 +293,14 @@ abstract class ApiService {
   factory ApiService(Dio dio, {String? baseUrl}) = _ApiService;
   
   // 认证 API
-  @POST('/auth/login')
+  @POST('/user/login')
   Future<LoginResponse> login(@Body() LoginRequest request);
   
-  @POST('/auth/logout')
+  @POST('/user/logout')
   Future<void> logout();
   
   // 论坛 API
-  @GET('/forum/posts')
+  @GET('/forum/feed')
   Future<PostListResponse> getPosts(
     @Query('page') int page,
     @Query('limit') int limit,
