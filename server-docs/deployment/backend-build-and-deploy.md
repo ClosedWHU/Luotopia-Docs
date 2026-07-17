@@ -1,12 +1,20 @@
+---
+id: backend-build-and-deploy
+title: 后端构建与部署
+sidebar_label: 后端构建与部署
+sidebar_position: 10
+description: 工作区 server/ 本地构建与 Docker 部署要点
+---
+
 # 后端构建与部署指南
 
-针对 工作区中的 `server/`（Go）的构建与部署要点。
+针对 工作区中的 `server/`（Go）的构建与部署要点。更完整的 Compose 说明见 [Docker 部署](./docker.md)。
 
 ## 环境
 
 - Go：**与 `server/go.mod` 一致**（当前为 1.26.x 量级）
-- 生产镜像：见 `server/Dockerfile`（多阶段，**CGO 开启**，含 gojieba 等）
-- 配置：JSON/JSONC 等，路径 `CONFIG_PATH` 或 `--config`
+- 生产镜像：见 `server/Dockerfile`（多阶段，**CGO 开启**）
+- 配置：JSON/JSONC，路径 `CONFIG_PATH` 或 `--config`
 
 ## 本地构建
 
@@ -17,8 +25,6 @@ go build -o bin/luotopia-backend ./cmd
 ```
 
 入口命令只有：`serve` | `worker` | `cli`。
-
-交叉编译若关闭 CGO（`CGO_ENABLED=0`），可能无法编过依赖 CGO 的包；与 Dockerfile 一致时请用容器构建。
 
 ## Docker
 
@@ -33,7 +39,7 @@ docker run -d \
 ```
 
 - 端口 = 配置 `server.port`
-- Compose 全栈：见 [Docker 部署](./server-docs/deployment/docker.md) 与 `server/docker-compose.yml`
+- 全栈：`docker compose up -d --build`（见 [Docker 部署](./docker.md)）
 - Postgres 推荐 `Dockerfile.db`（pgvector + pg_jieba）
 
 ## 配置注意
@@ -41,9 +47,10 @@ docker run -d \
 - 未知字段启动失败
 - 生产 `public_base` 用 HTTPS
 - 勿把 metrics 无鉴权暴露公网
-- 密钥不要进 git
 
-## 更多
+## 相关文档
 
-- 文档站：`server-docs/deployment/`
-- CLI：`server-docs/cli_reference.md`
+- [配置手册](./config.md)
+- [Docker](./docker.md)
+- [监控](./monitoring.md)
+- [CLI](../cli_reference.md)
