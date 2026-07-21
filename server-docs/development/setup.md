@@ -2,8 +2,8 @@
 title: 本地开发环境搭建
 sidebar_label: 环境搭建
 description: Go 服务端本地运行：配置、数据库、serve / worker
+sidebar_position: 1
 ---
-
 # 本地开发环境搭建
 
 ## 前置

@@ -1,7 +1,8 @@
 # 前后端规范化改进计划
 
 > 目标：在不大爆炸重构的前提下，统一包边界、分层纪律与目录约定，提升可维护性与可扩展性。  
-> 状态：Phase 0–4 持续推进：CI 门禁、forum/course_review 迁址、system service 门面已落地。
+> 状态：Phase 0–4 持续推进：CI 门禁、forum/course_review 迁址、system service 门面已落地。  
+> 文档站：用户/客户端/服务端已按 Docusaurus 三分区维护；**安装包更新与热更新**属官网 homepage，勿写进业务服 `system` 主路径。
 
 ## 背景（审计结论摘要）
 

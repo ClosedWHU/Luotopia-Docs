@@ -2,39 +2,32 @@ import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-
 const config: Config = {
   title: 'Luotopia 文档',
-  tagline: '整合校园服务，构建开源生态',
-  favicon: 'img/favicon.ico',
+  tagline: '珞家：用户指南、客户端与服务端文档',
+  // Keep docs visually aligned with the client and homepage branding.
+  favicon: 'https://www.whu.sb/favicon.svg',
 
-  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    v4: true,
   },
 
-  // Set the production url of your site here
   url: 'https://docs.whu.sb',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'ClosedWHU', // Usually your GitHub org/user name.
-  projectName: 'Luotopia', // Usually your repo name.
+  organizationName: 'ClosedWHU',
+  projectName: 'luotopia',
 
   onBrokenLinks: 'throw',
   markdown: {
+    mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: 'throw',
     },
   },
 
-  // Even if you don't use internationalization, you can use this field to set
-  // useful metadata like html lang. For example, if your site is Chinese, you
-  // may want to replace "en" with "zh-Hans".
+  themes: ['@docusaurus/theme-mermaid'],
+
   i18n: {
     defaultLocale: 'zh-Hans',
     locales: ['zh-Hans'],
@@ -44,15 +37,9 @@ const config: Config = {
     [
       'classic',
       {
-        docs: {
-          routeBasePath: '/', // Serve the docs at the site's root
-          sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/ClosedWHU/Luotopia-Server/tree/main/docs/',
-        },
-        blog: false, // Disable blog for now
+        // Disable default docs; use three instances below for /user /client /server
+        docs: false,
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -60,26 +47,106 @@ const config: Config = {
     ],
   ],
 
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'user',
+        path: 'user-docs',
+        routeBasePath: 'user',
+        sidebarPath: require.resolve('./sidebarsUser.ts'),
+        editUrl: 'https://github.com/ClosedWHU/luotopia/tree/main/docs/',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'client',
+        path: 'client-docs',
+        routeBasePath: 'client',
+        sidebarPath: require.resolve('./sidebarsClient.ts'),
+        editUrl: 'https://github.com/ClosedWHU/luotopia/tree/main/docs/',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'server',
+        path: 'server-docs',
+        routeBasePath: 'server',
+        sidebarPath: require.resolve('./sidebarsServer.ts'),
+        editUrl: 'https://github.com/ClosedWHU/luotopia/tree/main/docs/',
+      },
+    ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          // Old underscore pathnames (new pages use kebab slugs)
+          {from: '/server/01-architecture/database_design', to: '/server/architecture/database-design'},
+          {from: '/server/01-architecture/security_policy', to: '/server/architecture/security-policy'},
+          {from: '/server/03-api/detailed_reference', to: '/server/api/detailed-reference'},
+          {from: '/server/deploy/backend-build-and-deploy', to: '/server/deployment/backend-build-and-deploy'},
+          {from: '/server/advanced', to: '/server/advanced/performance_tuning'},
+        ],
+        createRedirects(existingPath: string) {
+          // Skip category/index routes that collide as both `/foo` and `/foo/` on Windows
+          if (existingPath.endsWith('/') || existingPath.split('/').length <= 3) {
+            return undefined;
+          }
+          const pairs: [string, string][] = [
+            ['/server/architecture', '/server/01-architecture'],
+            ['/server/development', '/server/02-development'],
+            ['/server/api', '/server/03-api'],
+            ['/server/deployment', '/server/04-deployment'],
+            ['/server/modules', '/server/05-modules'],
+          ];
+          for (const [toPrefix, fromPrefix] of pairs) {
+            if (existingPath.startsWith(`${toPrefix}/`)) {
+              return [existingPath.replace(toPrefix, fromPrefix)];
+            }
+          }
+          return undefined;
+        },
+      },
+    ],
+  ],
+
   themeConfig: {
-    // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    image: 'https://www.whu.sb/img/og-image.png',
     colorMode: {
       respectPrefersColorScheme: true,
     },
     navbar: {
       title: 'Luotopia 文档',
       logo: {
-        src: 'img/logo.svg',
+        alt: 'Luotopia',
+        src: 'https://www.whu.sb/img/app-icon.png',
       },
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'userSidebar',
+          docsPluginId: 'user',
           position: 'left',
-          label: '文档',
+          label: '用户指南',
         },
         {
-          href: 'https://github.com/ClosedWHU/Luotopia-Server',
+          type: 'docSidebar',
+          sidebarId: 'clientSidebar',
+          docsPluginId: 'client',
+          position: 'left',
+          label: '客户端开发',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'serverSidebar',
+          docsPluginId: 'server',
+          position: 'left',
+          label: '服务端开发',
+        },
+        {
+          href: 'https://github.com/ClosedWHU/luotopia',
           label: 'GitHub',
           position: 'right',
         },
@@ -89,25 +156,17 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: '文档',
+          title: '文档分区',
           items: [
-            {
-              label: '概览',
-              to: '/',
-            },
-            {
-              label: '服务端',
-              to: '/server/',
-            },
+            {label: '用户指南', to: '/user/'},
+            {label: '客户端开发', to: '/client/'},
+            {label: '服务端开发', to: '/server/'},
           ],
         },
         {
           title: '社区',
           items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/ClosedWHU',
-            },
+            {label: 'GitHub', href: 'https://github.com/ClosedWHU'},
           ],
         },
       ],

@@ -2,8 +2,8 @@
 title: Docker 部署
 sidebar_label: Docker
 description: Compose 服务、端口、库名、常用命令与排障
+sidebar_position: 2
 ---
-
 # Docker 部署
 
 仓库：`server/docker-compose.yml`。
@@ -115,6 +115,8 @@ SCHOOL_CALENDAR_DATA_HOST=../WHU-sb-Calendar/data
 官方 compose 使用 `./docker-volumes/postgres` 与 Redis volume（以当前 yml 为准）。`docker compose down` 不会删除 volume；需清理时再 `down -v` 或手动删除数据目录。
 
 ## Postgres 插件
+
+Compose 不挂载或执行数据库 `init.sql`；API/Worker 启动时统一运行应用内 migration 和 bootstrap。
 
 `Dockerfile.db` 在镜像内编译安装 **pg_jieba**；`vector`、`pg_trgm` 在运行时 `CREATE EXTENSION`。不要用官方裸 `pgvector` 镜像替代并期望有 jieba。
 

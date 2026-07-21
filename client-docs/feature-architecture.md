@@ -1,0 +1,71 @@
+---
+sidebar_position: 4
+title: Feature 架构约定
+sidebar_label: Feature 约定
+description: feature-first 布局、分层规则与迁移例外
+---
+# Flutter Feature 架构约定
+
+与仓库 `docs/architecture-normalization-plan.md` Phase 0/1 对齐。
+
+## 目标布局
+
+```text
+lib/
+  app/                 # 路由、壳
+  core/                # api 客户端、config、l10n、theme…
+  features/
+    <feature_name>/
+      data/            # Repository、DTO 映射、本地存储
+      domain/          # 实体、状态、纯逻辑（无 Dio/OpenAPI/Widget）
+      presentation/    # pages、widgets、providers
+  shared/              # 跨 feature UI/工具
+```
+
+## 规则
+
+1. **业务代码进 `features/<name>`**，不要把可复用逻辑只放在 `features/pages/...` 的 page 文件里。  
+2. **`presentation` 禁止**直接写 API 路径字符串；统一走 `data/*_repository.dart`。  
+3. **`domain` 禁止** import `package:dio`、`package:openapi`、Flutter widget。  
+4. **网络**：  
+   - 未登录 / Auth：`luotopiaBaseDioProvider`（`core/api/luotopia_http.dart`）  
+   - 业务：`dioProvider` / OpenAPI（`core/api/api_providers.dart`）  
+   - 官网（更新 / 热更新 / 法律 / 友情链接）：`package:http` + `AppConfig.siteBaseUrl`  
+5. **双 origin**：业务 `apiBaseUrl`（可被 `customServerUrl` 覆盖）与官网 `siteBaseUrl` **分开**。  
+6. Page 文件建议 **&lt; 400 行**；超出则拆 widget / notifier。  
+7. SnackBar 优先 `showAppSnackBar*`（root messenger），见 [UI 与组件](./components.md)。  
+
+## 迁移状态（相对规范化计划）
+
+| 项 | 状态 |
+|------|------|
+| `features/forum` | 已独立 feature |
+| `features/course_review` | 已独立 feature |
+| `features/app_update` / `hot_update` | 已独立 |
+| `features/pages/ai` | 仍在 `pages/ai`（可后续升格） |
+| `features/weather` | 已有独立 feature；校园页卡片复用 |
+| 校园 `sub_apps/*` | 主路径；见 [子应用目录](./campus-sub-apps.md) |
+
+迁移时用 **export 转发** 保持 import 稳定，避免一次全仓 rename。
+
+## 服务端协同模块检查表
+
+- [x] 统一 `apiBaseUrl`  
+- [x] Auth Dio 与业务 Dio 分离（防循环依赖）  
+- [x] Forum / CourseReview feature 迁出  
+- [x] Auth domain models 与 data 分离  
+- [x] 官网更新 / 热更新不走业务 Dio  
+- [ ] OpenAPI 按 tag 生成裁剪  
+- [ ] 资料 / 头图等剩余接入  
+
+## 新增 feature 模板
+
+```text
+features/foo/
+  data/foo_repository.dart
+  domain/models.dart
+  domain/foo_state.dart          # 可选
+  presentation/providers/...
+  presentation/pages/...
+  presentation/widgets/...
+```

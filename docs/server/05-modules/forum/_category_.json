@@ -1,8 +1,0 @@
-{
-  "label": "论坛社区",
-  "position": 1,
-  "link": {
-    "type": "generated-index",
-    "description": "高匿名社区系统的核心逻辑，包括治理规则、内容分发与 AI 审核。"
-  }
-}

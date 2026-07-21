@@ -2,8 +2,8 @@
 title: 配置手册
 sidebar_label: 配置
 description: 核心配置项、unknown 字段校验与生产注意
+sidebar_position: 1
 ---
-
 # 配置手册
 
 配置文件 JSON/JSONC 等，由 `CONFIG_PATH` 或 `--config` 指定。  

@@ -1,3 +1,8 @@
+---
+title: 校历与 ICS
+sidebar_label: 校历与 ICS
+sidebar_position: 11
+---
 # 日历模块
 
 代码：`internal/domains/campus/calendar`（`http/`：`calendar.go` CRUD、`calendar_feed.go` ICS 导出、`calendar_import.go` legacy 导入；`service/feed.go` 校历 feed）。
@@ -43,23 +48,12 @@ SCHOOL_CALENDAR_DATA_HOST=../WHU-sb-Calendar/data
 
 ## 数据模型
 
-### CalendarEvent（日历事件）
-用于用户手动创建的事件。
+### 用户事件（概念）
 
-```go
-type CalendarEvent struct {
-	ID          uint64    `gorm:"primaryKey" json:"id"`
-	UserID      uint64    `gorm:"index" json:"user_id"`        // 所有者 ID
-	Title       string    `json:"title"`                       // 事件标题
-	Description string    `json:"description"`                 // 事件描述
-	Location    string    `json:"location"`                    // 事件地点
-	StartAt     time.Time `json:"start_at"`                    // 开始时间
-	EndAt       time.Time `json:"end_at"`                      // 结束时间
-	IsAllDay    bool      `json:"is_all_day"`                  // 是否全天事件
-	CreatedAt   time.Time `json:"created_at"`                  // 创建时间
-	UpdatedAt   time.Time `json:"updated_at"`                  // 更新时间
-}
-```
+用户可创建手动日历事件。常见字段：标题、描述、地点、起止时间、是否全天。  
+**字段名与类型以 OpenAPI 为准。**
+
+校历主数据来自数据卷 JSON（见上文），与用户事件分离。
 
 ## API 接口
 

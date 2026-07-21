@@ -2,10 +2,9 @@
 id: backend-build-and-deploy
 title: 后端构建与部署
 sidebar_label: 后端构建与部署
-sidebar_position: 10
+sidebar_position: 5
 description: 工作区 server/ 本地构建与 Docker 部署要点
 ---
-
 # 后端构建与部署指南
 
 针对 工作区中的 `server/`（Go）的构建与部署要点。更完整的 Compose 说明见 [Docker 部署](./docker.md)。
