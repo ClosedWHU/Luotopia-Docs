@@ -6,7 +6,7 @@ slug: migrations
 ---
 # 数据库迁移
 
-服务端主要使用 GORM **AutoMigrate**，在进程初始化数据库时对齐表结构与模型。
+服务端通过版本化迁移升级生产 schema；`AutoMigrate` 仅用于初始 schema 和本地开发/测试。
 
 ## 1. 何时执行
 
@@ -25,14 +25,15 @@ slug: migrations
 
 1. 连接 Postgres  
 2. 安装扩展：`vector`、`pg_trgm`；若可用则 `pg_jieba`  
-3. AutoMigrate 各域模型  
+3. 应用按版本顺序的 schema 迁移  
 4. Bootstrap 必要用户/数据（如 anonymous 等，以实现为准）
 
 ## 3. 新增字段
 
 1. 修改对应 `model`  
-2. 重启服务触发 AutoMigrate  
-3. GORM **不会**自动删列；重命名/删列请手写 SQL
+2. 在 `internal/platform/database/migrations.go` 增加下一个前向迁移版本  
+3. 对新部署的初始 schema 同步更新 `runAutoMigrate`；不要依赖它升级已部署数据库  
+4. 迁移不得包含破坏性 schema 操作；重命名/删除需要单独的数据迁移方案
 
 ## 4. 搜索索引
 

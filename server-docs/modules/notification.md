@@ -19,7 +19,7 @@ sidebar_position: 14
 | POST | `/api/v1/notifications/mark-all-read` |
 | DELETE | `/api/v1/notifications/{id}` |
 
-均需登录（Bearer）。字段与分页以 OpenAPI 为准。
+均需登录（Bearer）。字段与分页以 OpenAPI 为准（OperationID 为 kebab，如 `notification-list`）。
 
 ## 非当前保证
 

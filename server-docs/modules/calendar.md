@@ -7,7 +7,7 @@ sidebar_position: 11
 
 代码：`internal/domains/campus/calendar`（`http/`：`calendar.go` CRUD、`calendar_feed.go` ICS 导出、`calendar_import.go` legacy 导入；`service/feed.go` 校历 feed）。
 
-路由以 OpenAPI 为准。
+JSON 日历 API 以 OpenAPI / `httpapi` 为准。订阅用 ICS 下载：`GET /api/v1/calendar/export.ics`（Gin；可选鉴权；失败为 problem+json）。
 
 ## 功能特性
 

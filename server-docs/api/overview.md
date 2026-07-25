@@ -8,18 +8,20 @@ sidebar_position: 1
 
 REST + [Huma v2](https://huma.rocks/)。**完整路径与字段以 OpenAPI 为准**。
 
+业务路由统一经 `httpapi.Register` 注册（Access + 可选限流）。见 [HTTP 注册规范](./httpapi.md)。
+
 ## 基础
 
 | 项 | 值 |
 |----|-----|
 | 前缀 | `/api/v1` |
-| 格式 | `application/json` |
+| 格式 | `application/json`（失败多为 `application/problem+json`） |
 | 端口 | 配置 `server.port`（Docker 样例 **6262**） |
-| 健康检查 | `GET /health` |
+| 健康检查 | `GET /health`、就绪 `GET /ready` |
 
 ## 认证
 
-实现：`internal/middleware/huma_auth.go`。`/api/v1/*` **默认要登录**；白名单见 [安全策略](../architecture/security_policy.md)。
+实现：`internal/middleware/huma_auth.go` + Access 注册表。`/api/v1/*` **默认要登录**；公开接口以 `AccessPublic` 声明为准，见 [安全策略](../architecture/security_policy.md)。
 
 ### JWT（App 主路径）
 
@@ -39,13 +41,11 @@ X-Api-Secret: <secret>
 
 - 用户在账号里创建的个人凭证  
 - **不是**对 body 的 HMAC；**不是**全站 `api_secret`  
-- 权限窄，多为部分只读 GET  
+- 权限窄，多为部分只读 GET；另有凭证级配额  
 
 ### Web / OIDC
 
 会话 Cookie + 授权码流（identity 模块）。
-
-全站请求 HMAC 的迁移说明见 [已移除与迁移](../meta/removed-and-migrated.md#全站请求-hmac)。
 
 ## 文档与调试
 
@@ -58,7 +58,10 @@ http://localhost:6262/openapi.json  # 或仓库导出的 openapi.json
 
 ## 限流
 
-`security.rate_limit` / `rate_window`。登录等路径另有尝试次数限制。
+- 默认：未单独配置时，API 按 IP 约 50 次/分钟。
+- 敏感操作可声明多层窗口（分钟/小时/天）与主体（IP / 用户）。
+- 配置项与实现见 `security` 配置、Redis 限流与 [HTTP 注册规范](./httpapi.md#4-限流)。
+- 登录等路径另有 identity 侧尝试次数限制。
 
 ## 不在本 API 的客户端能力
 
@@ -75,6 +78,8 @@ http://localhost:6262/openapi.json  # 或仓库导出的 openapi.json
 
 ## 相关
 
+- [HTTP 注册规范](./httpapi.md)
 - [安全策略](../architecture/security_policy.md)
 - [业务调用摘要](./detailed_reference.md)
+- [已移除与迁移](../meta/removed-and-migrated.md)（旧协议 / 旧注册方式）
 - [客户端对接](pathname:///client/api_integration)

@@ -4,6 +4,6 @@
   "link": {
     "type": "generated-index",
     "slug": "/api",
-    "description": "Luotopia Server API 参考指南与最佳实践。"
+    "description": "使用指南、HTTP 注册规范、调用摘要与错误码（字段以 OpenAPI 为准）。"
   }
 }

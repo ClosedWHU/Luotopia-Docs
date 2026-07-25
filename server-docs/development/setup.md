@@ -68,12 +68,20 @@ go run ./cmd worker run --config config/config.json
 
 ## 加一个 API（简要）
 
-1. 在对应 `internal/domains/<x>/model` 定义输入输出  
+1. 在对应 `internal/domains/<x>/model`（或 handler 旁）定义输入输出  
 2. `repo` / `service` 写逻辑  
-3. `http` 里 `huma.Register`，声明 `Security`  
+3. `http` 里使用 **`httpapi.Register`**，声明 `Access`（及可选 `Rate`）  
 4. 启动后看 OpenAPI 是否更新  
 
-更细：[贡献规范](./contributing.md)。
+```go
+httpapi.Register(api, httpapi.Op{
+    ID: "domain-verb", Method: http.MethodGet, Path: "/api/v1/...",
+    Summary: "...", Tags: []string{"..."},
+    Access: httpapi.AccessUser, // 或 AccessPublic / AccessAdmin / AccessSuperAdmin
+}, h.Handler)
+```
+
+规范：[HTTP 注册规范](../api/httpapi.md)、仓库 `server/docs/api-conventions.md`。更细：[贡献规范](./contributing.md)。
 
 ## 常见问题
 

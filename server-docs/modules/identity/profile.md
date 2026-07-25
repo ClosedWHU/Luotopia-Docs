@@ -12,7 +12,7 @@ sidebar_position: 3
 
 - 用户名/邮箱 + 密码（匿名白名单路径，通常需验证码）
 - 社交登录（如 HAM，配置 `identity.social.providers`）
-- Passkey / MFA / 邮箱验证 / 密码重置（见 OpenAPI 与 `anonymousOperations`）
+- Passkey / MFA / 邮箱验证 / 密码重置（见 OpenAPI；公开认证流以 `AccessPublic` 声明为准）
 - 匿名游客登录不作为产品路径；迁移说明见 [已移除与迁移](../../meta/removed-and-migrated.md)。
 
 ## 2. 资料与安全

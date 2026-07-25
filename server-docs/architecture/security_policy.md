@@ -7,8 +7,8 @@ slug: security-policy
 # 安全策略
 
 > **一句话**：HTTPS + Bearer JWT（或会话 / 用户 API 凭证）+ 服务端鉴权与限流。  
-> **不做**：全站请求 HMAC / `X-Api-Sign`。  
-> 实现：`internal/middleware/huma_auth.go`。
+> **不做**：全站请求 HMAC / `X-Api-Sign`（说明见 [已移除与迁移](../meta/removed-and-migrated.md#全站请求-hmac)）。  
+> 实现：`internal/middleware/huma_auth.go`、`httpapi` Access 注册表、限流中间件。
 
 ## 1. 认证机制
 
@@ -22,7 +22,7 @@ slug: security-policy
 ### 1.2 OIDC / SSO 会话
 
 - 遵循 OpenID Connect；Web 端可通过会话 Cookie 认证。
-- 关键状态（`state` / `nonce`）短有效期，降低 CSRF 与重放风险。
+- 交换状态（`state` / `nonce`）短有效期，降低 CSRF 与重放风险。
 
 ### 1.3 用户 API 凭证（集成用）
 
@@ -30,38 +30,47 @@ slug: security-policy
 - **用法**: 请求头同时携带 `X-Api-Key` 与 `X-Api-Secret`（明文比对/哈希校验凭证本身）。
 - **不是** 全站共享的请求 HMAC 签名；也**不**对 body 做 `X-Api-Sign`。
 - 权限较窄：默认仅允许部分只读 GET（如 courses / teachers / reviews / search / random）。
+- 另有凭证级 RPM / RPH / 日 / 月配额（与接口限流叠加）。
 
-### 1.4 匿名接口白名单
+### 1.4 匿名与 Access 声明
 
-`/api/v1/*` **默认需要认证**。仅下列操作允许匿名（见 `anonymousOperations`）：
+`/api/v1/*` **默认需要认证**。公开接口在注册时声明 **`Access: Public`**（`httpapi.Register`），同时写入 OpenAPI Security 与运行时 Access 表。
 
-- 注册、登录、token 刷新
-- 邮箱验证、密码重置、MFA、Passkey 登录相关
+典型公开能力包括（完整列表以 OpenAPI 与代码注册为准）：
+
+- 注册、登录、token 刷新、邮箱验证、密码重置、MFA / Passkey 登录相关
 - 验证码配置 / Altcha 挑战
-- 论坛 health
+- 系统更新检查、密码策略、部分公开读（搜索、课评读、校车等，以 `AccessPublic` 为准）
+- 头像二进制 `GET /api/v1/avatars/{id}`、论坛 `GET /api/v1/forum/health`
 
-其它 `/api/v1` 路径未认证返回 401。
+未在 Access 表注册的 `/api/v1` 操作按需登录。写法见 [HTTP 注册规范](../api/httpapi.md)。
 
 ## 2. 授权机制
 
-### 2.1 角色
+### 2.1 角色 / Access
 
-1. **Anonymous**: 仅白名单接口（登录注册等），不能访问受保护业务写接口。
-2. **User**: 登录用户，评价、资料、需登录的业务能力。
-3. **Admin**: 管理后台（`/api/v1/admin/*`）。
-4. **SuperAdmin**: 更敏感的管理操作（用户、队列、缓存、embedding 等）。
+1. **Public**: 无需登录（仅声明为 Public 的操作）。
+2. **User**: 登录用户（JWT / Session；部分路径允许 API Key）。
+3. **Admin**: 管理能力（admin 或 superadmin）。
+4. **SuperAdmin**: 更敏感管理（用户、队列、缓存、embedding 等；路径与 Access 声明双重约束）。
 
 ### 2.2 路由保护
 
-- Huma 操作通过 `Security` 声明；运行时由 `NewHumaAuthMiddleware` + `enforceOperationAuthorization` 强制执行。
+- 业务 API 经 `httpapi.Register` 声明 `Access`；`NewHumaAuthMiddleware` 按 Access 注册表与路径规则强制执行。
+- OpenAPI 的 `Security` 由 Access 生成。
 - 传输层安全依赖 **HTTPS**（生产 `server.public_base` 应为 `https://`）。
 
 ## 3. 安全防御措施
 
 ### 3.1 速率限制
 
-- 全局限流：`security.rate_limit` / `rate_window`。
-- 登录等敏感路径另有尝试次数窗口（identity OIDC 配置）。
+- **默认**：未单独声明时，对 `/api/v1/*` 按 IP 约 50 次/分钟（Redis 多窗口）。
+- **按操作声明**：`httpapi.Op.Rate`（单窗口或多层：分钟/小时/天；主体 IP / User / UserOrIP）。
+- **共享预算**：相同 `Scope` 的多个操作共用计数（如头像上传与删除）。
+- **豁免**：头像 GET、health/ready/metrics，以及 `Exempt: true`。
+- 登录等路径仍可叠加 identity 侧尝试次数窗口。
+
+详见 [HTTP 注册规范 · 限流](../api/httpapi.md#4-限流)。
 
 ### 3.2 人机校验
 
@@ -73,6 +82,7 @@ slug: security-policy
 - 密码 bcrypt 哈希。
 - 用户 API Secret 优先存哈希。
 - 日志与管理审计避免输出密码、token 等敏感字段。
+- 客户端错误文案不包含数据库或系统底层细节。
 
 ### 3.4 Metrics 暴露
 
@@ -82,13 +92,9 @@ slug: security-policy
 
 ## 4. 当前请求安全模型
 
-前后端通信安全建立在：
-
-1. **TLS（HTTPS）** 保护信道完整性与机密性  
+1. **TLS（HTTPS）** 保护信道  
 2. **用户级 JWT / Session / API 凭证** 证明身份  
-3. **服务端授权与限流**  
-
-全站 HMAC 的迁移说明见 [已移除与迁移](../meta/removed-and-migrated.md#全站请求-hmac)。
+3. **服务端授权与限流**（Access + Rate）
 
 ## 5. 漏洞反馈
 
@@ -96,14 +102,17 @@ slug: security-policy
 
 ## 6. FAQ
 
-**Q: 以前的签名示例为什么不能用？**  
-A: 见 [已移除与迁移](../meta/removed-and-migrated.md#全站请求-hmac)；当前使用 Bearer JWT，或用户级 `X-Api-Key` + `X-Api-Secret`。
+**Q: 为什么没有请求体签名？**  
+A: 当前模型为 HTTPS + 用户凭证；旧全站 HMAC 见 [已移除与迁移](../meta/removed-and-migrated.md#全站请求-hmac)。
 
 **Q: JWT 密钥泄露后怎么办？**  
 A: 立即轮换 `security.jwt_secret`，并视情况吊销会话；已签发的 access token 在旧密钥下仍可能有效至过期，应配合短 TTL 与会话绑定。
 
-**Q: 不需要登录的接口是不是不安全？**  
-A: 白名单内的认证相关接口必须匿名才能完成登录流；它们靠验证码、限流与 HTTPS 防护，而不是 JWT。业务写接口仍默认要登录。
+**Q: 不需要登录的接口如何声明？**  
+A: 注册时使用 `Access: Public`。见 [HTTP 注册规范](../api/httpapi.md)。
+
+**Q: 旧的匿名路径表 / huma.Register 去哪了？**  
+A: 见 [已移除与迁移 · HTTP 路由注册](../meta/removed-and-migrated.md#http-路由注册huma--httpapi)。
 
 ---
 [返回目录](../index.md)

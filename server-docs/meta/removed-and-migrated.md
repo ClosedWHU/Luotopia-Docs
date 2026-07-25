@@ -2,12 +2,14 @@
 title: 已移除与迁移项
 sidebar_label: 已移除与迁移
 sidebar_position: 4
-description: 服务端不应再使用的协议、服务与运行入口
+description: 服务端废弃协议与迁移说明的唯一汇总；主文档只写当前行为
 ---
 
 # 已移除与迁移项
 
-本文集中记录服务端的废弃协议、未落地能力与迁移规则。新代码与外部对接应使用「当前替代」。
+本文是**弃用与迁移的唯一汇总**。主文档（架构、API、模块）只写当前行为；若需了解「曾经怎样 / 勿再使用什么」，查本文。
+
+新代码与外部对接以「当前替代」及 [OpenAPI](../api/overview.md)、[HTTP 注册规范](../api/httpapi.md) 为准。
 
 ## 全站请求 HMAC
 
@@ -38,7 +40,33 @@ description: 服务端不应再使用的协议、服务与运行入口
 
 安装包更新与解析脚本热更新由官网 homepage 提供；`system` 域不作为 Flutter 主分发路径。见 [官网与外部面](../modules/external_surfaces.md)。
 
+## HTTP 路由注册（huma → httpapi）
+
+| 旧做法 | 当前替代 |
+|--------|----------|
+| 业务包直接 `huma.Register` + 手写 `Security` | **`httpapi.Register`**（`Access` + 可选 `Rate`） |
+| 用 `anonymousOperations` 路径大表维护匿名接口 | 注册时 **`Access: Public`**；运行时 Access 表为空则 `/api/v1/*` 默认需登录 |
+| Gin 内存全局限流作为主手段 | Redis 多窗口 + 操作级 `Rate`；默认 IP 配额作为兜底 |
+| Forum Huma Group + 包内鉴权中间件为主 | 完整 path 的 `httpapi.Register` + 全局鉴权/限流（`EnsureDefaults` 仍可用中间件钩子） |
+
+当前规范正文：[HTTP 注册规范](../api/httpapi.md)、仓库 `server/docs/api-conventions.md`。
+
+## 通知 OpenAPI OperationID
+
+通知域 **OperationID** 由 camelCase 改为 kebab（**HTTP 路径未变**）：
+
+| 旧 OperationID | 当前 OperationID |
+|----------------|------------------|
+| `listNotifications` | `notification-list` |
+| `getUnreadCount` | `notification-unread-count` |
+| `markAsRead` | `notification-mark-read` |
+| `markAllAsRead` | `notification-mark-all-read` |
+| `deleteNotification` | `notification-delete` |
+
+仅影响 OpenAPI `operationId` 与限流注册键；客户端若按 operationId 生成代码需同步。
+
 ## 相关
 
-- [安全策略](../architecture/security_policy.md)
+- [安全策略](../architecture/security_policy.md)（当前模型）
+- [HTTP 注册规范](../api/httpapi.md)（当前写法）
 - [公开文档边界](./public_docs_policy.md)

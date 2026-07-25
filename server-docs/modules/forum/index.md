@@ -8,7 +8,7 @@ sidebar_position: 0
 
 [返回模块总览](../index.md)
 
-论坛模块（`internal/domains/forum`）提供登录用户可见的社区能力。**接口以 OpenAPI 为准**；排序权重与治理阈值为实现细节，公开文档只描述行为。
+论坛模块（`internal/domains/forum`）提供登录用户可见的社区能力。路由经 `httpapi.Register` 声明（User / Admin Access 与写限流）。**字段以 OpenAPI 为准**；排序权重与治理阈值为实现细节，公开文档只描述行为。
 
 ## 子文档
 

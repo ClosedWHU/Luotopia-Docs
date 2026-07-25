@@ -18,19 +18,22 @@ description: 模块化单体、domains 划分与请求链路
 
 ```mermaid
 graph TD
-    User((客户端)) --> API["Huma / Gin"]
-    API --> Auth[JWT / Session / API Key]
-    API --> Identity[identity]
-    API --> Forum[forum]
-    API --> Course[course_review]
-    API --> Search[search]
-    API --> Campus[campus]
+    User((客户端)) --> Gin[Gin 入口]
+    Gin --> MW[日志 / CORS / Altcha]
+    MW --> Huma[Huma + 鉴权 + 限流]
+    Huma --> Identity[identity]
+    Huma --> Forum[forum]
+    Huma --> Course[course_review]
+    Huma --> Search[search]
+    Huma --> Campus[campus]
     Identity --> PG[(Postgres)]
     Forum --> PG
     Course --> PG
-    Identity --> Redis[(Redis)]
-    API --> Metrics[metrics 独立端口]
+    Huma --> Redis[(Redis 限流/会话)]
+    Gin --> Metrics[metrics 独立端口]
 ```
+
+业务 API 经 **`httpapi.Register`** 声明 Access / Rate；见 [HTTP 注册规范](../api/httpapi.md)。
 
 ## 域职责（摘要）
 
@@ -45,7 +48,7 @@ graph TD
 
 ## 登录请求（示意）
 
-1. `POST /api/v1/user/login`（白名单 + 验证码等）  
+1. `POST /api/v1/user/login`（`AccessPublic` + 验证码 / 限流等）  
 2. 签发 access / refresh  
 3. 后续：`Authorization: Bearer …`  
 4. 中间件解析 JWT（可选会话绑定）  

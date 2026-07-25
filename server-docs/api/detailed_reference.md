@@ -55,7 +55,7 @@ X-Api-Secret: <secret>
 
 ### 2.3 其它认证
 
-Passkey、MFA、邮箱验证、密码重置、token 刷新等路径见 OpenAPI 与 `anonymousOperations` 白名单。废弃能力与旧文档差异见 [已移除与迁移](../meta/removed-and-migrated.md)。
+Passkey、MFA、邮箱验证、密码重置、token 刷新等路径见 OpenAPI；公开能力以 `AccessPublic` 为准（[HTTP 注册规范](./httpapi.md)）。
 
 ---
 

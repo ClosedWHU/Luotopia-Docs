@@ -28,10 +28,15 @@ sidebar_position: 3
 底座：`internal/platform/`。入口：`cmd/`（仅 `serve` / `worker` / `cli`）。
 
 ## 3. API 开发流程
-我们使用 Huma v2 框架，它会自动生成 OpenAPI 文档：
-1. 在 `model/` 中定义 `Input` 和 `Output` 结构体。
-2. 在 `http/` 中实现 Handler 函数。
-3. 在 `Register` 方法中注册路由，并添加适当的 `Tags` 和 `Summary`。
+
+使用 Huma v2 生成 OpenAPI，业务路由统一经 **`httpapi.Register`**（禁止业务包直接 `huma.Register`）：
+
+1. 定义 `Input` / `Output` 结构体（Huma tag + JSON snake_case）。  
+2. 在 `http/` 实现 Handler；错误用 `httpapi.Error` / `ToHumaError`，勿向客户端透传底层 `err.Error()`。  
+3. 在 `RegisterRoutes` 中调用 `httpapi.Register`，填写 kebab `OperationID`、`Access`、可选 `Rate`、`Tags`、`Summary`。  
+4. 公开接口使用 `AccessPublic`；管理接口使用 `AccessAdmin` / `AccessSuperAdmin`。  
+
+细则：[HTTP 注册规范](../api/httpapi.md)、`server/docs/api-conventions.md`。
 
 ## 4. Git 工作流
 - **分支管理**: 开发新功能请创建 `feat/feature-name` 分支。

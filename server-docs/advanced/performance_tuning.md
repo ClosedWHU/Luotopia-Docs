@@ -31,7 +31,7 @@ description: 数据库、缓存与服务端通用调优原则
 ## 3. HTTP 与业务
 
 - 强制分页与合理 `limit` 上限。  
-- 昂贵接口限流（见 `security.rate_limit`）。  
+- 昂贵接口限流（默认 IP 配额 + 按操作 `httpapi.Op.Rate`；见 [HTTP 注册规范](../api/httpapi.md)）。  
 - 避免在请求路径做全表扫描式搜索词。  
 
 ## 4. 搜索
