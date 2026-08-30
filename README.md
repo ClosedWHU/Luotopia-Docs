@@ -1,4 +1,6 @@
 # Luotopia 文档站（Docusaurus）
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FClosedWHU%2FLuotopia-Docs.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FClosedWHU%2FLuotopia-Docs?ref=badge_shield)
+
 
 三个**一级路由**、三套侧边栏：
 
@@ -99,3 +101,7 @@ erDiagram
 注意：ER 实体属性块内**不要**写 `%%` 注释（会破坏解析）。复杂注释写在图外。
 
 用户指南：`/user/`（源目录 `user-docs/`）。
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FClosedWHU%2FLuotopia-Docs.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FClosedWHU%2FLuotopia-Docs?ref=badge_large)
