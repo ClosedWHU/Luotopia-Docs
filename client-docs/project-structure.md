@@ -16,8 +16,13 @@ app/lib/
 ├── app/              # 启动、路由、Shell、装配
 ├── core/             # 与业务无关的基础设施
 ├── features/         # 按功能切分（页面 / 账号 / 天气…）
-└── shared/           # 跨 feature 的领域模型与通用 UI
+├── shared/           # 跨 feature 的领域模型与通用 UI
+└── toolkit/          # AI Agent 工具运行时（application / credentials / data）
 ```
+
+`toolkit/data/` 存放工具适配器（如 `payment_checkout_vault.dart`、`water_electric_adapters.dart`、`school_net_adapters.dart`），`toolkit/application/` 为工具与 catalog 定义，`toolkit/credentials/` 为凭据 provider。
+
+仓库级相关目录（`app/` 下）：`ohos/`（HarmonyOS 工程）、`packages/`（本地 Dart 包：`luotopia_agent_harness`、`luotopia_agent_tool_runtime`、`luotopia_flutter_bridge`、`luotopia_toolkit_core`、`luotopia_toolkit_virtual_cli`）、`native/`（Rust 原生组件）、`tool/ohos/`（鸿蒙构建脚本）。
 
 ## core/
 

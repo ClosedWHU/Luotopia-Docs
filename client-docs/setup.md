@@ -14,6 +14,9 @@ description: Flutter 安装、运行与后端联调
 
 ## 安装与运行
 
+> [!IMPORTANT]
+> `lib/core/l10n/arb` 是指向 `ClosedWHU/Luotopia-i18n` 的 git submodule。fresh clone 需 `git clone --recurse-submodules`，或 clone 后执行 `git submodule update --init`，否则 l10n 生成缺 arb 文件。
+
 ```bash
 cd app
 flutter pub get
@@ -31,6 +34,10 @@ build-release.bat
 脚本启用 `--obfuscate` 与 split debug info。Cargo/fjs 缓存目录见 `.gitignore` 中的 `.cargo-target`（避免 `flutter clean` 清掉数十分钟编译缓存）。
 
 iOS / 桌面发布脚本见 `app/build-ios*.sh`、Windows MSIX 配置（`pubspec` `msix_config`），以仓库脚本为准。
+
+### HarmonyOS NEXT 构建
+
+使用 OH Flutter 3.35（非官方 SDK，版本约束见 `pubspec.yaml` 注释）。构建入口为 `tool/ohos/build.ps1` / `tool/ohos/env.ps1`，详见 `tool/ohos/BUILD.md`。
 
 ## 联调后端
 

@@ -10,20 +10,23 @@ description: AppWebViewPage 接入方式
 
 ## 框架边界
 
+底层栈为 `zikzak_inappwebview`，页面层通过平台中立抽象 `AppWebViewController`（`shared/presentation/widgets/webview/app_web_view_types.dart`）访问：Linux 走 `webview_all`（WebKitGTK）后端，其余原生平台走 Zikzak 后端。业务代码只面向抽象，不直接依赖插件类型。
+
 `AppWebViewPage` 负责通用生命周期：
 
-- 创建并持有 `WebViewController`  
-- 启用 `JavaScriptMode.unrestricted`  
-- Android：`setUseWideViewPort(true)`、`setTextZoom(100)`  
+- 创建并持有 `AppWebViewController`  
+- 默认启用 JavaScript  
+- Android：`controller.configureAndroid(useWideViewPort: true, textZoom: 100, ...)`  
+- 首次导航前自动注入校园 CAS 会话（见下）  
 - 统一标题栏、返回、刷新、加载层、进度条、主框架错误层  
 - 返回：WebView 可后退时先 `goBack()`，否则退出页面  
 - 导航拦截与带 headers 重新加载  
 
-不处理业务：
+会话与业务边界：
 
-- 不判断武大账号是否登录  
-- 不调用 `whuAuthProvider`  
-- 不完成 CAS 登录  
+- 默认 `primeCampusSession: true`：自动调用 `whuAuthProvider.primeCasCookiesForWebView(controller)`，把当前武大 CAS Cookie 写入 WebView Cookie 存储，校园页免登录打开；无有效会话时静默匿名打开  
+- 绝不能触碰武大会话的页面显式传 `primeCampusSession: false`  
+- 框架不判断是否已登录、不做登录跳转  
 - 不解析业务 URL、Cookie 或 JS 消息  
 - 不注入业务 JS  
 
@@ -46,7 +49,7 @@ return AppWebViewPage(
 
 ## 需要登录或会话准备
 
-登录检查、Cookie 注入、服务授权等放在 `initialRequest` 中。未满足条件时返回 `null`，并用页面状态配合 `overlayBuilder` 展示业务提示。
+CAS Cookie 注入由框架自动完成（`primeCampusSession` 默认 `true`），业务侧无需再手动调用。登录检查、服务授权等业务前置条件放在 `initialRequest` 中。未满足条件时返回 `null`，并用页面状态配合 `overlayBuilder` 展示业务提示。
 
 ```dart
 return AppWebViewPage(
@@ -59,7 +62,6 @@ return AppWebViewPage(
       return null;
     }
 
-    await authNotifier.primeCasCookiesForWebView();
     return AppWebViewRequest(uri: entryUri);
   },
   overlayBuilder: (context, state, controller) {
@@ -70,6 +72,9 @@ return AppWebViewPage(
   },
 );
 ```
+
+> [!NOTE]
+> 特殊场景需在业务代码手动补注入时，使用新签名 `whuAuthProvider.primeCasCookiesForWebView(controller)`（参数为 `AppWebViewController`）；无有效 CAS 会话时抛 `WhuAuthException`。
 
 ## 需要指定 Headers
 
@@ -128,7 +133,7 @@ Bridge 回调中可弹窗、写仓储或 `showAppSnackBar*`；不要把业务规
 
 ## 新页面自查
 
-- 除 `AppWebViewPage` 外，不直接创建 `WebViewController()`  
+- 除 `AppWebViewPage` 外，不直接实例化 WebView 控制器；业务代码只面向 `AppWebViewController` 抽象  
 - 不复制加载层、错误层、返回键和刷新按钮样板  
 - 认证、Header、JS bridge 只通过回调接入  
 - 敏感 Cookie、token、学号、姓名、设备指纹不写入代码或可提交文档  

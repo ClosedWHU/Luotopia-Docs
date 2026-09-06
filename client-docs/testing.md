@@ -24,7 +24,7 @@ flutter test test/features/campus/
 |------|------|
 | 单元 | domain 规则、纯 Dart 转换、GPA、版本比较等 |
 | Widget | 关键页面状态（加载 / 空 / 错误） |
-| 集成 | 可选；网络用 mock |
+| 集成 | 可选；网络用 mock。`integration_test/` 已有 smoke、AI stream、voice 套件 |
 
 - 测 ViewModel / Notifier 时用 `ProviderContainer`，避免依赖真实网络  
 - `whu_auth`、Dio 用 mock 接口  

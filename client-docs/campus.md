@@ -46,7 +46,7 @@ lib/features/pages/campus/sub_apps/<子应用名>/
 `campus_page.dart`：
 
 ```text
-showBusPreview = layout.showBusPreviewCard && !kIsWeb
+showBusPreview = layout.showBusPreviewCard
 ```
 
 - 为 true：渲染预览卡片，`excludedAppIds` 含 `bus`（网格无图标）  
