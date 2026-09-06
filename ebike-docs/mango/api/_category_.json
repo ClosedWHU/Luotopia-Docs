@@ -1,0 +1,9 @@
+{
+  "label": "接口清单",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "slug": "/ebike/mango/api",
+    "description": "按业务模块分组的接口路径、方法与调用方（前缀 /miniMango/v1，JWT Bearer + mg-sig 签名）。"
+  }
+}

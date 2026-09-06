@@ -79,6 +79,16 @@ const config: Config = {
       },
     ],
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'ebike',
+        path: 'ebike-docs',
+        routeBasePath: 'ebike',
+        sidebarPath: require.resolve('./sidebarsEbike.ts'),
+        editUrl: 'https://github.com/ClosedWHU/luotopia/tree/main/docs/',
+      },
+    ],
+    [
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
@@ -146,6 +156,13 @@ const config: Config = {
           label: '服务端开发',
         },
         {
+          type: 'docSidebar',
+          sidebarId: 'ebikeSidebar',
+          docsPluginId: 'ebike',
+          position: 'left',
+          label: '电单车接口',
+        },
+        {
           href: 'https://github.com/ClosedWHU/luotopia',
           label: 'GitHub',
           position: 'right',
@@ -161,6 +178,7 @@ const config: Config = {
             {label: '用户指南', to: '/user/'},
             {label: '客户端开发', to: '/client/'},
             {label: '服务端开发', to: '/server/'},
+            {label: '电单车接口', to: '/ebike/'},
           ],
         },
         {
