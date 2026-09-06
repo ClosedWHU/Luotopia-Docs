@@ -14,7 +14,7 @@ app/lib/
 ├── main.dart
 ├── app/              # 启动、路由、Shell、装配
 ├── core/             # 与业务无关的基础设施
-├── features/         # 按功能切分（页面 / 账号 / 天气…）
+├── features/         # 按功能切分（页面 / 账户 / 天气…）
 ├── shared/           # 跨 feature 的领域模型与通用 UI
 └── toolkit/          # AI Agent 工具运行时（application / credentials / data）
 ```
@@ -34,13 +34,13 @@ app/lib/
 | 区域 | 说明 |
 |------|------|
 | `features/pages/` | 完整页面：home、list、campus、settings、ai、forum… |
-| `features/luotopia_auth/` | 珞家账号 |
+| `features/luotopia_auth/` | 珞家账户 |
 | `features/whu_auth/` | 武大教务认证 |
 | `features/weather/` | 天气（直连第三方） |
 | `features/campus_bus/` | 校巴数据与预览卡片 |
 | `features/app_update/` | 安装包版本检查（官网 Pages Function） |
 | `features/hot_update/` | 解析脚本热更新（manifest + Ed25519） |
-| `features/forum/`、`course_review/` 等 | 其它独立能力 |
+| `features/forum/`、`course_review/` 等 | 其他独立能力 |
 
 页面内部可按需有 `presentation` / `domain` / `data`，**不为占位强行建空目录**。
 

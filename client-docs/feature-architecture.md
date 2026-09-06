@@ -1,6 +1,6 @@
 ---
 sidebar_position: 4
-title: Feature 架构约定
+title: Flutter Feature 架构约定
 sidebar_label: Feature 约定
 description: feature-first 布局、分层规则与迁移例外
 ---

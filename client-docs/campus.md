@@ -35,7 +35,7 @@ lib/features/pages/campus/sub_apps/<子应用名>/
 | 空闲教室 / 部分主数据 | UI + 可选 API | `campus/*` 域 |
 | E 卡 / 座位 / 场馆 | 多为本机会话 + WebView | 不代持密码 |
 | 课程评价资格 | 本地成绩 → 同步最小数据 | identity / course_review |
-| 校园巴士预览 | `CampusBusCard` + 布局偏好 | 不经过业务服 |
+| 校园巴士预览 | `CampusBusCard` + 布局偏好 | 不经过业务服务器 |
 | 安装包更新 / 热更新脚本 | 官网 `www.whu.sb` | 非 `system` 域（见下） |
 
 详见 [服务端 · 校园边界](pathname:///server/modules/campus-proxies)。

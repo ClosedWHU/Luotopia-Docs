@@ -1,5 +1,5 @@
 ---
-title: 状态管理
+title: 状态管理（Riverpod）
 sidebar_label: 状态管理
 sidebar_position: 5
 description: Riverpod 与 ViewModel / Notifier 约定

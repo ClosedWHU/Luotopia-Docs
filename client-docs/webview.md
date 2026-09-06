@@ -136,4 +136,4 @@ Bridge 回调中可弹窗、写仓储或 `showAppSnackBar*`；不要把业务规
 - 不复制加载层、错误层、返回键和刷新按钮样板  
 - 认证、Header、JS bridge 只通过回调接入  
 - 敏感 Cookie、token、学号、姓名、设备指纹不写入代码或可提交文档  
-- 需要武大统一认证时优先复用 `whu_auth`，不要在页面层拼接 Cookie  
+- 需要武大统一身份认证时优先复用 `whu_auth`，不要在页面层拼接 Cookie  

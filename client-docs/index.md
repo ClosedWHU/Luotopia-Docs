@@ -9,7 +9,7 @@ Flutter 跨平台 App（Riverpod + Material 3 + go_router）。代码在 monorep
 
 侧栏按阅读顺序排列。快速跳转：
 
-| 你想… | 去 |
+| 目标 | 文档 |
 |--------|-----|
 | 装环境、联调后端 | [环境搭建](./setup.md) |
 | 目录与分层 | [架构](./architecture.md) · [目录结构](./project-structure.md) · [Feature 约定](./feature-architecture.md) |
@@ -19,18 +19,18 @@ Flutter 跨平台 App（Riverpod + Material 3 + go_router）。代码在 monorep
 | 能力地图 / 更新 | [功能模块](./features.md) · [更新与热更新](./updates.md) |
 | 测试 / 迁移项 | [测试](./testing.md) · [已移除与迁移](./removed-and-migrated.md) |
 
-其它分区：
+其他分区：
 
 - [用户怎么用 App](pathname:///user/)
 - [服务端开发](pathname:///server/)
 
-## 几条硬约定
+## 硬性约定
 
 - UI：**Material 3**（含 M3E loading；SnackBar 用 `showAppSnackBar*`）
 - 业务 API：`Authorization: Bearer`，无请求 HMAC 签名
 - 武大教务会话：只在设备本地（`whu_auth`）
 - 天气：客户端直连第三方
-- 安装包更新 / 解析脚本热更新：官网 `www.whu.sb`（homepage），**不是**业务服 `system/update`  
+- 安装包更新 / 解析脚本热更新：官网 `www.whu.sb`（homepage），**不是**业务服务器 `system/update`  
 - Feature 分层与迁址状态：[Feature 约定](./feature-architecture.md)
 
 公开文档只写到**契约与工程边界**；第三方协议细节与密钥见 [公开文档边界](pathname:///server/meta/public-docs-policy)。

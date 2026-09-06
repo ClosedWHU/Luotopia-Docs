@@ -15,7 +15,7 @@ description: Dio、Bearer JWT、customServerUrl
 | 认证头 | `Authorization: Bearer <token>` |
 | 401 | refresh 后重试 |
 | 自定义服务器 | 开发者 `customServerUrl` |
-| 请求签名 | **无**（个别校园第三方如座位预约另有 HMAC，与业务服无关） |
+| 请求签名 | **无**（个别校园第三方如座位预约另有 HMAC，与业务服务器无关） |
 | 官网 HTTP | `package:http`（更新、热更新、友情链接等） |
 
 服务端总览：[API 使用指南](pathname:///server/api/overview)。

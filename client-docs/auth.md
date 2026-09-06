@@ -1,6 +1,6 @@
 ---
-title: 认证与账号
-sidebar_label: 认证与账号
+title: 认证与账户
+sidebar_label: 认证与账户
 sidebar_position: 8
 description: 珞家 JWT、武大教务会话、开发者服务器
 ---
@@ -31,17 +31,17 @@ description: 珞家 JWT、武大教务会话、开发者服务器
 
 | 配置 | 典型 |
 |------|------|
-| `AppConfig.apiBaseUrl` | 模拟器 `http://10.0.2.2:6262`，其它 `http://localhost:6262` |
+| `AppConfig.apiBaseUrl` | 模拟器 `http://10.0.2.2:6262`，其他 `http://localhost:6262` |
 | 开发者 `customServerUrl` | 覆盖默认，如 `http://10.0.2.2:6262` |
 | `AppConfig.siteBaseUrl` | 官网 `https://www.whu.sb`（更新 / 热更新 / 法律 / 友情链接） |
 
 开启：设置 → 关于 → 连点版本 → 开发者设置。
 
-`customServerUrl` **只**覆盖珞家业务服，**不**改变 `siteBaseUrl`。
+`customServerUrl` **只**覆盖珞家业务服务器，**不**改变 `siteBaseUrl`。
 
 ## 武大教务
 
-- 登录页 / 设置中的武大账号  
+- 登录页 / 设置中的武大账户  
 - 生命周期：后台过久可主动刷新教务会话  
 - WebView 校园业务：统一用 `AppWebViewPage` 模式挂 Cookie / Header  
 
@@ -51,7 +51,8 @@ description: 珞家 JWT、武大教务会话、开发者服务器
 
 全站请求 HMAC 与旧校园目录等已集中见 [已移除与迁移](./removed-and-migrated.md)。
 
-仍须遵守：不要把教务 Cookie 放到 Luotopia REST body/header 让服务端代爬。
+> [!IMPORTANT]
+> 仍须遵守：不要把教务 Cookie 放到 Luotopia REST body/header 让服务端代爬。
 
 ## 相关
 
