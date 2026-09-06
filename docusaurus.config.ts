@@ -1,4 +1,5 @@
 import {themes as prismThemes} from 'prism-react-renderer';
+import {remarkAlert} from 'remark-github-blockquote-alert';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
@@ -37,7 +38,7 @@ const config: Config = {
     [
       'classic',
       {
-        // Disable default docs; use three instances below for /user /client /server
+        // Disable default docs; use four instances below for /user /client /server /ebike
         docs: false,
         blog: false,
         theme: {
@@ -55,7 +56,8 @@ const config: Config = {
         path: 'user-docs',
         routeBasePath: 'user',
         sidebarPath: require.resolve('./sidebarsUser.ts'),
-        editUrl: 'https://github.com/ClosedWHU/luotopia/tree/main/docs/',
+        editUrl: 'https://github.com/ClosedWHU/Luotopia-Docs/tree/main/user-docs/',
+        remarkPlugins: [remarkAlert],
       },
     ],
     [
@@ -65,7 +67,8 @@ const config: Config = {
         path: 'client-docs',
         routeBasePath: 'client',
         sidebarPath: require.resolve('./sidebarsClient.ts'),
-        editUrl: 'https://github.com/ClosedWHU/luotopia/tree/main/docs/',
+        editUrl: 'https://github.com/ClosedWHU/Luotopia-Docs/tree/main/client-docs/',
+        remarkPlugins: [remarkAlert],
       },
     ],
     [
@@ -75,7 +78,8 @@ const config: Config = {
         path: 'server-docs',
         routeBasePath: 'server',
         sidebarPath: require.resolve('./sidebarsServer.ts'),
-        editUrl: 'https://github.com/ClosedWHU/luotopia/tree/main/docs/',
+        editUrl: 'https://github.com/ClosedWHU/Luotopia-Docs/tree/main/server-docs/',
+        remarkPlugins: [remarkAlert],
       },
     ],
     [
@@ -85,7 +89,8 @@ const config: Config = {
         path: 'ebike-docs',
         routeBasePath: 'ebike',
         sidebarPath: require.resolve('./sidebarsEbike.ts'),
-        editUrl: 'https://github.com/ClosedWHU/luotopia/tree/main/docs/',
+        editUrl: 'https://github.com/ClosedWHU/Luotopia-Docs/tree/main/ebike-docs/',
+        remarkPlugins: [remarkAlert],
       },
     ],
     [
@@ -98,6 +103,7 @@ const config: Config = {
           {from: '/server/03-api/detailed_reference', to: '/server/api/detailed-reference'},
           {from: '/server/deploy/backend-build-and-deploy', to: '/server/deployment/backend-build-and-deploy'},
           {from: '/server/advanced', to: '/server/advanced/performance_tuning'},
+          {from: '/server/meta/public_docs_policy', to: '/server/meta/public-docs-policy'},
         ],
         createRedirects(existingPath: string) {
           // Skip category/index routes that collide as both `/foo` and `/foo/` on Windows

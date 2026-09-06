@@ -83,7 +83,7 @@ SCHOOL_CALENDAR_DATA_HOST=../WHU-sb-Calendar/data
 返回认证用户的所有手动事件，支持按日期范围过滤。
 
 **查询参数**:
-```
+```text
 ?start_date=2026-05-01&end_date=2026-05-31&limit=50
 ```
 

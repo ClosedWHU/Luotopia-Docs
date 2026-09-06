@@ -29,7 +29,7 @@ sidebar_position: 10
 返回认证用户的时间表条目（字段与过滤以 OpenAPI 为准）。
 
 **查询参数**:
-```
+```text
 ?semester=2024-2025-1&limit=50&offset=0
 ```
 
