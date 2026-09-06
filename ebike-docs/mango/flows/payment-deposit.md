@@ -11,7 +11,7 @@ sidebar_position: 1
 
 **小程序端从不接触商户密钥，也不自行签名。** 统一模式：
 
-```
+```text
 客户端 → POST /miniMango/v1/finance/ticket/<某业务>  { amount(分), channel:"miniMango", openid }
        ← { charge: { timeStamp, nonceStr, package, signType, sign }, ticket: { _id } }
 客户端 → wx.requestPayment({
@@ -73,7 +73,7 @@ globalData.depositWay = (enableMiniDepositCard && enableMiniDeposit) ? n[0].mini
 
 `pages/deposit/deposit.js` 的分支（`_goToPayDeposit`）：
 
-```
+```text
 needBuyType === "deposit"（从扫码/首页强制进入）
 ├─ depositWay === true  → POST /finance/deposit            { channel, openid, depositAmount: regionDepositAmount }
 ├─ freeDepositAndCommutingCard.enable === true
@@ -92,7 +92,7 @@ needBuyType !== "deposit"（从账户页进入）→ 直接 stillBuyCard()
 扫码时的免押判定（`pages/readyUnlock/readyUnlock.js` `getStock`）：服务端在 `GET /ebike/stock/number` 里返回 `needPayDeposit: true` + `message` 时，toast 后 `navigateTo ../deposit/deposit?needBuyType=deposit`，并通过 `eventChannel.on("depositPaySuccess")` 在支付成功后**自动重放 `getStock(number)`**（`pages/deposit/deposit.js` `successCallback` 里 `getOpenerEventChannel().emit("depositPaySuccess")`，兜底调 `prevPage.payDepositEnd()`）。
 
 `pages/index/index.js` `scannerCheckoutAccount` 的前置门禁顺序：
-```
+```text
 loginStatus? → (deposit !== 0 || isFreeDeposit)? → !hasUnpayOrder? → 武大授权协议弹窗? → readyUnlock
 ```
 注意其中有一行 `g.globalData.deposit = 1`（在判断前**强行把押金态改成 1**），使 `0 !== deposit` 恒真 —— 押金门禁在首页扫码链路里实际被这行代码短路了，真正的押金校验落在服务端 `getStock` 的 `needPayDeposit`。同样的写法出现在 `checkIndexStatus()`（`t.globalData.deposit = 1`）。这看起来是运营侧临时放开小程序押金门槛的改动，属于**前端校验形同虚设**的典型例子（服务端仍是最终裁决者）。

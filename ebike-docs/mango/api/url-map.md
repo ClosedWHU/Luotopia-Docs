@@ -7,7 +7,7 @@ sidebar_position: 8
 
 ## 附录 A：`utils/util.js` URL 表全量 key（100 个，按源码顺序）
 
-```
+```text
 serachForPath, getOpenId, getPhoneNumber, phoneCreateToken, sendCode, phoneWXCreateToken, auth,
 couponInfo, getWallet, getUserInfo, getShare, getStock, getStockInfo, stockCanUseCheck, createOrder,
 getRegion, nearStock, stockInfo, nearPark, plakingLotPlanning, plakingLotNavigation,

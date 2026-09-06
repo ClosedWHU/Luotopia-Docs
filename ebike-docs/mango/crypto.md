@@ -20,7 +20,7 @@ sidebar_position: 4
 
 `M` 的字段（全部按 `&&` 短路条件填充，falsy 字段直接缺席）：
 
-```
+```text
 固定： endpoint: "mini",  plat: "miniMango"
 定位： lat, lng, accuracy, altitude, horizontalAccuracy, speed, verticalAccuracy   ← globalData.location（wx.getLocation type:"gcj02"）
 系统： SDKVersion, batteryLevel, benchmarkLevel, brand, fontSizeSetting, language,

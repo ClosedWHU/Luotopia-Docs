@@ -205,7 +205,7 @@ uploadFile: function (e) {
 
 以 `PUT /miniMango/v1/order/order/lockWithExpires`（临时锁车，`pages/index/index.js` `onLock`）为例：
 
-```
+```text
 调用：dataRequest({ url:"temporaryLock", method:"put", bodyParam:{ expires: 40 } })
 → url    = "https://api.mangoebike.com/miniMango/v1/order/order/lockWithExpires"
 → query  = {}                     → 无 "query:*"
@@ -229,7 +229,7 @@ body（wx.request 对 PUT 会把 data 放 body）：{"expires":40}
 
 再以带数组 query 的 `GET /miniMango/v1/operation/parkingLot/near`（`pages/index/index.js` `getParkingLots`）为例：
 
-```
+```text
 data = { parkingPattern: 2, center: [108.36, 22.81], zoom: 16,
          regionIds: ["1905231014892"], stockSearchRadius: 200 }
 mg-sk = "query:parkingPattern,query:center,query:zoom,query:regionIds,query:stockSearchRadius"

@@ -56,7 +56,7 @@ exports.default = { conn: e };
 
 ### 8.1 扫码开锁
 
-```
+```text
 [入口 A] 微信扫小程序码 → pages/loginPre?scancode=xxx 或 pages/index?q=<encoded>
          → globalData.scanCode = 车牌号
 [入口 B] 首页/开锁页点「扫码」→ pages/readyUnlock → _scanner()
@@ -112,7 +112,7 @@ unlockBike()
 
 ### 8.2 骑行中
 
-```
+```text
 pages/index/index.js onShow → fetchCurrentOrder()，并由 checkTimeOut() 挂 10s 定时器
 GET /order/order/processing
   → boxId = order.box, stockNo, orderId
@@ -159,7 +159,7 @@ GET /order/order/processing
 
 ### 8.3 还车（结束行程）
 
-```
+```text
 onCompleteOrderPopUp
   ├─ isCharterOrder → 先弹 showCharterTip（包车提示）→ charterBeforeFinish
   └─ → fetchCurrentOrder(cb) = PUT /order/order/snap      ← 还车前判定快照
@@ -287,7 +287,7 @@ PUT /order/order/finish 的失败分支（服务端通过 response 里的开关�
 
 由此可还原计费构成：
 
-```
+```text
 应付 = rent.finalTotal
      + helmetDispatchCost        （头盔未归还罚费）
      + noParkingDispatchCost     （禁停区还车罚费）

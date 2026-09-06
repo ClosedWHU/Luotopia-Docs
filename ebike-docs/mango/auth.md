@@ -27,7 +27,7 @@ sidebar_position: 2
 
 启动即触发，用户无感。
 
-```
+```text
 app.js onLaunch
   └─ globalData.token = wx.getStorageSync("token")
   └─ globalData.scene  = wx.getLaunchOptionsSync().scene
@@ -105,7 +105,7 @@ r.createToken(l);
 
 ### 3.4 登录方式三：短信验证码登录
 
-```
+```text
 pages/enterPhone/enterPhone.js  _sendCodeButtonEvent
   └─ POST /miniMango/v1/account/verify  { tel }              // key: sendCode
        → 成功后 globalData.tel = tel, navigateTo enterCode
