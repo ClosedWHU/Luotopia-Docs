@@ -5,18 +5,19 @@ sidebar_label: 安全策略
 slug: security-policy
 ---
 
-> **一句话**：HTTPS + Bearer JWT（或会话 / 用户 API 凭证）+ 服务端鉴权与限流。  
-> **不做**：全站请求 HMAC / `X-Api-Sign`（说明见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)）。  
-> 实现：`internal/middleware/huma_auth.go`、`httpapi` Access 注册表、限流中间件。
+当前安全模型：HTTPS + Bearer JWT（或会话 / 用户 API 凭证）+ 服务端鉴权与限流。
+
+- **不做**：全站请求 HMAC / `X-Api-Sign`（说明见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)）。
+- 实现：`internal/middleware/huma_auth.go`、`httpapi` Access 注册表、限流中间件。
 
 ## 1. 认证机制
 
 ### 1.1 JWT 令牌（主路径）
 
-- **签署算法**: HS256，密钥为 `security.jwt_secret`。
-- **载荷 (Claims)**: 含用户 ID、用户名、角色、是否管理员、可选 `session_id`，以及标准 `exp`。
-- **使用方式**: `Authorization: Bearer <access_token>`。
-- **会话绑定**: 若 JWT 含 `session_id`，服务端会校验会话是否仍有效；吊销会话后 token 立即失效。
+- **签署算法**：HS256，密钥为 `security.jwt_secret`。
+- **载荷 (Claims)**：含用户 ID、用户名、角色、是否管理员、可选 `session_id`，以及标准 `exp`。
+- **使用方式**：`Authorization: Bearer <access_token>`。
+- **会话绑定**：若 JWT 含 `session_id`，服务端会校验会话是否仍有效；吊销会话后 token 立即失效。
 
 ### 1.2 OIDC / SSO 会话
 
@@ -26,7 +27,7 @@ slug: security-policy
 ### 1.3 用户 API 凭证（集成用）
 
 - 用户可创建自己的 `API Key` + `API Secret`（个人开发者/脚本集成）。
-- **用法**: 请求头同时携带 `X-Api-Key` 与 `X-Api-Secret`（明文比对/哈希校验凭证本身）。
+- **用法**：请求头同时携带 `X-Api-Key` 与 `X-Api-Secret`（明文比对/哈希校验凭证本身）。
 - **不是** 全站共享的请求 HMAC 签名；也**不**对 body 做 `X-Api-Sign`。
 - 权限较窄：默认仅允许部分只读 GET（如 courses / teachers / reviews / search / random）。
 - 另有凭证级 RPM / RPH / 日 / 月配额（与接口限流叠加）。
@@ -39,7 +40,7 @@ slug: security-policy
 
 - 注册、登录、token 刷新、邮箱验证、密码重置、MFA / Passkey 登录相关
 - 验证码配置 / Altcha 挑战
-- 系统更新检查、密码策略、部分公开读（搜索、课评读、校车等，以 `AccessPublic` 为准）
+- 系统更新检查、密码策略、部分公开读（搜索、课评读、校巴等，以 `AccessPublic` 为准）
 - 头像二进制 `GET /api/v1/avatars/{id}`、论坛 `GET /api/v1/forum/health`
 
 未在 Access 表注册的 `/api/v1` 操作按需登录。写法见 [HTTP 注册规范](../api/http_api.md)。
@@ -48,10 +49,10 @@ slug: security-policy
 
 ### 2.1 角色 / Access
 
-1. **Public**: 无需登录（仅声明为 Public 的操作）。
-2. **User**: 登录用户（JWT / Session；部分路径允许 API Key）。
-3. **Admin**: 管理能力（admin 或 superadmin）。
-4. **SuperAdmin**: 更敏感管理（用户、队列、缓存、embedding 等；路径与 Access 声明双重约束）。
+1. **Public**：无需登录（仅声明为 Public 的操作）。
+2. **User**：登录用户（JWT / Session；部分路径允许 API Key）。
+3. **Admin**：管理能力（admin 或 superadmin）。
+4. **SuperAdmin**：更敏感管理（用户、队列、缓存、embedding 等；路径与 Access 声明双重约束）。
 
 ### 2.2 路由保护
 
@@ -75,17 +76,16 @@ slug: security-policy
 | 食堂 | `dining:manage` |
 
 > [!IMPORTANT]
-> `teacher:delete` 被 course_review 教师管理端点强制（`GET/DELETE/PUT /api/v1/admin/teachers/...`，见 `teacher_handler.go` 与 `teacher_admin.go`），但**不在**上述种子清单中：`admin` 角色默认无此权限，仅 `superadmin` 直通（`CheckClaimsPermission`，`internal/middleware/auth.go`）或需手工创建该权限并授予角色。
+> 个别权限码（如 `teacher:delete`）的种子化状态以部署为准：未种子化的权限码默认不授予任何角色，需在 RBAC 中手工创建并授予后方可通过校验。
 
 ## 3. 安全防御措施
 
 ### 3.1 速率限制
 
-- **默认**：未单独声明时，对 `/api/v1/*` 按 IP 约 50 次/分钟（Redis 多窗口）。
-- **按操作声明**：`httpapi.Op.Rate`（单窗口或多层：分钟/小时/天；主体 IP / User / UserOrIP）。
-- **共享预算**：相同 `Scope` 的多个操作共用计数（如头像上传与删除）。
-- **豁免**：头像 GET、health/ready/metrics，以及 `Exempt: true`。
-- 登录等路径仍可叠加 identity 侧尝试次数窗口。
+- **默认**：未单独声明 Rate 的操作回落到默认 IP 配额；配额与窗口机制以部署配置（`security.rate_limit`）为准。
+- **按操作声明**：敏感操作可在注册时通过 `httpapi.Op.Rate` 单独声明配额。
+- **豁免**：基础设施与静态读路径可豁免限流，清单以实现为准。
+- 登录等路径仍可叠加 identity 侧尝试次数限制。
 
 详见 [HTTP 注册规范 · 限流](../api/http_api.md#4-限流)。
 
@@ -131,5 +131,8 @@ A: 注册时使用 `Access: Public`。见 [HTTP 注册规范](../api/http_api.md
 **Q: 旧的匿名路径表 / huma.Register 去哪了？**  
 A: 见 [已移除与迁移 · HTTP 路由注册](../meta/removed_and_migrated.md#http-路由注册huma--httpapi)。
 
----
-[返回目录](../index.md)
+## 相关
+
+- [HTTP 注册规范](../api/http_api.md)
+- [配置手册](../deployment/config.md)
+- [服务端概览](../index.md)

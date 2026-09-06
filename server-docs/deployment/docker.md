@@ -90,11 +90,12 @@ docker compose exec redis redis-cli
 - 所有 API 与 worker 的 `storage.root_dir` 指向同一个可读写 namespace。
 - 挂载必须支持多实例并发读写与原子 create-if-absent；典型选择是 RWX PVC、NFS 或具备等价语义的共享文件系统。
 - 不得为每个 Pod/主机配置独立本地盘，即使容器内路径都显示为 `/app/storage`。
-- rolling update 前先执行 migration；migration 21 创建 readiness 所需的 `storage_backend_probes` 表。
+- rolling update 前先执行数据库迁移（readiness 依赖的探测表由迁移创建）。
 
-API 的 `GET /ready` 与 worker 启动会先执行临时对象写入、读取和删除，再把数据库中的共享 token 与固定 backend key `.probe/shared-backend` 比对。首个实例负责初始化 sentinel；后续实例如果挂载到不同 namespace、后端不可写或读到不同内容，API 将返回不就绪，worker 将拒绝启动 dispatcher/reconcile。HTTP 响应只暴露稳定的 `storage unavailable`，具体错误留在服务日志中。
+API 的 `GET /ready` 与 worker 启动会校验共享存储：实例间通过共享存储哨兵校验挂载一致性；机制细节以实现为准。如果实例挂载到不同 namespace、后端不可写或校验不一致，API 将返回不就绪，worker 将拒绝启动 dispatcher/reconcile。HTTP 响应只暴露稳定的 `storage unavailable`，具体错误留在服务日志中。
 
-readiness 能阻止新启动的 split mount 实例接流量，但不能替代存储监控、容量告警和备份。变更共享卷前应在预发布环境验证两个独立 API 实例间上传/下载，并验证 worker 能处理另一实例生成的 deletion intent。
+> [!CAUTION]
+> readiness 能阻止新启动的 split mount 实例接流量，但不能替代存储监控、容量告警和备份。变更共享卷前应在预发布环境验证两个独立 API 实例间上传/下载，并验证 worker 能处理另一实例生成的 deletion intent；否则可能导致素材丢失或不一致。
 
 ## Postgres 插件
 
@@ -126,7 +127,7 @@ docker run -d --name luotopia-api \
 | metrics 宿主机 404 | `metrics_host` 是否 `0.0.0.0`；是否误绑 `127.0.0.1` 却做了端口映射 |
 | 配置启动失败 | 日志中的 `unknown config field(s)` |
 | 校历 ICS 无校历事件 | 确认镜像为含 `whucalendar` 依赖的构建版本 |
-| `/ready` 返回 `storage unavailable` | API/worker 是否挂载同一 RWX namespace；`storage.root_dir` 是否一致且可读写；migration 21 是否已执行；日志中是否有 sentinel 缺失或 token mismatch |
+| `/ready` 返回 `storage unavailable` | API/worker 是否挂载同一 RWX namespace；`storage.root_dir` 是否一致且可读写；数据库迁移是否已执行；服务日志中的存储哨兵校验错误 |
 
 ## 相关
 

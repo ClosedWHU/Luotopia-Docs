@@ -4,9 +4,6 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-
-[返回模块总览](../index.md)
-
 论坛模块（`internal/domains/forum`）提供登录用户可见的社区能力。路由经 `httpapi.Register` 声明（User / Admin Access 与写限流）。**字段以 OpenAPI 为准**；排序权重与治理阈值为实现细节，公开文档只描述行为。
 
 ## 子文档
@@ -44,5 +41,9 @@ A: 在互动写路径更新；读路径使用已存储分值（以实现为准�
 **Q: 新帖为何可能靠前？**  
 A: 时间衰减使新内容有初始曝光机会。
 
----
-[返回模块总览](../index.md)
+## 相关
+
+- [治理与规则](./governance.md)
+- [内容安全](./moderation.md)
+- [模块详解](../index.md)
+

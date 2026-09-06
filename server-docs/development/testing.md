@@ -43,5 +43,9 @@ cd server
 go test ./...
 ```
 
----
-[返回开发指南](pathname:///server/development)
+## 相关
+
+- [开发指南](pathname:///server/development)
+- [集成测试](../modules/services/integration_testing.md)
+- [服务端开发规范](./contributing.md)
+

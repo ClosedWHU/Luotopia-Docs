@@ -1,36 +1,21 @@
 ---
 sidebar_position: 2
-title: Account Deletion Policy
+title: 账号注销策略
 slug: account-deletion
 sidebar_label: 账号注销
-description: Central-account deletion scope, retained records, and recovery window
+description: 中心账户的注销范围、保留记录与恢复窗口
 ---
 
-`identity_users` is the sole authoritative Luotopia account record. Local usernames,
-forum nicknames, WHU student IDs, and device identifiers are not interchangeable.
-In particular, a WHU CAS/device session only proves possession for a provider flow; it
-does not create or replace a central identity session.
+`identity_users` 是唯一权威的 Luotopia 账户记录。本地用户名、论坛昵称、武大学号与设备标识彼此不可互换。特别地，武大 CAS / 设备会话仅在对应提供商流程中证明持有关系，不会创建或替代中心身份会话。
 
-Deleting an account is one database transaction. It deletes private data: email and
-external identity bindings, passkeys, sessions/refresh tokens, API credentials and
-usage, devices, consents, notifications, timetable snapshots and entries, calendar
-events, transcripts, completion records, grade submissions, forum profile state,
-attachments, reactions, favorites, aliases, and memberships. Storage object rows owned
-by the account are deleted inside that transaction; for each affected blob path the
-transaction records a deletion intent, and the storage reconciler retries physical file
-removal asynchronously until it succeeds.
+注销账户在**一个数据库事务**内完成，删除私有数据：邮箱与外部身份绑定、passkey、会话 / refresh token、API 凭证及其使用记录、设备、隐私同意、通知、课表快照与条目、日历事件、成绩记录、修读完成记录、给分样本、论坛资料状态、附件、反应、收藏、别名与成员关系。账户拥有的存储对象元数据行在同一事务内删除；对每个受影响的 blob 路径，事务会记录 deletion intent，由存储 reconciler 异步重试物理文件删除直至成功。
 
-Public forum posts and comments are retained for thread continuity and moderation, but
-their author ID is replaced with the system `anonymous` account and their displayed
-author name becomes `Deleted user`. Public course reviews are retained but their
-`user_id` is cleared. No blanket database cascade is used.
+公开的论坛帖子与评论为保持帖子连续性与可审核性而保留，但作者 ID 会替换为系统 `anonymous` 账户，展示的作者名变为 `Deleted user`。公开的课程评价保留，但其 `user_id` 被清空。系统不使用全库级联删除。
 
-The intentional non-FK user references are public/forum and audit history: post and
-comment authors (pseudonymized on deletion), review authors (cleared on deletion),
-audit/outbox history, and moderation actor fields. Pending deletion intents reference
-blob paths only and carry no owner reference, so they never block account deletion.
-Timetable entries, timetable snapshots, and calendar events also retain
-application-enforced ownership checks so client import/sync flows are not
-broken by a database migration. They are still deleted explicitly by the lifecycle
-transaction. These references are handled by the lifecycle transaction or retention
-policy rather than being allowed to block account deletion.
+有意保留的非外键用户引用包括公开 / 论坛内容与审计历史：帖子与评论作者（注销时假名化）、评价作者（注销时清空）、审计 / outbox 历史以及审核操作者字段。待处理的 deletion intent 只引用 blob 路径、不携带属主引用，因此永远不会阻塞账号注销。课表条目、课表快照与日历事件同样保留应用层的所有权校验，客户端导入 / 同步流程不因数据库迁移而失效；它们仍由生命周期事务显式删除。上述引用统一由生命周期事务或保留策略处理，不允许阻塞账号注销。
+
+## 相关
+
+- [身份认证模块](./index.md)
+- [隐私同意、设备与云同步](./privacy_sync.md)
+- [Docker 部署 · 多实例存储要求](../../deployment/docker.md#多实例存储要求)

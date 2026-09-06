@@ -10,9 +10,11 @@ JSON 日历 API 以 OpenAPI / `httpapi` 为准。订阅用 ICS 下载：`GET /ap
 
 ## 功能特性
 
-1. **ICS / Feed**: 校历 + 用户课表合成标准 iCalendar（`FeedService`）。
-2. **手动事件管理**: 用户自建事件 CRUD。
-3. **Legacy 导入**: 兼容校内遗留 curl 课表导入（`calendar_import.go`）。
+| 能力 | 说明 |
+|------|------|
+| ICS / Feed | 校历 + 用户课表合成标准 iCalendar（`FeedService`） |
+| 手动事件管理 | 用户自建事件 CRUD |
+| Legacy 导入 | 兼容校内遗留 curl 课表导入（`calendar_import.go`） |
 
 ## 校历数据（内嵌）
 
@@ -25,98 +27,53 @@ JSON 日历 API 以 OpenAPI / `httpapi` 为准。订阅用 ICS 下载：`GET /ap
 
 ### 用户事件（概念）
 
-用户可创建手动日历事件。常见字段：标题、描述、地点、起止时间、是否全天。  
+用户可创建手动日历事件。常见字段：标题、描述、地点、起止时间、是否全天。
 **字段名与类型以 OpenAPI 为准。**
 
 校历主数据来自 `whucalendar` Go 包（见上文），与用户事件分离。
 
 ## API 接口
 
-### 生成 ICS 文件
-**请求**: `POST /api/v1/calendar/generate`
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/v1/calendar/export` | 导出 ICS 日历 feed |
+| GET | `/api/v1/calendar/export.ics` | 订阅用 ICS 下载（Gin；可选鉴权） |
+| GET | `/api/v1/calendar/events` | 列出用户事件（按 `start_at` / `end_at` 范围过滤） |
+| POST | `/api/v1/calendar/events` | 创建用户事件 |
+| DELETE | `/api/v1/calendar/events/{id}` | 删除指定事件（仅事件所有者） |
 
-根据已导入的课程数据和学期首个周日生成 ICS 格式的日历文件。
+### 创建事件请求体（摘要）
 
-**请求体**:
-```json
-{
-  "semester": "2024-2025-1",
-  "include_manual_events": true
-}
-```
+字段名以 OpenAPI 为准（JSON 为 camelCase）：
 
-**响应**:
-```json
-{
-  "ics_content": "BEGIN:VCALENDAR\nVERSION:2.0\n..."
-}
-```
-
-### 列出用户事件
-**请求**: `GET /api/v1/calendar/events`
-
-返回认证用户的所有手动事件，支持按日期范围过滤。
-
-**查询参数**:
-```text
-?start_date=2026-05-01&end_date=2026-05-31&limit=50
-```
-
-### 创建新事件
-**请求**: `POST /api/v1/calendar/events`
-
-为用户创建一个新的日历事件。
-
-**请求体**:
 ```json
 {
   "title": "项目报告会",
   "description": "小组项目进展报告",
   "location": "教室 202",
-  "start_at": "2026-05-20T14:00:00Z",
-  "end_at": "2026-05-20T16:00:00Z",
-  "is_all_day": false
+  "startAt": "2026-05-20T14:00:00Z",
+  "endAt": "2026-05-20T16:00:00Z",
+  "isAllDay": false,
+  "category": "study"
 }
 ```
-
-**响应**:
-```json
-{
-  "id": 12345,
-  "user_id": 1001,
-  "title": "项目报告会",
-  "created_at": "2026-05-13T10:30:00Z"
-}
-```
-
-### 删除事件
-**请求**: `DELETE /api/v1/calendar/events/{id}`
-
-删除指定的日历事件。仅事件所有者可以删除。
-
----
 
 ## 使用场景
 
-### 场景 1: 导出到 Apple Calendar
-1. 用户在 Luotopia App 中点击"导出日历"
-2. 系统生成 ICS 文件
-3. 用户在邮件中点击 `.ics` 附件
-4. 自动导入到 Apple Calendar
+### 导出到外部日历
 
-### 场景 2: 添加个人提醒事件
-1. 期末考试前用户创建"考试准备"事件
-2. 设置时间为考前一周
-3. 日历应用推送提醒通知
-
----
+1. 用户在 Luotopia App 中触发「导出日历」。
+2. 系统生成 ICS 内容或提供订阅链接。
+3. 用户在外部日历应用（如 Apple Calendar）中导入 `.ics` 或订阅 feed。
 
 ## 最佳实践
 
-- **时区处理**: 所有时间统一为 UTC，客户端负责时区转换
-- **ICS 标准**: 严格遵循 RFC 5545 标准，确保兼容性
-- **性能优化**: 大量事件查询时使用分页，默认每页 50 条
+- **时区处理**：时间统一使用 RFC3339 时间戳，客户端负责时区转换。
+- **ICS 标准**：严格遵循 RFC 5545 标准，确保兼容性。
+- **性能优化**：事件查询按时间范围过滤；分页与上限以 OpenAPI 为准。
 
----
+## 相关
 
-[返回模块列表](./index.md)
+- [课程时间表](./timetable.md)
+- [模块详解](./index.md)
+- [已移除与迁移](../meta/removed_and_migrated.md)

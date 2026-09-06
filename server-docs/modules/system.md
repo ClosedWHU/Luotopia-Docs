@@ -33,5 +33,8 @@ sidebar_position: 13
 - 远程配置键集合以实现与运营配置为准（如维护开关等），勿假设固定键名永远存在。  
 - 版本检查请求参数（platform 等）以 OpenAPI 为准。
 
----
-[返回模块总览](./index.md)
+## 相关
+
+- [官网与外部面](./external_surfaces.md)
+- [模块详解](./index.md)
+

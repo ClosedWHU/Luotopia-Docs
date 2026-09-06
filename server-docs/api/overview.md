@@ -48,7 +48,7 @@ X-Api-Secret: <secret>
 
 ## 文档与调试
 
-服务起来后（端口换成你的配置）：
+服务启动后（端口以实际配置为准）：
 
 ```text
 http://localhost:6262/docs          # 交互文档（路径以实例为准）
@@ -57,9 +57,8 @@ http://localhost:6262/openapi.json  # 或仓库导出的 openapi.json
 
 ## 限流
 
-- 默认：未单独配置时，API 按 IP 约 50 次/分钟。
-- 敏感操作可声明多层窗口（分钟/小时/天）与主体（IP / 用户）。
-- 配置项与实现见 `security` 配置、Redis 限流与 [HTTP 注册规范](./http_api.md#4-限流)。
+- 默认 IP 配额与窗口机制以部署配置为准（`security.rate_limit`）；未单独声明 Rate 的操作回落到默认配额。
+- 敏感操作可在注册时单独声明配额，见 [HTTP 注册规范](./http_api.md#4-限流)。
 - 登录等路径另有 identity 侧尝试次数限制。
 
 ## 不在本 API 的客户端能力

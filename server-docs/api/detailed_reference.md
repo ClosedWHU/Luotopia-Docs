@@ -1,74 +1,32 @@
 ---
-title: 业务接口调用规范
+title: API 调用规范
 sidebar_label: 调用规范
 slug: detailed-reference
 sidebar_position: 3
 ---
 
-> **权威来源**：运行中服务的 OpenAPI（`/openapi.json`）。本文为常用调用**摘要**，字段与路径冲突时以 OpenAPI / 代码为准。  
+> **权威来源**：运行中服务的 OpenAPI（`/openapi.json`）。本文为常用调用**规范与示例**，字段与路径冲突时以 OpenAPI / 代码为准。
 > 不在此文档中复制完整 schema；新增接口请改 OpenAPI 生成物，而非只改本文。
 
-本文说明认证方式与若干核心调用形态，帮助客户端对接。
+本文说明核心调用形态与示例请求体，帮助客户端对接。端点索引见 [API 接口参考（摘要）](./full_reference.md)。
 
-## 1. 认证机制
+## 认证
 
-### 1.1 JWT（推荐）
+认证方式（JWT / 用户 API 凭证 / Web 会话）统一见 [API 使用指南 · 认证](./overview.md#认证)；默认鉴权规则见 [安全策略](../architecture/security_policy.md)。全站请求 HMAC 的迁移说明见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)。
 
-受保护接口在 Header 中携带：
+## 课程评价调用
 
-```http
-Authorization: Bearer <access_token>
-```
+### 提交评价 `POST /api/v1/reviews`
 
-`/api/v1/*` 默认要求认证；仅登录注册、刷新 token、验证码等白名单路径可匿名。详见 [安全策略](../architecture/security_policy.md)。
+支持用户对课程进行多维度评分，需携带 `Authorization`，且要求已具备评价资格（见 [课评身份与资格策略](../modules/forum/course_review_and_identity_policy.md)）。
 
-### 1.2 用户 API 凭证（可选，集成用）
+**请求体**（字段全集以 OpenAPI 为准）：
 
-```http
-X-Api-Key: <key>
-X-Api-Secret: <secret>
-```
-
-用于用户级脚本集成，**不是**对请求体的 HMAC 签名。权限限于部分只读 GET。
-
-全站请求 HMAC 的迁移说明见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)。
-
----
-
-## 2. 身份认证接口
-
-### 2.1 用户注册 `POST /api/v1/user/register`
-用于新用户入驻，需提供基础账号信息。
-
-**Request Body**:
-```json
-{
-  "username": "luotopian",
-  "password": "very_secure_password",
-  "email": "student@whu.edu.cn"
-}
-```
-
-### 2.2 用户登录 `POST /api/v1/user/login`
-支持用户名/密码验证。登录成功后，服务器会设置 `jwt` Cookie 并返回 Token。
-
-### 2.3 其它认证
-
-Passkey、MFA、邮箱验证、密码重置、token 刷新等路径见 OpenAPI；公开能力以 `AccessPublic` 为准（[HTTP 注册规范](./http_api.md)）。
-
----
-
-## 3. 课程评价接口
-
-### 3.1 提交评价 `POST /api/v1/reviews`
-支持用户对课程进行详细维度的评分。需携带 `Authorization`。
-
-**Request Body**:
 ```json
 {
   "course_uid": "CS101-WHU",
   "title": "课程作业量适中",
-  "content": "老师讲得很细...",
+  "content": "老师讲得很细……",
   "rating": 4.5,
   "difficulty": 3,
   "workload": 4,
@@ -84,54 +42,59 @@ Passkey、MFA、邮箱验证、密码重置、token 刷新等路径见 OpenAPI�
 }
 ```
 
----
+## 论坛调用
 
-## 4. 论坛接口
+### 聚合信息流 `GET /api/v1/forum/feed`
 
-### 4.1 获取聚合信息流 `GET /api/v1/forum/feed`
-返回当前全站最热的帖子列表。
+返回当前全站热门帖子列表（排序语义见 [论坛模块](../modules/forum/index.md)）。
 
-### 4.2 发布帖子 `POST /api/v1/forum/posts`
-**Request Body**:
+### 发布帖子 `POST /api/v1/forum/posts`
+
+**请求体**：
+
 ```json
 {
-  "board_id": "main",
+  "boardId": "main",
   "title": "关于选课的讨论",
-  "content": "大家觉得这学期的...",
-  "tag_slugs": ["选课", "求助"]
+  "content": "大家觉得这学期的……",
+  "tagSlugs": ["选课", "求助"]
 }
 ```
 
-### 4.3 帖子互动 `POST /api/v1/forum/posts/{id}/reactions`
-**Request Body**:
+### 帖子互动 `POST /api/v1/forum/posts/{id}/reactions`
+
+**请求体**：
+
 ```json
 {
   "value": 1
 }
 ```
-`value`: `1` 为点赞，`-1` 为踩。
 
----
+`value`：`1` 为点赞，`-1` 为踩，`0` 为取消。
 
-## 5. 校园数据集成
+## 校园数据边界
 
-该模块负责桥接校内开放数据平台。
+校园侧数据（教务、图书馆、场馆等）不由本 API 代理：
 
-### 5.1 课程搜索 `GET /api/v1/external/ham/course/search`
-**Query Parameters**:
-- `keyword`: 搜索关键词（如：计算机）
-- `keyword_type`: `0` 名称，`1` 老师
+- 依赖**武大个人会话**的能力由 App 直连，服务端不接收教务 Cookie / 密码，见 [校园边界](../modules/campus_proxies.md)。
+- 外部只读数据补充（如给分大盘）由服务端内部客户端拉取，**不对外暴露代理路由**，见 [给分与统计](../modules/course/course_grades.md)。
 
----
+## 集成 FAQ
 
-## 6. 开发建议与集成 FAQ
+### 列表性能
 
-### 6.1 列表性能优化
-所有列表接口均支持 `page` 和 `limit` 参数。建议在客户端实现无限滚动时，`limit` 保持在 20 左右。
+列表接口支持分页参数（`page` / `limit` 或 `limit` / `cursor`，以 OpenAPI 为准）。客户端无限滚动时建议 `limit` 保持在 20 左右。
 
-### 6.2 响应异常排查
-**Q: 为什么接口返回 401 但没有具体的错误提示？**
-A: 请检查 `Authorization` Header 格式。如果 Token 已过期，系统会返回业务代码 `1002`。
+### 响应异常排查
 
----
-[返回目录](../index.md)
+**Q：为什么接口返回 401 但没有具体的错误提示？**
+
+A：请检查 `Authorization` Header 格式。令牌过期时返回业务码 `1002`（可静默刷新）；登录凭据错误统一返回业务码 `1004`。语义见 [错误码](./error_codes.md)。
+
+## 相关
+
+- [API 使用指南](./overview.md)
+- [API 接口参考（摘要）](./full_reference.md)
+- [错误码](./error_codes.md)
+- [HTTP 注册规范](./http_api.md)

@@ -25,5 +25,9 @@ sidebar_position: 6
 - Handler 在 `admin/http`  
 - 跨域数据访问应遵守模块边界；管理操作建议记审计日志  
 
----
-[返回目录](./index.md)
+## 相关
+
+- [模块详解](./index.md)
+- [安全策略](../architecture/security_policy.md)
+- [日志与审计](./platform/logging.md)
+

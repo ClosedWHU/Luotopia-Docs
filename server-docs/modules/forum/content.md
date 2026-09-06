@@ -4,7 +4,6 @@ sidebar_label: 内容与搜索
 sidebar_position: 2
 ---
 
-
 代码：`internal/domains/forum`。下列为**对外行为与设计边界**；排序权重、缓存键与 SQL 以实现为准，不在公开文档中固定公式。
 
 ## 1. 内容模型（概念）

@@ -6,7 +6,6 @@ sidebar_label: MFA 与 Passkey
 description: SMTP、OTP、WebAuthn 域名关联
 ---
 
-
 ## SMTP
 
 生产环境 MFA 需要在服务端配置 `identity.email`：
@@ -50,3 +49,8 @@ Android asset links 须包含 `delegate_permission/common.get_login_creds`、包
   }
 ]
 ```
+
+## 相关
+
+- [身份认证模块](./index.md)
+- [安全与防御策略](./security.md)

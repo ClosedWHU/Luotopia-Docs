@@ -37,5 +37,9 @@ sidebar_position: 14
 | 客户端 | [更新与热更新](pathname:///client/updates) |
 | 用户 | [设置](pathname:///user/settings) · [FAQ](pathname:///user/faq) |
 
----
-[返回模块总览](./index.md)
+## 相关
+
+- [系统管理](./system.md)
+- [模块详解](./index.md)
+- [已移除与迁移](../meta/removed_and_migrated.md)
+

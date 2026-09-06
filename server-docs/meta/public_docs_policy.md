@@ -1,5 +1,5 @@
 ---
-title: 公开文档边界（开源文档站）
+title: 公开文档边界
 sidebar_label: 公开文档边界
 description: 文档站开源时，写到什么深度、禁止写什么
 slug: public-docs-policy

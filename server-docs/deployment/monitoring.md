@@ -7,7 +7,7 @@ sidebar_position: 4
 
 实现：`internal/platform/monitoring`。
 
-## 怎么暴露
+## 暴露方式
 
 | 方式 | 默认 |
 |------|------|

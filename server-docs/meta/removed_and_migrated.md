@@ -6,7 +6,6 @@ sidebar_position: 4
 description: 服务端废弃协议与迁移说明的唯一汇总；主文档只写当前行为
 ---
 
-
 本文是**弃用与迁移的唯一汇总**。主文档（架构、API、模块）只写当前行为；若需了解「曾经怎样 / 勿再使用什么」，查本文。
 
 新代码与外部对接以「当前替代」及 [OpenAPI](../api/overview.md)、[HTTP 注册规范](../api/http_api.md) 为准。
@@ -36,6 +35,19 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 
 当前无 `internal/domains/chat`，不要依赖 `/api/v1/chat/*` 或历史 WebSocket 私聊说明。状态页见 [即时通讯](../modules/chat.md)。
 
+## 客户端成绩上传授资（transcript/sync）
+
+| 旧做法 | 当前替代 |
+|--------|----------|
+| `POST /api/v1/user/transcript/sync`（客户端上传成绩行，`client_transcript` 源授评价资格） | `POST /api/v1/user/review-eligibility/sync`（服务端核验教务成绩后授资） |
+| `POST /api/v1/course/grades/submit`、`GET /api/v1/course/grades/stats/{course_uid}` | `GET /api/v1/course/grades/view/{course_uid}` 及 resolve / prepare / teachers 端点 |
+
+客户端上传的历史成绩行仅作为私有数据保留（legacy），不再授予评价 / 给分资格。当前说明见 [给分与统计](../modules/course/course_grades.md) 与 [课评身份与资格策略](../modules/forum/course_review_and_identity_policy.md)。
+
+## 尚未落地的空闲教室实时推算
+
+空闲教室数据为批量导入；「对接教务实时排课表做即时空闲推算」等说法未落地，不要依赖相关接口。当前说明见 [空闲教室查询](../modules/classroom.md)。
+
 ## 官网更新与热更新不属于 system 主路径
 
 安装包更新与解析脚本热更新由官网 homepage 提供；`system` 域不作为 Flutter 主分发路径。见 [官网与外部面](../modules/external_surfaces.md)。
@@ -46,7 +58,7 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 |--------|----------|
 | 业务包直接 `huma.Register` + 手写 `Security` | **`httpapi.Register`**（`Access` + 可选 `Rate`） |
 | 用 `anonymousOperations` 路径大表维护匿名接口 | 注册时 **`Access: Public`**；运行时 Access 表为空则 `/api/v1/*` 默认需登录 |
-| Gin 内存全局限流作为主手段 | Redis 多窗口 + 操作级 `Rate`；默认 IP 配额作为兜底 |
+| Gin 内存全局限流作为主手段 | 操作级 `Rate` 配额 + 默认 IP 配额兜底（数值与机制以部署配置为准） |
 | Forum Huma Group + 包内鉴权中间件为主 | 完整 path 的 `httpapi.Register` + 全局鉴权/限流（`EnsureDefaults` 仍可用中间件钩子） |
 
 当前规范正文：[HTTP 注册规范](../api/http_api.md)、仓库 `server/docs/api-conventions.md`。

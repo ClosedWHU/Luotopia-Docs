@@ -19,7 +19,7 @@ sidebar_position: 1
 | `database.name` | 库名 | `luotopia`（与 Postgres 一致） |
 | `cache.redis_url` | Redis | `redis:6379` |
 | `security.jwt_secret` | JWT 密钥 | **生产必换** |
-| `security.rate_limit` | 限流（实现窗口见 `rate_window`） | `200` |
+| `security.rate_limit` | 默认 API 限流配额（窗口见 `security.rate_window`） | 值以部署配置为准 |
 | `monitoring.metrics_host` | metrics 绑定 | 本机 `127.0.0.1`；容器 scrape 用 `0.0.0.0` |
 | `monitoring.metrics_port` | metrics 端口 | `9090` |
 | `monitoring.expose_metrics_on_api` | 是否在业务口挂 `/metrics` | `false` |
@@ -32,7 +32,7 @@ sidebar_position: 1
 
 - `identity.enabled`：是否启用身份模块  
 - `identity.oidc.*`：令牌 TTL、签发密钥等  
-- `identity.social.providers`：社交登录（如 HAM）；字段为 camelCase  
+- `identity.social.providers`：社交登录（如 Ham）；字段为 camelCase  
 
 完整字段见 `internal/platform/config` 与样例 `config/*.json`。
 

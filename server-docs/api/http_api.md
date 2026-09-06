@@ -6,7 +6,6 @@ description: httpapi.Register、Access、限流与错误契约
 sidebar_position: 2
 ---
 
-
 本文描述 Go 业务 API 的**当前**注册方式、鉴权声明与限流。字段级路径与 schema 仍以 **OpenAPI** 为准。
 
 弃用写法、旧白名单、OperationID 重命名等见 **[已移除与迁移](../meta/removed_and_migrated.md#http-路由注册huma--httpapi)**。
@@ -42,14 +41,15 @@ httpapi.Register(api, httpapi.Op{
     Tags:    []string{"Forum"},
     Access:  httpapi.AccessUser,
     Rate: &httpapi.Rate{
-        Scope:    "forum-write-user",
+        Scope:    "example-write-user",
         Subject:  httpapi.SubjectUser,
-        Windows:  []cache.RateWindow{cache.MinuteWindow(5), cache.HourWindow(60)},
-        FailOpen: true,
+        Windows:  []cache.RateWindow{cache.MinuteWindow(<N>), cache.HourWindow(<M>)},
         Detail:   "too many forum write requests",
     },
 }, h.PostPosts)
 ```
+
+配额数值与降级策略以实现为准，不在公开文档中固定。
 
 业务包不要直接调用 `huma.Register`（仅由 `httpapi.Register` 内部调用）。
 
@@ -58,7 +58,7 @@ httpapi.Register(api, httpapi.Op{
 | `ID` | `{domain}-{verb}-{object?}`，kebab-case |
 | `Path` | 通常 `/api/v1/...`；OIDC/社交可有 `/auth/*`、`/oidc/*`、`/.well-known/*` |
 | `Access` | 同时决定 OpenAPI `Security` 与运行时鉴权 |
-| `Rate` | 省略则默认 IP 约 50/分钟；`Exempt: true` 不限流 |
+| `Rate` | 省略则回落默认配额（以部署配置为准）；`Exempt: true` 不参与限流 |
 
 ### Access
 
@@ -99,12 +99,10 @@ return nil, middleware.ToHumaError(ctx, appErrors.NotFoundf("..."))
 
 | 能力 | 说明 |
 |------|------|
-| 实现 | Redis 多窗口计数 `AllowMultiWindow` |
-| 窗口 | 单窗口或多层（分钟 / 小时 / 天） |
-| 主体 | IP / User / UserOrIP |
-| 共享预算 | 相同 `Scope` + 主体共享配额（如头像上传与删除） |
-| 默认 | 未声明 Rate 的 `/api/v1/*`：约 IP 50/分钟 |
-| 豁免 | 头像二进制 GET、health/ready/metrics，以及 `Exempt: true` |
+| 声明 | `httpapi.Op.Rate`（`Scope` / `Subject` / `Windows` 等字段以代码为准） |
+| 默认 | 未声明 Rate 的 `/api/v1/*` 回落默认 IP 配额；配额与窗口机制以部署配置为准 |
+| 豁免 | 基础设施与静态读路径可豁免限流，清单以实现为准 |
+| 降级 | 限流依赖不可用时的降级策略以实现为准 |
 
 典型声明：登录注册 IP 分层、头像 per-user 多层、论坛写/互动、Agent chat、资料上传等。
 
@@ -120,7 +118,7 @@ return nil, middleware.ToHumaError(ctx, appErrors.NotFoundf("..."))
 
 identity、verification、system、agent、notification、campus（Huma）、dining、search、materials、course_review、admin、forum、platform cache 均经 `httpapi` 注册。通知等 OperationID 命名见 OpenAPI。
 
-## 7. 相关
+## 相关
 
 - [API 使用指南](./overview.md)
 - [安全策略](../architecture/security_policy.md)

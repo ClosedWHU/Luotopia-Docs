@@ -72,7 +72,7 @@ httpapi.Register(api, httpapi.Op{
 }, h.Handler)
 ```
 
-规范：[HTTP 注册规范](../api/http_api.md)、仓库 `server/docs/api-conventions.md`。更细：[贡献规范](./contributing.md)。
+规范：[HTTP 注册规范](../api/http_api.md)、仓库 `server/docs/api-conventions.md`。更细：[服务端开发规范](./contributing.md)。
 
 ## 常见问题
 

@@ -4,7 +4,6 @@ sidebar_label: 内容安全
 sidebar_position: 4
 ---
 
-
 代码：`internal/domains/forum` 与审核相关服务。提供商、阈值、提示词为**运维配置**，公开文档不固定数值。
 
 ## 1. 举报
@@ -64,8 +63,7 @@ A: 若产品启用申诉 API，可按 OpenAPI 发起；复核流程以实现为�
 
 ## 相关
 
-- [内容审核服务](../services/content_moderation.md)  
-- [论坛总览](./index.md)  
+- [内容审核服务](../services/content_moderation.md)
+- [论坛总览](./index.md)
+- [模块详解](../index.md)
 
----
-[返回目录](../index.md)

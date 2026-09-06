@@ -4,7 +4,6 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-
 代码：`internal/domains/course_review/`。
 
 ## 专题
@@ -27,7 +26,7 @@ sidebar_position: 0
 
 ## 常见问题
 
-**Q: 重算会不会压垮库？**  
+**Q: 聚合重算的数据库压力如何控制？**  
 A: 按 `course_id` 限定范围；可配合异步/防抖。
 
 **Q: 为何某评价不进统计？**  

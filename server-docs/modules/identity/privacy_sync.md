@@ -1,10 +1,9 @@
 ---
-title: 隐私同意与成绩同步
+title: 隐私同意、设备与云同步
 slug: privacy-sync
-sidebar_label: 隐私与成绩同步
+sidebar_label: 隐私与云同步
 sidebar_position: 7
 ---
-
 
 ## 目标
 
@@ -98,9 +97,9 @@ Purpose 白名单：
 - 表：`user_timetable_snapshots`  
 - **不含**学号 / Cookie
 
-## 成绩同步
+## 成绩与评价资格
 
-已有 `POST /api/v1/user/transcript/sync`。上线后建议同样要求 `sync.transcript` consent（可在下一刀接入 `RequirePrivacyConsent`）。
+评价 / 给分资格导入见 `POST /api/v1/user/review-eligibility/sync`（服务端核验，见 [给分与统计](../course/course_grades.md)）。该路径是否要求 `sync.transcript` 同意以实现为准（可接入 `RequirePrivacyConsent`）。
 
 ## 禁止上传
 
@@ -116,3 +115,10 @@ Purpose 白名单：
 4. 文档与客户端开关  
 
 不必做通用「任意 JSON 桶」主库。
+
+## 相关
+
+- [身份认证模块](./index.md)
+- [账号注销策略](./account_deletion.md)
+- [给分与统计](../course/course_grades.md)
+

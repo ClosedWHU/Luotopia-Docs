@@ -4,7 +4,6 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-
 路径：`server/internal/platform/`。
 
 ## 常见能力
@@ -18,11 +17,11 @@ sidebar_position: 0
 | `monitoring` | Prometheus 指标、独立 metrics 端口、可选 Basic Auth |
 | `security` | 敏感词等横切能力 |
 
-## 相关文档
+## 相关
 
+- [日志规范与审计](./logging.md)
 - [配置手册](../../deployment/config.md)
 - [监控](../../deployment/monitoring.md)
 - [安全策略](../../architecture/security_policy.md)
+- [模块详解](../index.md)
 
----
-[返回模块总览](../index.md)

@@ -97,5 +97,9 @@ unknown config field(s): monitoring.host, weather
 
 详见 [配置手册](./deployment/config.md) 与 `server/config/README.md`。
 
----
-[返回目录](./index.md)
+## 相关
+
+- [服务端概览](./index.md)
+- [配置手册](./deployment/config.md)
+- [环境搭建](./development/setup.md)
+

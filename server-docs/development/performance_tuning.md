@@ -56,6 +56,10 @@ description: 数据库、缓存与服务端通用调优原则
 | 缓存失效风暴 | 失效粒度、TTL、互斥重建 |
 | 搜索超时 | 缩小 scope、分页、检查索引 |
 
----
+## 相关
 
-[返回开发指南](pathname:///server/development)
+- [开发指南](pathname:///server/development)
+- [HTTP 注册规范](../api/http_api.md)
+- [搜索索引与全文检索](../modules/search/indexing.md)
+- [监控与 Metrics](../deployment/monitoring.md)
+
