@@ -2,9 +2,8 @@
 title: 天气（客户端直连）
 sidebar_label: 天气（无服务端）
 description: 服务端无天气模块；App 直连第三方
-sidebar_position: 20
+sidebar_position: 17
 ---
-# 天气
 
 ## 状态：**服务端无此模块**
 

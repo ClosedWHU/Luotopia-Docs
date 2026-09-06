@@ -4,7 +4,6 @@ sidebar_label: 治理与规则
 sidebar_position: 1
 ---
 
-# 论坛治理与规则
 
 代码：`internal/domains/forum`。下列阈值/白名单逻辑以实现与配置为准。
 

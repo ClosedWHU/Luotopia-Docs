@@ -1,9 +1,9 @@
 ---
 title: 内容审核服务
+slug: content-moderation
 sidebar_label: 内容审核
 sidebar_position: 2
 ---
-# 内容审核服务
 
 对用户生成内容（论坛帖、评论等）做检查，支持敏感词与策略动作。实现与词库路径以部署为准。
 

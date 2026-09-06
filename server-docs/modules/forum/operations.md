@@ -4,7 +4,6 @@ sidebar_label: 运营工具
 sidebar_position: 5
 ---
 
-# 论坛运营工具
 
 代码：`internal/domains/forum`（运营/通知相关 repo）。  
 站内通知列表也可能走 `components/notification`；**以 OpenAPI 为准**。邀请制是否启用取决于产品与配置，勿假设永远强制邀请注册。

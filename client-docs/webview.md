@@ -4,7 +4,6 @@ title: WebView 页面调用规范
 sidebar_label: WebView
 description: AppWebViewPage 接入方式
 ---
-# WebView 页面调用规范
 
 新增 WebView 页面应优先使用 `AppWebViewPage`，不要在业务页面重复编写加载层、错误层、返回和刷新逻辑。
 

@@ -4,7 +4,6 @@ sidebar_label: 测试
 sidebar_position: 16
 description: Flutter 测试约定与重点目录
 ---
-# 测试
 
 ## 命令
 
@@ -42,6 +41,6 @@ flutter test test/features/campus/
 
 ## 相关
 
-- [状态管理](./state_management.md)
+- [状态管理](./state-management.md)
 - [架构](./architecture.md)
 - [更新与热更新](./updates.md)

@@ -4,7 +4,6 @@ sidebar_label: 认证与账号
 sidebar_position: 8
 description: 珞家 JWT、武大教务会话、开发者服务器
 ---
-# 认证与账号
 
 客户端有两套身份，**不要混用**。
 
@@ -56,7 +55,7 @@ description: 珞家 JWT、武大教务会话、开发者服务器
 
 ## 相关
 
-- [API 对接](./api_integration.md)
+- [API 对接](./api-integration.md)
 - [校园功能](./campus.md)
 - [已移除与迁移](./removed-and-migrated.md)
 - [服务端 API](pathname:///server/api/overview)

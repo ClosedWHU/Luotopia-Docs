@@ -1,10 +1,10 @@
 ---
 sidebar_position: 6
 title: CLI 命令参考
+slug: cli-reference
 sidebar_label: CLI 参考
 description: serve / worker / cli 顶层命令
 ---
-# CLI 命令参考
 
 以 `server/cmd` 为准。二进制常见名 `luotopia-backend`。
 

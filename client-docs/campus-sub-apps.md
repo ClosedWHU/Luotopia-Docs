@@ -4,7 +4,6 @@ title: 校园子应用目录
 sidebar_label: 子应用目录
 description: sub_apps 布局、共享边界与当前清单
 ---
-# 校园页子应用架构
 
 校园页主入口与具体子应用分开。路径均相对于 `app/lib/`。
 

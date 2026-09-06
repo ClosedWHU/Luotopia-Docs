@@ -1,10 +1,10 @@
 ---
 title: 课程给分与统计
+slug: course-grades
 sidebar_label: 给分与统计
 sidebar_position: 2
 ---
 
-# 课程给分与统计
 
 ## 模块概述
 

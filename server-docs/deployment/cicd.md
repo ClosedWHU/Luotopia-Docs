@@ -3,7 +3,6 @@ title: CI/CD 与发布
 sidebar_label: CI/CD
 sidebar_position: 3
 ---
-# CI/CD 流程说明
 
 Luotopia 采用 GitHub Actions 作为持续集成工具，确保代码提交的质量与稳定性。
 

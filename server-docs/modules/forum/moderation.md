@@ -4,7 +4,6 @@ sidebar_label: 内容安全
 sidebar_position: 4
 ---
 
-# 论坛内容安全
 
 代码：`internal/domains/forum` 与审核相关服务。提供商、阈值、提示词为**运维配置**，公开文档不固定数值。
 

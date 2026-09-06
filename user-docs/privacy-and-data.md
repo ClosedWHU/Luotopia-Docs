@@ -4,7 +4,6 @@ title: 隐私与数据
 sidebar_label: 隐私与数据
 description: 数据存在哪、是否上传、更新与遥测
 ---
-# 隐私与数据
 
 界面文案与法律文档以 App 内 **关于 / 法律** 页面为准。本文是操作向摘要。
 
@@ -50,6 +49,6 @@ description: 数据存在哪、是否上传、更新与遥测
 
 ## 相关
 
-- [账号](./accounts)  
-- [设置](./settings)  
-- [常见问题](./faq)  
+- [账号](./accounts.md)  
+- [设置](./settings.md)  
+- [常见问题](./faq.md)  

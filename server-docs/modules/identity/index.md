@@ -4,9 +4,6 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-# 身份认证模块
----
----
 
 身份认证模块（原 SSO 项目）是 Luotopia 生态系统的核心，提供基于 OIDC 协议的统一身份管理。
 
@@ -16,7 +13,7 @@ sidebar_position: 0
 - **[HAM vs 教务 CAS](whu_auth.md)**：社交登录与 App 教务会话边界
 - **[账户与资料](profile.md)**
 - **[安全](security.md)**：JWT、Altcha、无限全站 HMAC
-- **[MFA 与 Passkey](mfa-passkeys.md)**：SMTP、OTP、域名关联
+- **[MFA 与 Passkey](mfa_passkeys.md)**：SMTP、OTP、域名关联
 - **[租户与社交登录](tenant.md)**
 
 ## 2. 目录结构

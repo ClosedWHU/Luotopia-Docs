@@ -3,7 +3,7 @@
   "position": 5,
   "link": {
     "type": "generated-index",
-    "slug": "/ebike/zhiyin/api",
-    "description": "按业务模块分组的接口路径、参数与调用方（全部 POST + JSON，走统一签名请求层）。"
+    "description": "按业务模块分组的接口路径、参数与调用方（全部 POST + JSON，走统一签名请求层）。",
+    "slug": "/zhiyin/api"
   }
 }

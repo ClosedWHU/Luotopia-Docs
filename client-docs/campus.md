@@ -4,7 +4,6 @@ sidebar_label: 校园功能
 sidebar_position: 10
 description: 校园页子应用、whu_auth、WebView 约定
 ---
-# 校园功能开发
 
 校园页入口在 `features/pages/campus/`。子应用放在：
 
@@ -39,7 +38,7 @@ lib/features/pages/campus/sub_apps/<子应用名>/
 | 校园巴士预览 | `CampusBusCard` + 布局偏好 | 不经过业务服 |
 | 安装包更新 / 热更新脚本 | 官网 `www.whu.sb` | 非 `system` 域（见下） |
 
-详见 [服务端 · 校园边界](pathname:///server/modules/campus_proxies)。
+详见 [服务端 · 校园边界](pathname:///server/modules/campus-proxies)。
 
 ## 校巴卡片 vs 网格
 

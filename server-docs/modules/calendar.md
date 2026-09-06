@@ -1,9 +1,8 @@
 ---
 title: 校历与 ICS
 sidebar_label: 校历与 ICS
-sidebar_position: 11
+sidebar_position: 8
 ---
-# 日历模块
 
 代码：`internal/domains/campus/calendar`（`http/`：`calendar.go` CRUD、`calendar_feed.go` ICS 导出、`calendar_import.go` legacy 导入；`service/feed.go` 校历 feed）。
 
@@ -20,7 +19,7 @@ JSON 日历 API 以 OpenAPI / `httpapi` 为准。订阅用 ICS 下载：`GET /ap
 校历学年数据由 `whucalendar.LoadAllYears()` 从 Go 依赖 `github.com/ClosedWHU/WHU-Calendar` 内嵌加载（`internal/domains/campus/calendar/service/feed.go`）。升级数据即升级依赖版本，无运行时配置、同步脚本或数据卷。
 
 > [!NOTE]
-> 旧数据卷方案（`server.calendar_data_dir` / `CALENDAR_DATA_DIR`）已移除，见 [已移除与迁移](../meta/removed-and-migrated.md)。
+> 旧数据卷方案（`server.calendar_data_dir` / `CALENDAR_DATA_DIR`）已移除，见 [已移除与迁移](../meta/removed_and_migrated.md)。
 
 ## 数据模型
 

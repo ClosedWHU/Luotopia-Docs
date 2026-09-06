@@ -1,9 +1,8 @@
 ---
 title: 站内通知
 sidebar_label: 站内通知
-sidebar_position: 14
+sidebar_position: 12
 ---
-# 消息通知
 
 代码：`internal/domains/components/notification`。
 

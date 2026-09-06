@@ -3,7 +3,7 @@
   "position": 3,
   "link": {
     "type": "generated-index",
-    "slug": "/api",
-    "description": "使用指南、HTTP 注册规范、调用摘要与错误码（字段以 OpenAPI 为准）。"
+    "description": "使用指南、HTTP 注册规范、调用摘要与错误码（字段以 OpenAPI 为准）。",
+    "slug": "/api"
   }
 }

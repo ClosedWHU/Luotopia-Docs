@@ -4,7 +4,6 @@ sidebar_label: 索引与全文检索
 sidebar_position: 1
 ---
 
-# 搜索索引与全文检索
 
 Luotopia 业务搜索基于 **PostgreSQL 全文检索**（及可选扩展），**无需**独立搜索集群。实现位于 `internal/domains/search`。
 
@@ -67,5 +66,5 @@ curl -s "http://localhost:6262/health"
 ## 相关
 
 - [搜索模块](./index.md)  
-- [SearchEngine 服务](../services/search_engine.md)  
+- [SearchEngine 服务](./index.md)  
 - [API 使用指南](../../api/overview.md)  

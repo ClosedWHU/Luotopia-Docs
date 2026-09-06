@@ -4,7 +4,6 @@ sidebar_label: 功能模块
 sidebar_position: 14
 description: 已实现与开发中能力一览（对照 app/README）
 ---
-# 功能模块地图
 
 以仓库 `app/README.md` 为准；下表方便导航。
 

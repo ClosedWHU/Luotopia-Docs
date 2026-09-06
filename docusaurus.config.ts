@@ -97,13 +97,52 @@ const config: Config = {
       '@docusaurus/plugin-client-redirects',
       {
         redirects: [
-          // Old underscore pathnames (new pages use kebab slugs)
+          // Legacy numbered sections
           {from: '/server/01-architecture/database_design', to: '/server/architecture/database-design'},
           {from: '/server/01-architecture/security_policy', to: '/server/architecture/security-policy'},
           {from: '/server/03-api/detailed_reference', to: '/server/api/detailed-reference'},
           {from: '/server/deploy/backend-build-and-deploy', to: '/server/deployment/backend-build-and-deploy'},
-          {from: '/server/advanced', to: '/server/advanced/performance_tuning'},
           {from: '/server/meta/public_docs_policy', to: '/server/meta/public-docs-policy'},
+          // Underscore URLs -> kebab slugs (2026-09 normalization)
+          {from: '/server/cli_reference', to: '/server/cli-reference'},
+          {from: '/server/api/error_codes', to: '/server/api/error-codes'},
+          {from: '/server/api/full_reference', to: '/server/api/full-reference'},
+          {from: '/server/api/detailed_reference', to: '/server/api/detailed-reference'},
+          {from: '/server/api/httpapi', to: '/server/api/http-api'},
+          {from: '/server/architecture/database_design', to: '/server/architecture/database-design'},
+          {from: '/server/architecture/security_policy', to: '/server/architecture/security-policy'},
+          {from: '/server/meta/style_guide', to: '/server/meta/style-guide'},
+          {from: '/server/modules/campus_proxies', to: '/server/modules/campus-proxies'},
+          {from: '/server/modules/external_surfaces', to: '/server/modules/external-surfaces'},
+          {from: '/server/modules/course/course_grades', to: '/server/modules/course/course-grades'},
+          {from: '/server/modules/identity/privacy_sync', to: '/server/modules/identity/privacy-sync'},
+          {from: '/server/modules/identity/whu_auth', to: '/server/modules/identity/whu-auth'},
+          {from: '/server/modules/services/content_moderation', to: '/server/modules/services/content-moderation'},
+          {from: '/server/modules/services/integration_testing', to: '/server/modules/services/integration-testing'},
+          {from: '/client/api_integration', to: '/client/api-integration'},
+          {from: '/client/multi_platform', to: '/client/multi-platform'},
+          {from: '/client/state_management', to: '/client/state-management'},
+          // Moved / removed pages
+          {from: '/server/advanced', to: '/server/development/performance-tuning'},
+          {from: '/server/advanced/performance_tuning', to: '/server/development/performance-tuning'},
+          {from: '/server/modules/services/search_engine', to: '/server/modules/search'},
+          {from: '/server/05-modules/services/search_engine', to: '/server/modules/search'},
+          // Old label-based category index URLs
+          {from: '/server/category/身份认证', to: '/server/modules/identity'},
+          {from: '/server/category/论坛服务', to: '/server/modules/forum'},
+          {from: '/server/category/课程服务', to: '/server/modules/course'},
+          {from: '/server/category/统一搜索', to: '/server/modules/search'},
+          {from: '/server/category/基础设施', to: '/server/modules/platform'},
+          {from: '/server/category/内部服务', to: '/server/modules/services'},
+          {from: '/server/category/规范与社区', to: '/server/meta'},
+          {from: '/server/category/高级功能', to: '/server/development/performance-tuning'},
+          // Old double-prefixed ebike category URLs
+          {from: '/ebike/ebike/zhiyin', to: '/ebike/zhiyin'},
+          {from: '/ebike/ebike/mango', to: '/ebike/mango'},
+          {from: '/ebike/ebike/zhiyin/api', to: '/ebike/zhiyin/api'},
+          {from: '/ebike/ebike/zhiyin/flows', to: '/ebike/zhiyin/flows'},
+          {from: '/ebike/ebike/mango/api', to: '/ebike/mango/api'},
+          {from: '/ebike/ebike/mango/flows', to: '/ebike/mango/flows'},
         ],
         createRedirects(existingPath: string) {
           // Skip category/index routes that collide as both `/foo` and `/foo/` on Windows
@@ -119,7 +158,8 @@ const config: Config = {
           ];
           for (const [toPrefix, fromPrefix] of pairs) {
             if (existingPath.startsWith(`${toPrefix}/`)) {
-              return [existingPath.replace(toPrefix, fromPrefix)];
+              const legacy = existingPath.replace(toPrefix, fromPrefix);
+              return [legacy, legacy.replace(/-/g, '_')];
             }
           }
           return undefined;

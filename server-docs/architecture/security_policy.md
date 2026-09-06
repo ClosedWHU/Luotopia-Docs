@@ -4,10 +4,9 @@ title: 安全策略
 sidebar_label: 安全策略
 slug: security-policy
 ---
-# 安全策略
 
 > **一句话**：HTTPS + Bearer JWT（或会话 / 用户 API 凭证）+ 服务端鉴权与限流。  
-> **不做**：全站请求 HMAC / `X-Api-Sign`（说明见 [已移除与迁移](../meta/removed-and-migrated.md#全站请求-hmac)）。  
+> **不做**：全站请求 HMAC / `X-Api-Sign`（说明见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)）。  
 > 实现：`internal/middleware/huma_auth.go`、`httpapi` Access 注册表、限流中间件。
 
 ## 1. 认证机制
@@ -43,7 +42,7 @@ slug: security-policy
 - 系统更新检查、密码策略、部分公开读（搜索、课评读、校车等，以 `AccessPublic` 为准）
 - 头像二进制 `GET /api/v1/avatars/{id}`、论坛 `GET /api/v1/forum/health`
 
-未在 Access 表注册的 `/api/v1` 操作按需登录。写法见 [HTTP 注册规范](../api/httpapi.md)。
+未在 Access 表注册的 `/api/v1` 操作按需登录。写法见 [HTTP 注册规范](../api/http_api.md)。
 
 ## 2. 授权机制
 
@@ -88,7 +87,7 @@ slug: security-policy
 - **豁免**：头像 GET、health/ready/metrics，以及 `Exempt: true`。
 - 登录等路径仍可叠加 identity 侧尝试次数窗口。
 
-详见 [HTTP 注册规范 · 限流](../api/httpapi.md#4-限流)。
+详见 [HTTP 注册规范 · 限流](../api/http_api.md#4-限流)。
 
 ### 3.2 人机校验
 
@@ -121,16 +120,16 @@ slug: security-policy
 ## 6. FAQ
 
 **Q: 为什么没有请求体签名？**  
-A: 当前模型为 HTTPS + 用户凭证；旧全站 HMAC 见 [已移除与迁移](../meta/removed-and-migrated.md#全站请求-hmac)。
+A: 当前模型为 HTTPS + 用户凭证；旧全站 HMAC 见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)。
 
 **Q: JWT 密钥泄露后怎么办？**  
 A: 立即轮换 `security.jwt_secret`，并视情况吊销会话；已签发的 access token 在旧密钥下仍可能有效至过期，应配合短 TTL 与会话绑定。
 
 **Q: 不需要登录的接口如何声明？**  
-A: 注册时使用 `Access: Public`。见 [HTTP 注册规范](../api/httpapi.md)。
+A: 注册时使用 `Access: Public`。见 [HTTP 注册规范](../api/http_api.md)。
 
 **Q: 旧的匿名路径表 / huma.Register 去哪了？**  
-A: 见 [已移除与迁移 · HTTP 路由注册](../meta/removed-and-migrated.md#http-路由注册huma--httpapi)。
+A: 见 [已移除与迁移 · HTTP 路由注册](../meta/removed_and_migrated.md#http-路由注册huma--httpapi)。
 
 ---
 [返回目录](../index.md)

@@ -1,12 +1,9 @@
 ---
-id: index
-slug: /
 sidebar_position: 0
 title: 服务端开发文档
 sidebar_label: 概览
 description: Go 后端：架构、开发、API、部署与模块
 ---
-# 服务端开发文档
 
 Go 模块化单体（Huma + Gin + Postgres + Redis）。入口：`serve` | `worker` | `cli`。
 
@@ -33,11 +30,11 @@ Go 模块化单体（Huma + Gin + Postgres + Redis）。入口：`serve` | `work
 1. **概览**（本页）  
 2. **系统架构** → 概览 / 库表 / 安全 / 迁移  
 3. **开发指南** → 环境 / 测试 / 贡献  
-4. **接口文档** → 使用指南 / [HTTP 注册规范](./api/httpapi.md) / 调用摘要 / 接口参考 / 错误码（**以 OpenAPI 为准**）  
+4. **接口文档** → 使用指南 / [HTTP 注册规范](./api/http_api.md) / 调用摘要 / 接口参考 / 错误码（**以 OpenAPI 为准**）  
 5. **运维部署** → 配置 / Docker / CI/CD / 监控 / 构建  
 6. **模块详解** → 身份、论坛、课程、搜索、校园边界、官网面、内部服务…  
 7. **CLI 参考**  
 8. **高级主题** → 性能调优  
-9. **规范与社区** → 风格 / [公开文档边界](./meta/public_docs_policy.md) / [已移除与迁移](./meta/removed-and-migrated.md) / 贡献  
+9. **规范与社区** → 风格 / [公开文档边界](./meta/public_docs_policy.md) / [已移除与迁移](./meta/removed_and_migrated.md) / 贡献  
 
 模块入口：[模块详解](./modules/index.md)

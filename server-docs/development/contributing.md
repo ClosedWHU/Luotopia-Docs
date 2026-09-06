@@ -3,7 +3,6 @@ title: 开发规范与贡献指南
 sidebar_label: 贡献规范
 sidebar_position: 3
 ---
-# 开发规范与贡献指南
 
 为了确保 Luotopia Server 的代码质量和一致性，所有开发者必须遵守以下规范。
 
@@ -36,7 +35,7 @@ sidebar_position: 3
 3. 在 `RegisterRoutes` 中调用 `httpapi.Register`，填写 kebab `OperationID`、`Access`、可选 `Rate`、`Tags`、`Summary`。  
 4. 公开接口使用 `AccessPublic`；管理接口使用 `AccessAdmin` / `AccessSuperAdmin`。  
 
-细则：[HTTP 注册规范](../api/httpapi.md)、`server/docs/api-conventions.md`。
+细则：[HTTP 注册规范](../api/http_api.md)、`server/docs/api-conventions.md`。
 
 ## 4. Git 工作流
 - **分支管理**: 开发新功能请创建 `feat/feature-name` 分支。

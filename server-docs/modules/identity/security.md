@@ -4,7 +4,6 @@ sidebar_label: 安全与会话
 sidebar_position: 4
 ---
 
-# 安全与防御策略
 
 Identity 模块集成多重机制，确保用户与令牌安全。以代码实现为准。
 
@@ -27,4 +26,4 @@ Identity 模块集成多重机制，确保用户与令牌安全。以代码实�
 
 ## 4. MFA 与 Passkey
 
-SMTP、OTP 与 WebAuthn 域名关联见 [MFA 与 Passkey](./mfa-passkeys.md)。
+SMTP、OTP 与 WebAuthn 域名关联见 [MFA 与 Passkey](./mfa_passkeys.md)。

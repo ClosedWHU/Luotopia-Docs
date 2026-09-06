@@ -1,15 +1,15 @@
 ---
 title: 已移除与迁移项
+slug: removed-and-migrated
 sidebar_label: 已移除与迁移
 sidebar_position: 4
 description: 服务端废弃协议与迁移说明的唯一汇总；主文档只写当前行为
 ---
 
-# 已移除与迁移项
 
 本文是**弃用与迁移的唯一汇总**。主文档（架构、API、模块）只写当前行为；若需了解「曾经怎样 / 勿再使用什么」，查本文。
 
-新代码与外部对接以「当前替代」及 [OpenAPI](../api/overview.md)、[HTTP 注册规范](../api/httpapi.md) 为准。
+新代码与外部对接以「当前替代」及 [OpenAPI](../api/overview.md)、[HTTP 注册规范](../api/http_api.md) 为准。
 
 ## 全站请求 HMAC
 
@@ -49,7 +49,7 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 | Gin 内存全局限流作为主手段 | Redis 多窗口 + 操作级 `Rate`；默认 IP 配额作为兜底 |
 | Forum Huma Group + 包内鉴权中间件为主 | 完整 path 的 `httpapi.Register` + 全局鉴权/限流（`EnsureDefaults` 仍可用中间件钩子） |
 
-当前规范正文：[HTTP 注册规范](../api/httpapi.md)、仓库 `server/docs/api-conventions.md`。
+当前规范正文：[HTTP 注册规范](../api/http_api.md)、仓库 `server/docs/api-conventions.md`。
 
 ## 校历数据卷与 calendar_data_dir（2026-08 移除）
 
@@ -77,5 +77,5 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 ## 相关
 
 - [安全策略](../architecture/security_policy.md)（当前模型）
-- [HTTP 注册规范](../api/httpapi.md)（当前写法）
+- [HTTP 注册规范](../api/http_api.md)（当前写法）
 - [公开文档边界](./public_docs_policy.md)

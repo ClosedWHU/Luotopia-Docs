@@ -1,10 +1,10 @@
 ---
 title: 官网与外部面
+slug: external-surfaces
 sidebar_label: 官网与外部面
 description: homepage、GitHub Releases、与业务服的边界
-sidebar_position: 1
+sidebar_position: 14
 ---
-# 官网与外部面
 
 业务服（本仓库 `server/`）不是客户端唯一后端。下列「面」与 App 强相关，但代码/部署不在 `server` 进程内。
 

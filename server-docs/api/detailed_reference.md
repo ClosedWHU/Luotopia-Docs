@@ -2,9 +2,8 @@
 title: 业务接口调用规范
 sidebar_label: 调用规范
 slug: detailed-reference
-sidebar_position: 2
+sidebar_position: 3
 ---
-# 业务接口调用规范
 
 > **权威来源**：运行中服务的 OpenAPI（`/openapi.json`）。本文为常用调用**摘要**，字段与路径冲突时以 OpenAPI / 代码为准。  
 > 不在此文档中复制完整 schema；新增接口请改 OpenAPI 生成物，而非只改本文。
@@ -32,7 +31,7 @@ X-Api-Secret: <secret>
 
 用于用户级脚本集成，**不是**对请求体的 HMAC 签名。权限限于部分只读 GET。
 
-全站请求 HMAC 的迁移说明见 [已移除与迁移](../meta/removed-and-migrated.md#全站请求-hmac)。
+全站请求 HMAC 的迁移说明见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)。
 
 ---
 
@@ -55,7 +54,7 @@ X-Api-Secret: <secret>
 
 ### 2.3 其它认证
 
-Passkey、MFA、邮箱验证、密码重置、token 刷新等路径见 OpenAPI；公开能力以 `AccessPublic` 为准（[HTTP 注册规范](./httpapi.md)）。
+Passkey、MFA、邮箱验证、密码重置、token 刷新等路径见 OpenAPI；公开能力以 `AccessPublic` 为准（[HTTP 注册规范](./http_api.md)）。
 
 ---
 

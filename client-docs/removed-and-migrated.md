@@ -5,7 +5,6 @@ sidebar_position: 17
 description: 客户端不应再使用的协议、目录与旧行为
 ---
 
-# 已移除与迁移项
 
 本文集中记录客户端的废弃约定。新代码使用「替代方案」，不要按旧文档或旧分支实现。
 
@@ -36,5 +35,5 @@ Release / stable 构建不再因 channel 自动排除 prerelease。是否请求�
 ## 相关
 
 - [认证与账号](./auth.md)
-- [API 对接](./api_integration.md)
+- [API 对接](./api-integration.md)
 - [公开文档边界](pathname:///server/meta/public-docs-policy)

@@ -4,7 +4,6 @@ title: 系统架构概览
 sidebar_label: 架构概览
 description: 模块化单体、domains 划分与请求链路
 ---
-# 系统架构概览
 
 **模块化单体**：业务在 `internal/domains/*`，底座在 `platform` + 中间件。
 
@@ -33,7 +32,7 @@ graph TD
     Gin --> Metrics[metrics 独立端口]
 ```
 
-业务 API 经 **`httpapi.Register`** 声明 Access / Rate；见 [HTTP 注册规范](../api/httpapi.md)。
+业务 API 经 **`httpapi.Register`** 声明 Access / Rate；见 [HTTP 注册规范](../api/http_api.md)。
 
 ## 域职责（摘要）
 

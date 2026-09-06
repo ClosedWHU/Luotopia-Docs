@@ -4,7 +4,6 @@ sidebar_label: 多端适配
 sidebar_position: 7
 description: 平台分支、鸿蒙适配与宽屏布局约定
 ---
-# 多端适配
 
 ## 原则
 

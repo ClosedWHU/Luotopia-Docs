@@ -1,9 +1,8 @@
 ---
 title: 课程时间表
 sidebar_label: 课程时间表
-sidebar_position: 10
+sidebar_position: 7
 ---
-# 课程时间表模块
 
 课程时间表模块允许用户管理他们的课程日程，包括从外部系统（如教务系统）导入数据和手动录入。
 

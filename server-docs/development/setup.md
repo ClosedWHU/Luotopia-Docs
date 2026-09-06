@@ -4,7 +4,6 @@ sidebar_label: 环境搭建
 description: Go 服务端本地运行：配置、数据库、serve / worker
 sidebar_position: 1
 ---
-# 本地开发环境搭建
 
 ## 前置
 
@@ -73,7 +72,7 @@ httpapi.Register(api, httpapi.Op{
 }, h.Handler)
 ```
 
-规范：[HTTP 注册规范](../api/httpapi.md)、仓库 `server/docs/api-conventions.md`。更细：[贡献规范](./contributing.md)。
+规范：[HTTP 注册规范](../api/http_api.md)、仓库 `server/docs/api-conventions.md`。更细：[贡献规范](./contributing.md)。
 
 ## 常见问题
 

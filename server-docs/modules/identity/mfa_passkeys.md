@@ -1,11 +1,11 @@
 ---
 sidebar_position: 6
 title: MFA 与 Passkey
+slug: mfa-passkeys
 sidebar_label: MFA 与 Passkey
 description: SMTP、OTP、WebAuthn 域名关联
 ---
 
-# MFA 与 Passkey
 
 ## SMTP
 

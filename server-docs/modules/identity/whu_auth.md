@@ -1,10 +1,10 @@
 ---
 title: 武大认证边界
+slug: whu-auth
 sidebar_label: 武大认证边界
 sidebar_position: 8
 ---
 
-# 武大身份相关说明（HAM vs 教务 CAS）
 
 请区分两条完全不同的链路。
 

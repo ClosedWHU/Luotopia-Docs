@@ -4,7 +4,6 @@ sidebar_label: 互动系统
 sidebar_position: 3
 ---
 
-# 论坛互动系统
 
 代码：`internal/domains/forum`（`repo` 互动相关逻辑）。路径前缀多为 `/api/v1/forum/*`，需登录。
 

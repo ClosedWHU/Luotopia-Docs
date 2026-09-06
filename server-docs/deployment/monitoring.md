@@ -4,7 +4,6 @@ sidebar_label: 监控
 description: Prometheus 独立端口、鉴权与配置
 sidebar_position: 4
 ---
-# 监控与 Metrics
 
 实现：`internal/platform/monitoring`。
 

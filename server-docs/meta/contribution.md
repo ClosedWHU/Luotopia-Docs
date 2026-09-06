@@ -4,7 +4,6 @@ sidebar_label: 贡献指南
 description: 文档与代码贡献约定
 sidebar_position: 3
 ---
-# 贡献指南
 
 欢迎修 Bug、改文档、加功能。
 

@@ -1,10 +1,10 @@
 ---
 title: 隐私同意与成绩同步
+slug: privacy-sync
 sidebar_label: 隐私与成绩同步
 sidebar_position: 7
 ---
 
-# 隐私同意、设备与云同步
 
 ## 目标
 

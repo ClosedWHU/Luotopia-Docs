@@ -4,7 +4,6 @@ sidebar_label: Docker
 description: Compose 服务、端口、库名、常用命令与排障
 sidebar_position: 2
 ---
-# Docker 部署
 
 仓库：`server/docker-compose.yml`。
 
@@ -76,7 +75,7 @@ docker compose exec redis redis-cli
 
 ## 校历数据
 
-校历数据由 `whucalendar` Go 包（`github.com/ClosedWHU/WHU-Calendar`）内嵌，无需数据卷。旧数据卷方案见 [已移除与迁移](../meta/removed-and-migrated.md)。
+校历数据由 `whucalendar` Go 包（`github.com/ClosedWHU/WHU-Calendar`）内嵌，无需数据卷。旧数据卷方案见 [已移除与迁移](../meta/removed_and_migrated.md)。
 
 ## 数据持久化
 

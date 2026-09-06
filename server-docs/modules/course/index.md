@@ -4,7 +4,6 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-# 课程服务概览
 
 代码：`internal/domains/course_review/`。
 

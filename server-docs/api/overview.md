@@ -4,11 +4,10 @@ sidebar_label: API 使用指南
 description: Base URL、JWT 认证、OpenAPI 与限流
 sidebar_position: 1
 ---
-# API 使用指南
 
 REST + [Huma v2](https://huma.rocks/)。**完整路径与字段以 OpenAPI 为准**。
 
-业务路由统一经 `httpapi.Register` 注册（Access + 可选限流）。见 [HTTP 注册规范](./httpapi.md)。
+业务路由统一经 `httpapi.Register` 注册（Access + 可选限流）。见 [HTTP 注册规范](./http_api.md)。
 
 ## 基础
 
@@ -60,7 +59,7 @@ http://localhost:6262/openapi.json  # 或仓库导出的 openapi.json
 
 - 默认：未单独配置时，API 按 IP 约 50 次/分钟。
 - 敏感操作可声明多层窗口（分钟/小时/天）与主体（IP / 用户）。
-- 配置项与实现见 `security` 配置、Redis 限流与 [HTTP 注册规范](./httpapi.md#4-限流)。
+- 配置项与实现见 `security` 配置、Redis 限流与 [HTTP 注册规范](./http_api.md#4-限流)。
 - 登录等路径另有 identity 侧尝试次数限制。
 
 ## 不在本 API 的客户端能力
@@ -78,8 +77,8 @@ http://localhost:6262/openapi.json  # 或仓库导出的 openapi.json
 
 ## 相关
 
-- [HTTP 注册规范](./httpapi.md)
+- [HTTP 注册规范](./http_api.md)
 - [安全策略](../architecture/security_policy.md)
 - [业务调用摘要](./detailed_reference.md)
-- [已移除与迁移](../meta/removed-and-migrated.md)（旧协议 / 旧注册方式）
-- [客户端对接](pathname:///client/api_integration)
+- [已移除与迁移](../meta/removed_and_migrated.md)（旧协议 / 旧注册方式）
+- [客户端对接](pathname:///client/api-integration)

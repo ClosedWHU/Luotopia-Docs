@@ -3,7 +3,7 @@
   "position": 6,
   "link": {
     "type": "generated-index",
-    "slug": "/ebike/zhiyin/flows",
-    "description": "支付、扫码开锁/还车与蓝牙协议的端到端流程。"
+    "description": "支付、扫码开锁/还车与蓝牙协议的端到端流程。",
+    "slug": "/zhiyin/flows"
   }
 }

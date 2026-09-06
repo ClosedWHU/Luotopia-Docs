@@ -4,9 +4,8 @@ title: Feature 架构约定
 sidebar_label: Feature 约定
 description: feature-first 布局、分层规则与迁移例外
 ---
-# Flutter Feature 架构约定
 
-与仓库 `docs/architecture-normalization-plan.md` Phase 0/1 对齐。
+约定源自内部架构规范化计划 Phase 0/1（该计划不随站发布）。
 
 ## 目标布局
 

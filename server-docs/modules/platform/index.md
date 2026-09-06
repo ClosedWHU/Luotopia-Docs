@@ -4,7 +4,6 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-# 基础设施与平台底座
 
 路径：`server/internal/platform/`。
 

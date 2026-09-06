@@ -4,7 +4,6 @@ sidebar_label: 架构总览
 sidebar_position: 2
 description: feature-first、MVVM、Riverpod
 ---
-# 架构总览
 
 客户端采用 **feature-first + 轻量 MVVM**，状态用 **Riverpod**。
 
@@ -42,7 +41,7 @@ flowchart TB
 - 依赖注入：`Provider` / `NotifierProvider`  
 - 读一次用 `ref.read`；构建期订阅用 `ref.watch`  
 
-详见 [状态管理](./state_management.md)。
+详见 [状态管理](./state-management.md)。
 
 ## 网络
 
@@ -51,7 +50,7 @@ flowchart TB
 - 认证：Bearer + 401 刷新  
 - 官网静态 / Pages Function：`http` + `AppConfig.siteBaseUrl`  
 
-详见 [API 对接](./api_integration.md) · [认证](./auth.md) · [更新与热更新](./updates.md)。
+详见 [API 对接](./api-integration.md) · [认证](./auth.md) · [更新与热更新](./updates.md)。
 
 ## UI
 

@@ -1,10 +1,10 @@
 ---
 title: 论坛与课程评价的身份策略
+slug: course-review-and-identity-policy
 sidebar_label: 课评与身份策略
 sidebar_position: 6
 ---
 
-# 论坛与课程评价身份策略
 
 ## 访问与身份
 

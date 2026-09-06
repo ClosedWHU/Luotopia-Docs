@@ -2,9 +2,7 @@
 sidebar_position: 4
 title: 数据库迁移
 sidebar_label: 数据库迁移
-slug: migrations
 ---
-# 数据库迁移
 
 服务端通过版本化迁移升级生产 schema；`AutoMigrate` 仅用于初始 schema 和本地开发/测试。
 
@@ -12,7 +10,7 @@ slug: migrations
 
 `database.InitDB()` 在 **`serve` / `worker` / 需要 DB 的 cli 操作** 启动路径中调用（以代码为准）。
 
-独立 migrate 命令与全量 schema SQL 的迁移说明见 [已移除与迁移](../meta/removed-and-migrated.md#独立-migrate-命令与全量-schema-sql)。
+独立 migrate 命令与全量 schema SQL 的迁移说明见 [已移除与迁移](../meta/removed_and_migrated.md#独立-migrate-命令与全量-schema-sql)。
 
 需要“只迁库、不提供 API”时，可：
 

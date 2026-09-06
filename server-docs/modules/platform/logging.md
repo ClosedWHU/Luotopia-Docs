@@ -4,7 +4,6 @@ sidebar_label: 日志与审计
 sidebar_position: 1
 ---
 
-# 日志规范与审计
 
 Luotopia Server 使用 `uber-go/zap` 作为全局日志框架，并提供针对管理员操作的自动审计功能。
 

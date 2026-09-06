@@ -4,7 +4,6 @@ sidebar_label: 目录结构
 sidebar_position: 3
 description: app/lib 目录分层与依赖方向
 ---
-# 目录结构
 
 仓库路径：`app/lib/`。约定见 `app/lib/README.md`。
 

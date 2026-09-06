@@ -1,9 +1,8 @@
 ---
 title: 管理后台
 sidebar_label: 管理后台
-sidebar_position: 15
+sidebar_position: 6
 ---
-# 管理后台
 
 代码：`internal/domains/admin`。路径前缀：`/api/v1/admin/*`。
 

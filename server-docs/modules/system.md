@@ -1,9 +1,8 @@
 ---
 title: 系统管理
 sidebar_label: 系统管理
-sidebar_position: 3
+sidebar_position: 13
 ---
-# 系统管理
 
 代码：`internal/domains/system`。
 

@@ -1,10 +1,10 @@
 ---
 title: 校园服务边界
+slug: campus-proxies
 sidebar_label: 校园边界
 description: 哪些走 App 直连，哪些走 Luotopia 服务端
-sidebar_position: 2
+sidebar_position: 10
 ---
-# 校园服务边界
 
 ## 原则
 

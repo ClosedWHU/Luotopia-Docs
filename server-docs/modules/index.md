@@ -4,7 +4,6 @@ sidebar_label: 模块详解
 description: internal/domains 模块索引与状态
 sidebar_position: 0
 ---
-# 模块详解
 
 代码在 `server/internal/domains/`（底座：`platform`、`middleware`、`services`）。  
 **字段与路由以 OpenAPI 为准**；下列「状态」方便扫一眼。

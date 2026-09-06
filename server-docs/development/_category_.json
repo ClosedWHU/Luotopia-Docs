@@ -3,7 +3,7 @@
   "position": 2,
   "link": {
     "type": "generated-index",
-    "slug": "/development",
-    "description": "开发指南、环境搭建及测试流程。"
+    "description": "开发指南、环境搭建及测试流程。",
+    "slug": "/development"
   }
 }

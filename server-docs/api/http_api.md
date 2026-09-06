@@ -1,15 +1,15 @@
 ---
 title: HTTP API 注册与限流规范
+slug: http-api
 sidebar_label: HTTP 注册规范
 description: httpapi.Register、Access、限流与错误契约
 sidebar_position: 2
 ---
 
-# HTTP API 注册与限流规范
 
 本文描述 Go 业务 API 的**当前**注册方式、鉴权声明与限流。字段级路径与 schema 仍以 **OpenAPI** 为准。
 
-弃用写法、旧白名单、OperationID 重命名等见 **[已移除与迁移](../meta/removed-and-migrated.md#http-路由注册huma--httpapi)**。
+弃用写法、旧白名单、OperationID 重命名等见 **[已移除与迁移](../meta/removed_and_migrated.md#http-路由注册huma--httpapi)**。
 
 权威实现：
 
@@ -125,4 +125,4 @@ identity、verification、system、agent、notification、campus（Huma）、din
 - [API 使用指南](./overview.md)
 - [安全策略](../architecture/security_policy.md)
 - [错误码](./error_codes.md)
-- [已移除与迁移](../meta/removed-and-migrated.md)
+- [已移除与迁移](../meta/removed_and_migrated.md)

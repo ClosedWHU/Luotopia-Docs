@@ -4,14 +4,13 @@ sidebar_label: 课程评价
 sidebar_position: 1
 ---
 
-# 课程评价
 
 代码：`internal/domains/course_review`（`http` / `service` / `repo`）。
 
 ## 1. 行为要点
 
 - **登录可写**；读/写 Access 以 OpenAPI 与 `httpapi` 注册为准（多数课评读为公开或按操作声明，写接口需登录）。  
-- 评价与课程 / 教师关联；提交需 **修读资格**（见 [course-review-and-identity-policy](../forum/course-review-and-identity-policy.md)、`POST /api/v1/user/transcript/sync`）。  
+- 评价与课程 / 教师关联；提交需 **修读资格**（见 [course-review-and-identity-policy](../forum/course_review_and_identity_policy.md)、`POST /api/v1/user/transcript/sync`）。  
 - 对外展示匿名；后端可保留作者 ID 用于反作弊与本人编辑删除。  
 - 审核 / 通过后的状态才进入统计（以 `is_approved` 等字段与服务逻辑为准）。
 

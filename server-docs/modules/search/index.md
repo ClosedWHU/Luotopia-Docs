@@ -4,7 +4,6 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-# 搜索服务
 
 搜索服务是 Luotopia 的核心中枢之一，负责跨模块的数据检索与智能建议。
 

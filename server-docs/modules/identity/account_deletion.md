@@ -1,10 +1,10 @@
 ---
 sidebar_position: 2
 title: Account Deletion Policy
+slug: account-deletion
 sidebar_label: 账号注销
 description: Central-account deletion scope, retained records, and recovery window
 ---
-# Account Deletion Policy
 
 `identity_users` is the sole authoritative Luotopia account record. Local usernames,
 forum nicknames, WHU student IDs, and device identifiers are not interchangeable.

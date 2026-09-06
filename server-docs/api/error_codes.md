@@ -1,9 +1,9 @@
 ---
 title: 全局错误码规范
+slug: error-codes
 sidebar_label: 错误码
-sidebar_position: 4
+sidebar_position: 5
 ---
-# 全局错误码规范
 
 > 实际 JSON 形状与 `business_code` 集合以 `platform/errors`、中间件与 **OpenAPI** 为准。下列为约定说明，可能与个别端点返回略有差异。
 

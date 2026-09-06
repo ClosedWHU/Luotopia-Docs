@@ -4,7 +4,6 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-# 论坛模块
 
 [返回模块总览](../index.md)
 
@@ -17,7 +16,7 @@ sidebar_position: 0
 3. **[互动流](interaction.md)**：赞、评、收藏等  
 4. **[内容安全](moderation.md)**：举报、申诉、自动审核边界  
 5. **[运营工具](operations.md)**：通知、邀请等（若启用）  
-6. **[课评与身份策略](course-review-and-identity-policy.md)**：与课程评价资格的交叉约定  
+6. **[课评与身份策略](course_review_and_identity_policy.md)**：与课程评价资格的交叉约定  
 
 ## 目录结构
 

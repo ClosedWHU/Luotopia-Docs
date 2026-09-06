@@ -4,7 +4,6 @@ sidebar_label: 更新与热更新
 sidebar_position: 15
 description: app_update / hot_update 与官网 homepage 边界
 ---
-# 安装包更新与热更新
 
 两套机制，**不要混用**：
 

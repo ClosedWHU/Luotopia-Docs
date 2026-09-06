@@ -4,7 +4,6 @@ sidebar_label: 租户与社交登录
 sidebar_position: 5
 ---
 
-# 租户与社交登录
 
 ## 1. 多租户
 

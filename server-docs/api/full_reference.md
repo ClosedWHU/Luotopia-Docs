@@ -1,9 +1,9 @@
 ---
 title: API 接口参考（摘要）
+slug: full-reference
 sidebar_label: 接口参考（摘要）
-sidebar_position: 3
+sidebar_position: 4
 ---
-# Luotopia Server API 接口参考（摘要）
 
 > **权威来源**：运行中服务导出的 OpenAPI（如 `/openapi.json` 或仓库 `server/openapi.json`）。  
 > 本文仅为**索引级**常用端点摘要，**不是**第二套 API 规范。字段类型、枚举、错误体以 OpenAPI 为准。  

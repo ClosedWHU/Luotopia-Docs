@@ -4,7 +4,6 @@ sidebar_label: 状态管理
 sidebar_position: 5
 description: Riverpod 与 ViewModel / Notifier 约定
 ---
-# 状态管理（Riverpod）
 
 ## 角色
 
@@ -55,7 +54,7 @@ class ExampleNotifier extends Notifier<ExampleState> {
 - `luotopiaAuthProvider` 管登录态  
 - `dioProvider` watch token 与 `customServerUrl`  
 
-见 [认证](./auth.md) · [API 对接](./api_integration.md)。
+见 [认证](./auth.md) · [API 对接](./api-integration.md)。
 
 ## 相关
 

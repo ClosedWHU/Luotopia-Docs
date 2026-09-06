@@ -4,7 +4,6 @@ sidebar_label: 环境搭建
 sidebar_position: 1
 description: Flutter 安装、运行与后端联调
 ---
-# 环境搭建
 
 ## 前置
 
@@ -74,6 +73,6 @@ curl http://localhost:6262/openapi.json -o server_api.json
 ## 相关
 
 - [认证](./auth.md)
-- [API 对接](./api_integration.md)
+- [API 对接](./api-integration.md)
 - [更新与热更新](./updates.md)
 - [用户指南](pathname:///user/)

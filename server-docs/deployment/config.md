@@ -4,7 +4,6 @@ sidebar_label: 配置
 description: 核心配置项、unknown 字段校验与生产注意
 sidebar_position: 1
 ---
-# 配置手册
 
 配置文件 JSON/JSONC 等，由 `CONFIG_PATH` 或 `--config` 指定。  
 加载后映射到 `Config`；**未知键会启动失败**。
@@ -48,7 +47,7 @@ unknown config field(s): ...
 不会静默落到默认值。
 
 > [!CAUTION]
-> `server.calendar_data_dir` 属已删除字段（校历数据改由 `whucalendar` Go 包内嵌，见 [已移除与迁移](../meta/removed-and-migrated.md#校历数据卷与-calendar_data_dir2026-08-移除)）。旧配置文件中保留该键会触发未知字段校验并导致启动失败。
+> `server.calendar_data_dir` 属已删除字段（校历数据改由 `whucalendar` Go 包内嵌，见 [已移除与迁移](../meta/removed_and_migrated.md#校历数据卷与-calendar_data_dir2026-08-移除)）。旧配置文件中保留该键会触发未知字段校验并导致启动失败。
 
 ## 环境变量
 
