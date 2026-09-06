@@ -8,7 +8,7 @@ sidebar_position: 1
 
 ## 前置
 
-- Go：与 `server/go.mod` 一致（1.26.x 量级）
+- Go：与 `server/go.mod` 一致（1.27.0）
 - PostgreSQL 14+（全文检索 / 扩展）
 - Redis 6+
 
@@ -24,17 +24,9 @@ docker compose up -d --build
 
 细节：[Docker 部署](../deployment/docker.md)。
 
-### 校历 JSON（可选但推荐）
+### 校历数据
 
-校历数据来自并列仓库 **WHU-sb-Calendar**（不要放在 `server/internal/domains/third_party`）。
-
-```powershell
-cd server
-# 若已在工作区并列检出 WHU-sb-Calendar：
-.\scripts\sync-calendar-data.ps1 -Source ..\WHU-sb-Calendar\data
-```
-
-Docker 将目录挂到 `/data/school-calendar`。见 [Docker · 校历数据卷](../deployment/docker.md#校历-json-数据卷方案-b)。
+校历学年数据内嵌于 Go 依赖 `github.com/ClosedWHU/WHU-Calendar`（`whucalendar.LoadAllYears()`），无需同步脚本与数据挂载。升级数据即升级依赖版本。见 [日历模块](../modules/calendar.md)。
 
 ## 本机直接跑 API
 

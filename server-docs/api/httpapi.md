@@ -118,7 +118,7 @@ return nil, middleware.ToHumaError(ctx, appErrors.NotFoundf("..."))
 
 ## 6. 模块覆盖
 
-identity、verification、system、agent、notification、campus（Huma）、search、materials、course_review、admin、forum、platform cache 均经 `httpapi` 注册。通知等 OperationID 命名见 OpenAPI。
+identity、verification、system、agent、notification、campus（Huma）、dining、search、materials、course_review、admin、forum、platform cache 均经 `httpapi` 注册。通知等 OperationID 命名见 OpenAPI。
 
 ## 7. 相关
 

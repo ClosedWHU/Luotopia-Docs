@@ -15,36 +15,12 @@ JSON 日历 API 以 OpenAPI / `httpapi` 为准。订阅用 ICS 下载：`GET /ap
 2. **手动事件管理**: 用户自建事件 CRUD。
 3. **Legacy 导入**: 兼容校内遗留 curl 课表导入（`calendar_import.go`）。
 
-## 校历数据（与 Docker 挂载）
+## 校历数据（内嵌）
 
-校历学年 JSON **不**放在 `internal/domains/third_party`。权威数据来自独立仓库 **WHU-sb-Calendar** 的 `data/*.json`，运行时以**数据卷**注入：
+校历学年数据由 `whucalendar.LoadAllYears()` 从 Go 依赖 `github.com/ClosedWHU/WHU-Calendar` 内嵌加载（`internal/domains/campus/calendar/service/feed.go`）。升级数据即升级依赖版本，无运行时配置、同步脚本或数据卷。
 
-| 环境 | 路径 |
-|------|------|
-| 容器内 | `/data/school-calendar`（`CALENDAR_DATA_DIR` / `server.calendar_data_dir`） |
-| Compose 宿主机 | `SCHOOL_CALENDAR_DATA_HOST`（默认 `server/data/school-calendar`） |
-
-多仓工作区推荐：
-
-```text
-luotopia/
-  server/
-  WHU-sb-Calendar/data/*.json   # 并列检出
-```
-
-同步示例（在 `server/`）：
-
-```powershell
-.\scripts\sync-calendar-data.ps1 -Source ..\WHU-sb-Calendar\data
-```
-
-或直接：
-
-```env
-SCHOOL_CALENDAR_DATA_HOST=../WHU-sb-Calendar/data
-```
-
-详见 [Docker 部署](../deployment/docker.md#校历-json-数据卷方案-b) 与 `server/data/school-calendar/README.md`。
+> [!NOTE]
+> 旧数据卷方案（`server.calendar_data_dir` / `CALENDAR_DATA_DIR`）已移除，见 [已移除与迁移](../meta/removed-and-migrated.md)。
 
 ## 数据模型
 
@@ -53,7 +29,7 @@ SCHOOL_CALENDAR_DATA_HOST=../WHU-sb-Calendar/data
 用户可创建手动日历事件。常见字段：标题、描述、地点、起止时间、是否全天。  
 **字段名与类型以 OpenAPI 为准。**
 
-校历主数据来自数据卷 JSON（见上文），与用户事件分离。
+校历主数据来自 `whucalendar` Go 包（见上文），与用户事件分离。
 
 ## API 接口
 

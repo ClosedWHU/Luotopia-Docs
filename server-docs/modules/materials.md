@@ -16,7 +16,7 @@ sidebar_position: 13
 - **物理后端**: 业务层只依赖 `storage.Backend`；当前部署使用 `storage.root_dir` 下的共享文件系统 adapter。
 - **对象元数据**: `materials.storage_object_id` 关联 `storage_objects`，对象记录保存 owner、purpose、MIME、大小与相对 key；物理路径不暴露给 HTTP handler。
 - **上传与下载**: 上传受 25 MiB 上限和扩展名 allowlist 约束；下载通过 `io.ReadCloser` 流式输出，可由另一 API 实例读取同一共享 backend 中的对象。
-- **删除**: 新对象复用统一 deletion-intent 生命周期，由 worker 幂等执行物理删除；共享 Blob 只在最后引用解除后删除。
+- **删除**: 新对象复用统一 deletion-intent 生命周期，由 worker 幂等执行物理删除；共享 Blob 只在最后引用解除后删除。账号注销时（`storage.RequestOwnerDeletionTx`）对象元数据在注销事务内即时删除，blob 经 deletion intent 异步清理。
 - **旧数据兼容**: 历史 `StoragePath` 仅由 local backend 在受限的 `uploads/materials` 根目录内兼容读取/删除，新写入不得继续生成该字段。
 - **多实例要求**: 所有 API 与 worker 必须看到同一可读写 namespace；详见 [Docker 部署](../deployment/docker.md#多实例存储要求)。
 

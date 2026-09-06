@@ -18,7 +18,8 @@ sidebar_position: 15
 - 用户与 API 凭证管理  
 - 队列 / worker / 缓存 / embedding 运维  
 - 内容与资料审核相关入口  
-- 课程外部映射等
+- 课程外部映射等  
+- 存储元数据巡检与清理：`GET /api/v1/admin/storage/invalid`、`DELETE /api/v1/admin/storage/invalid/{object_id}`、`POST /api/v1/admin/storage/invalid/purge`，权限 `storage:manage`
 
 ## 实现注意
 

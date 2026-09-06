@@ -51,6 +51,15 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 
 当前规范正文：[HTTP 注册规范](../api/httpapi.md)、仓库 `server/docs/api-conventions.md`。
 
+## 校历数据卷与 calendar_data_dir（2026-08 移除）
+
+| 旧做法 | 当前替代 |
+|--------|----------|
+| 校历学年 JSON 以只读数据卷挂载（`server.calendar_data_dir` / `CALENDAR_DATA_DIR` / `SCHOOL_CALENDAR_DATA_HOST`） | Go 依赖 `github.com/ClosedWHU/WHU-Calendar`（`whucalendar.LoadAllYears()`）内嵌数据 |
+| `scripts/sync-calendar-data.ps1` 同步并列仓 WHU-sb-Calendar | 升级依赖版本即升级数据 |
+
+需从配置文件与 Compose 编排中删除上述配置键、环境变量与数据卷挂载。保留 `calendar_data_dir` 会触发未知字段校验，导致启动失败。当前说明见 [日历模块](../modules/calendar.md) 与 [配置手册](../deployment/config.md)。
+
 ## 通知 OpenAPI OperationID
 
 通知域 **OperationID** 由 camelCase 改为 kebab（**HTTP 路径未变**）：

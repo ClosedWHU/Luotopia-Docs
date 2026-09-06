@@ -22,6 +22,9 @@ sidebar_position: 1
 | 提交评价 | `POST` 评价相关路径（OpenAPI） |
 | 列表 / 详情 | 按课程 UID 等查询 |
 | 管理审核 | `/api/v1/admin/...` |
+| 教师列表（管理） | `GET /api/v1/admin/teachers`（支持 `deleted_only`），权限 `teacher:delete` |
+| 教师软删（管理） | `DELETE /api/v1/admin/teachers/{id}`，权限 `teacher:delete` |
+| 教师恢复（管理） | `PUT /api/v1/admin/teachers/{id}/restore`，权限 `teacher:delete` |
 
 ## 3. 与给分
 

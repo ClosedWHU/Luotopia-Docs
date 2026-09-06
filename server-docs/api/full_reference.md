@@ -97,6 +97,18 @@ sidebar_position: 3
 - 教务、图书馆、场馆等与个人武大账户相关的请求由 App 直连。
 - 服务端不提供校园 Cookie / Token 透传接口。
 
+### 3.4 食堂（dining）
+
+路由前缀 `/api/v1/dining`（`internal/domains/dining`，OpenAPI Tag `Dining`），端点组包括：
+
+- **区域 / 楼宇 / 楼层**: `/areas`、`/buildings`、`/buildings/{id}/floors`、`/floors/{id}/plan`
+- **档口与菜单**: `/spots`、`/spots/{id}`、`/spots/{id}/menu`、`/spots/{id}/menu-groups`、`/spots/{id}/business-hours`
+- **推荐与搜索**: `/spots/random`、`/recommendations`、`/search`、`/snapshot`、`/recommendation-snapshot`
+- **评价 / 反应 / 评论 / 投稿**: `/spots/{id}/review`、`/reviews/{id}/report`、`/menu-items/{id}/comment`、`/submissions`
+- **管理端**: `/api/v1/dining/admin/*`（含 Tencent 同步 `/admin/areas/sync-tencent`），权限码 `dining:manage`
+
+字段与完整路径以 OpenAPI 为准。
+
 ---
 
 ## 4. 学习资料
@@ -150,5 +162,5 @@ sidebar_position: 3
 | `500` | **Internal Server Error**: 服务器发生不可预期的错误。 |
 
 ---
-**文档版本**: v1.0.1  
-**更新日期**: 2026-05-12
+**文档版本**: v1.0.2  
+**更新日期**: 2026-09-06

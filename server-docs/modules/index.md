@@ -16,6 +16,7 @@ sidebar_position: 0
 | 身份 / OIDC | `identity/` | [identity](./identity/index.md) | 主路径 |
 | 论坛 | `forum/` | [forum](./forum/index.md) | 服务端有；客户端可能未完整接 |
 | 课程评价 / 给分 | `course_review/` | [course](./course/index.md) | 主路径 |
+| 食堂 | `dining/` | 专页待补 | 主路径 |
 | 搜索 | `search/` | [search](./search/index.md) · [indexing](./search/indexing.md) | PG FTS + 可选扩展（公开文档仅行为级） |
 | 管理后台 | `admin/` | [admin](./admin.md) | 需 admin JWT |
 | Agent | `agent/` | 见代码 | 以仓库为准 |

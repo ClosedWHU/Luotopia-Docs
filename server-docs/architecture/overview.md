@@ -43,6 +43,7 @@ graph TD
 | forum | 帖评与审核相关 |
 | course_review | 课程、评价、给分 |
 | campus | 课表、日历、空闲教室等（非代持武大密码） |
+| dining | 食堂区域、楼宇楼层、档口、菜单、评价与投稿 |
 | search | 统一搜索 |
 | platform | DB、配置、缓存、metrics |
 

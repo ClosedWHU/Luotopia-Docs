@@ -60,6 +60,24 @@ slug: security-policy
 - OpenAPI 的 `Security` 由 Access 生成。
 - 传输层安全依赖 **HTTPS**（生产 `server.public_base` 应为 `https://`）。
 
+### 2.3 系统权限码
+
+部分 `AccessAdmin` 操作另声明细粒度权限码（`httpapi.Op.Permission`），由 RBAC 校验。启动引导时种子化以下系统权限（`internal/platform/database/bootstrap_users.go`），并同时授予 `admin` 与 `superadmin` 角色：
+
+| 分组 | 权限码 |
+|------|--------|
+| 课程 | `course:create` `course:edit` `course:delete` `course:list` `course:view` `course:merge` |
+| 课评 | `review:list` `review:view` `review:edit` `review:delete` `review:approve` |
+| 教师 | `teacher:create` `teacher:list` `teacher:view` `teacher:merge` |
+| 资料 | `material:approve` `material:delete` |
+| 用户 | `user:list` `user:view` `user:edit` `user:delete` `user:set_admin` `user:disable` `user:batch` `user:update-limits` `user:credentials` |
+| 缓存 / 运维 | `cache:clear` `cache:warmup` `task:manage` `queue:manage` `security:manage` `storage:manage` `embedding:create` |
+| 论坛 | `forum:config` `forum:moderate` `forum:manage-users` |
+| 食堂 | `dining:manage` |
+
+> [!IMPORTANT]
+> `teacher:delete` 被 course_review 教师管理端点强制（`GET/DELETE/PUT /api/v1/admin/teachers/...`，见 `teacher_handler.go` 与 `teacher_admin.go`），但**不在**上述种子清单中：`admin` 角色默认无此权限，仅 `superadmin` 直通（`CheckClaimsPermission`，`internal/middleware/auth.go`）或需手工创建该权限并授予角色。
+
 ## 3. 安全防御措施
 
 ### 3.1 速率限制
