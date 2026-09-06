@@ -5,6 +5,7 @@ description: 芒果电单车小程序目录结构的真实含义、业务代码�
 sidebar_position: 1
 ---
 
+> [!NOTE]
 > 完整未脱敏版存档于内部仓库 whu-ebike-re。
 
 - 小程序：芒果电单车（appid `wxbd322b1a1127faee`，南宁交投运营，mangoebike.com）
@@ -12,9 +13,9 @@ sidebar_position: 1
 - 本文所有路径均相对 `mango-ebike/`；行号针对**美化后**的等价代码（原文件为单行压缩，行号仅作定位参考，正文引用时会同时给出可 grep 的符号名）
 - 分析范围：仅静态阅读，未修改源码、未发起任何真实请求
 
-## 1. 概述
+## 概述
 
-### 1.1 目录结构的真实含义（重要）
+### 目录结构的真实含义
 
 根目录下的 `config/`、`lib/`、`api/`、`index.js`、`components/cell`、`components/groupCell`、`components/wxml-to-canvas`、`miniprogram_npm/*` **不是业务代码**，而是两个腾讯企业微信插件被解包工具摊平到根目录后的产物。证据：
 
@@ -26,20 +27,20 @@ sidebar_position: 1
     "materialPlugin": { "version": "1.0.5", "provider": "wx4d2deeab3aed6e5a", "subpackage": "__APP__" }
   }
   ```
-  两个插件的真实包名是 `contact-plugin-miniprogram`（企业微信「联系我」名片/客服）与 `chatgroup-plugin-miniprogram`（企业微信客户群活码），详见[其他发现](./findings.md) §9.3。
+  两个插件的真实包名是 `contact-plugin-miniprogram`（企业微信「联系我」名片/客服）与 `chatgroup-plugin-miniprogram`（企业微信客户群活码），详见[企业微信插件](./findings.md#插件企业微信)。
 - 插件组件在页面 WXML 中以 `<cell>` / `<cell2>` 使用，`pages/account/account.json`、`pages/index/index.json` 声明 `plugin://wx104a1a20c3f81ec2/cell`、`plugin://wx4d2deeab3aed6e5a/cell`。
 
 因此 **`config/app.config.js` 里的 `https://work.weixin.qq.com/cgi-bin/mng/` 是插件自己的后端，与芒果业务无关**。业务 API 全部集中在 `utils/util.js`。
 
-### 1.2 业务代码分层
+### 业务代码分层
 
 | 层 | 文件 | 职责 |
 |---|---|---|
 | URL 表 | `utils/util.js`（对象 `c`，100 个 key） | 全部后端接口路径，函数型 key 负责拼接路径参数 |
 | 请求封装 | `utils/util.js` → `dataRequest` / `uploadFile` | 唯一的业务请求出口，负责组装 header（含签名） |
-| 签名/加密 | `utils/util.js` → 函数 `s(method, url, query, body)` | 生成 `mg-sig` / `mg-ts` / `mg-sk` / `mg-eyt` / `mg-dvi` |
-| 加密库 | `utils/crypto-js.js`（CryptoJS UMD，约 48KB） | 实际只用到 `HmacSHA256`、`AES-CBC/PkCS7`、`enc.Base64/Hex/Utf8` |
-| 登录态 | `utils/features/user.js` | `checkOpenIdAndSession` / `userLoginByOpenId` / `userLoginByOpenIdOnHasId` / `clearUserLoginCache` / `checkRealNameAuthentication` |
+| 签名/加密 | `utils/util.js` | 生成 `mg-*` 请求头（签名与设备信息加密；构造细节存档于私有仓 `whu-ebike-re`，见[请求签名](./signing.md)） |
+| 加密库 | `utils/crypto-js.js`（CryptoJS UMD，约 48KB） | 实际只用到 `HmacSHA256`、`AES-CBC/PKCS7`、`enc.Base64/Hex/Utf8` |
+| 登录态 | `utils/features/user.js` | 会话检查、静默登录、登录缓存清理与实名门禁（见[认证与会话](./auth.md)） |
 | 全局态 | `app.js`（`globalData`） | token、openid、sessionKey、userId、regionId、location、押金/余额等 |
 | 埋点 | `utils/monitor/systemMonitor.js` | 自建批量埋点上报 |
 | 卡券聚合 | `utils/promoRideCard.js` | 骑行卡/通勤卡/免押套餐统一拉取与支付 |
@@ -48,17 +49,17 @@ sidebar_position: 1
 
 `lib/conn/conn.js` **不是长连接层**，详见[车辆状态通道](./flows/unlock-return.md)。
 
-## 2. API 主机与环境
+## API 主机与环境
 
-### 2.1 业务 API
+### 业务 API
 
 | 主机 | 用途 | 来源 |
 |---|---|---|
-| `https://api.mangoebike.com` | **唯一业务后端**。前缀 `/miniMango/v1/*`；文件上传走 `/oss/*` | `utils/util.js` 变量 `r = "https://api.mangoebike.com"` |
+| `https://api.mangoebike.com` | **唯一业务后端**。前缀 `/miniMango/v1/*`；文件上传走 `/oss/*` | `utils/util.js` 硬编码常量 |
 
-未发现任何测试/预发/灰度环境开关：`r` 是硬编码常量，没有按 `regionId`、`scene`、`globalData` 或 storage 切换 baseURL 的逻辑，也没有 `wx.getAccountInfoSync().miniProgram.envVersion` 分支。**单环境、单域名。**
+未发现任何测试/预发/灰度环境开关：网关地址是硬编码常量，没有按 `regionId`、`scene`、`globalData` 或 storage 切换 baseURL 的逻辑，也没有 `wx.getAccountInfoSync().miniProgram.envVersion` 分支。**单环境、单域名。**
 
-### 2.2 CDN / 静态资源
+### CDN / 静态资源
 
 | 主机 | 用途 | 来源 |
 |---|---|---|
@@ -68,21 +69,24 @@ sidebar_position: 1
 | `https://www.mangoebike.com` | `/cityPartner/index.html#/attract` 城市合伙人招商 | `pages/index/index.js` `toPartner`、`pages/account/account.js` |
 | `https://blog.mangoebike.com` | 帮助/协议文档（计价规则、押金说明、退款说明、信用分说明、免押说明、包车说明等 30+ 篇，2017–2019 年 WordPress 文章） | `utils/dataBase.js` `webUrl` |
 
-### 2.3 第三方服务
+### 第三方服务
 
 | 主机 | 用途 | 认证方式 | 来源 |
 |---|---|---|---|
-| `https://api.open.geovisearth.com` | 中科星图（geovisearth）逆地理 `/pj/geo/v2/poi/circle` 与关键字联想 `/pj/geo/v2/assistant/suggestion`，用于「停车区推荐」页选址 | **硬编码 token 明文放在 query**：`token: "<已脱敏：第三方地图 token，32 位十六进制>"` | `packages/business/pages/recommendedParkingLot/recommendedParkingLot.js`（`searchAddressByLocation` / `searchAddressByKeyword`） |
-| `https://restapi.amap.com` | 高德 Web 服务（`/v3/geocode/*`、`/v3/place/around`、`/v3/direction/*`、`/v3/weather/weatherInfo`、`/v3/staticmap`、`/v3/assistant/inputtips`、`/rest/me`） | 需要 key | `libs/amap-wx.130.js`（`AMapWX` SDK）。**全仓库无 `new AMapWX(...)` 调用、无高德 key** → 判定为未启用的死代码 |
-| `http://qr.topscan.com/api.php` | 邀请页生成二维码图片（`?text=<分享链接>`） | 无 | `pages/inviteFriend/inviteFriend.js` `fetchShareInfo`（`QRCode` 字段）。**注意是 HTTP 明文，且把带 shareId 的链接发给第三方** |
-| `https://mg.im.chengmandian.com.cn` | 在线客服 IM（`/ccs/user/mobile/login?channel-no=<已脱敏：IM channel-no>`），以 WebView 打开，URL 上追加 `&phone=<用户手机号>&region<regionId>` | channel-no 硬编码 | `utils/dataBase.js` `webUrl["联系客服"]`；`pages/index/index.js` `serviceEntrance`、`pages/auth/auth.js` `textTapHandler`、`pages/customerService/customerService.js` `onGotoCustomerService` |
-| `https://api.mch.weixin.qq.com` | `/pay/unifiedorder` 微信支付统一下单 | — | `utils/util.js` key `payfor`。**仅定义，客户端从未调用**（下单在服务端完成，见[支付与押金流程](./flows/payment-deposit.md)） |
-| `https://api.weixin.qq.com` | `/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET` | 占位符 `APPID`/`APPSECRET` 未替换 | `utils/util.js` key `access_token`。**仅定义，从未调用**（残留） |
-| `https://work.weixin.qq.com` | 企业微信插件后端：`/cgi-bin/mng/`（`api_prefix`）、`/cgi-bin/mng/xcx/login`、`/cgi-bin/mng/contactplugin/queryconfig`、埋点 `/wework_admin/report` | 插件自有 `skey`/`vid`/cookie 会话 | `config/app.config.js`、`lib/request/request.js`、`lib/util/index.js`、`components/cell/cell.js`、`components/groupCell/groupCell.js` |
-| `https://wwcdn.weixin.qq.com` | 企业微信插件默认头像等静态图 | — | `components/cell/cell.js`、`components/groupCell/groupCell.js` |
-| `http://r.tnpm.oa.com` | 腾讯内网 npm registry，仅出现在 `miniprogram_npm/widget-ui/index.js`、`miniprogram_npm/eventemitter3/index.js` 的包元数据里（`_resolved`） | — | 泄露了内部构建来源，无功能影响 |
+| `https://api.open.geovisearth.com` | 中科星图（geovisearth）逆地理与关键字联想，用于「停车区推荐」页选址 | **硬编码 token 明文放在 query**：`token: "<已脱敏：第三方地图 token，32 位十六进制>"` | `packages/business/pages/recommendedParkingLot/recommendedParkingLot.js` |
+| `https://restapi.amap.com` | 高德 Web 服务 SDK（地理/路径/天气/静态图） | 需要 key | `libs/amap-wx.130.js`（`AMapWX` SDK）。**全仓库无实例化调用、无高德 key** → 判定为未启用的死代码 |
+| `http://qr.topscan.com/api.php` | 邀请页生成二维码图片 | 无 | `pages/inviteFriend/inviteFriend.js` `fetchShareInfo`（`QRCode` 字段） |
+| `https://mg.im.chengmandian.com.cn` | 承满点在线客服 IM，以 WebView 打开，URL 上追加用户手机号与运营区标识 | channel-no 硬编码（已脱敏） | `utils/dataBase.js` `webUrl["联系客服"]`；`pages/index`、`pages/auth`、`pages/customerService` |
+| `https://api.mch.weixin.qq.com` | 微信支付统一下单 | — | `utils/util.js` key `payfor`。**仅定义，客户端从未调用**（下单在服务端完成，见[支付与押金流程](./flows/payment-deposit.md)） |
+| `https://api.weixin.qq.com` | 微信接口调用凭证端点 | 占位符 `APPID`/`APPSECRET` 未替换 | `utils/util.js` key `access_token`。**仅定义，从未调用**（残留） |
+| `https://work.weixin.qq.com` | 企业微信插件后端（登录、配置查询、埋点） | 插件自有 `skey`/`vid`/cookie 会话 | 插件段 `config/app.config.js`、`lib/request/request.js` 等 |
+| `https://wwcdn.weixin.qq.com` | 企业微信插件默认头像等静态图 | — | 插件段 `components/cell`、`components/groupCell` |
+| `<第三方内网 registry>` | 腾讯内网 npm registry，仅出现在 `miniprogram_npm/widget-ui`、`miniprogram_npm/eventemitter3` 的包元数据里（`_resolved`） | — | 泄露了内部构建来源，无功能影响 |
 
-### 2.4 其他外部标识
+> [!CAUTION]
+> 邀请二维码接口 `http://qr.topscan.com/api.php` 为 **HTTP 明文，且把带 shareId 的分享链接发给第三方**；承满点客服 IM 的 WebView URL 明文携带用户手机号（且拼接时 region 参数缺少 `=`）。均属个人信息外发面，详见[隐私与合规观察](./findings.md#隐私与合规观察)。
+
+### 其他外部标识
 
 - `app.json` → `navigateToMiniProgramAppIdList: ["wxebadf544ddae62cb"]`（允许跳转的另一个小程序）。
 - 客服电话硬编码：`4000238906`（`pages/refund/refund.js`、`pages/findLostTraction/findLostTraction.js`）、`02039715531`（`pages/index/index.js` `toCall`、`pages/customerService/customerService.js`）。

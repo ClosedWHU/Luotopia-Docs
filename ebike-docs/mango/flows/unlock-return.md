@@ -5,7 +5,7 @@ description: 车辆状态通道（无长连接、HTTP 轮询）与扫码开锁�
 sidebar_position: 2
 ---
 
-## 车辆状态通道（源文档 §6「长连接协议」：结论为无长连接，HTTP 轮询）
+## 车辆状态通道：无长连接，HTTP 轮询
 
 **结论：不存在长连接。**
 
@@ -52,9 +52,9 @@ exports.default = { conn: e };
 
 5. 定位推送方向是**客户端 → 服务端**：`utils/encapsulation/WXFeature.js` `listenLocationChange()` 调 `wx.startLocationUpdateBackground()` + `wx.onLocationChange(cb)`，回调只更新 `globalData.location`（供下一次请求的 `mg-dvi` 与 `center` 使用），**不主动上报**。没有单独的轨迹上传接口；轨迹由服务端根据订单 `route` 自行计算（前端只读 `order.route.distance` 与 `route.end.lngLat`）。
 
-## 8. 车辆控制流程（端到端）
+## 车辆控制流程（端到端）
 
-### 8.1 扫码开锁
+### 扫码开锁
 
 ```text
 [入口 A] 微信扫小程序码 → pages/loginPre?scancode=xxx 或 pages/index?q=<encoded>
@@ -68,9 +68,9 @@ pages/index/index.js scannerCheckoutAccount(null, code)
   1. !loginStatus            → 弹窗「您还未登录 / 去登录」→ pages/login
   2. deposit === 0 && !isFreeDeposit → navigateTo pages/deposit?needBuyType=deposit
   3. hasUnpayOrder           → 弹「您有调度费或租金未付」→ goTopay() → _recharge(hasUnPayAmount)
-  4. regionId === "2408241137969"（武汉大学）且 !WHShowDialogNotFirst
+  4. regionId === "<武汉大学区域 ID>" 且 !WHShowDialogNotFirst
                              → 弹「信息对外提供授权协议」（confirmText="不同意" / cancelText="同意"，
-                               反转按钮语义）→ PUT /account/user/license {id:"5a13efac…", state:!confirm}
+                               反转按钮语义）→ PUT /account/user/license {id:"<licenseId，已脱敏>", state:!confirm}
   5. → navigateTo pages/readyUnlock/readyUnlock?code=<车牌>
 
 pages/readyUnlock/readyUnlock.js getStock(code, isScanQR)
@@ -110,7 +110,7 @@ unlockBike()
                   wx.navigateBack({ delta: 2 })               → 回首页进入骑行态
 ```
 
-### 8.2 骑行中
+### 骑行中
 
 ```text
 pages/index/index.js onShow → fetchCurrentOrder()，并由 checkTimeOut() 挂 10s 定时器
@@ -134,13 +134,13 @@ GET /order/order/processing
 
 骑行中可用的车辆控制：
   • 临时锁车   onTemporaryLock → TemporaryLockDialog → onLock
-               → 若 hashelmetLock：PUT /ebike/box/{boxId}/command {command:6, param:{}, dataSource:6}
+               → 若 hashelmetLock：先向头盔盒下发「查询头盔在位状态」指令（指令码存档于私有仓）
                   ← data.stockBooleanState.helmetStay 或 status.helmetReact 为真才放行，
                     否则 hideLoading + toast「头盔未归还」
                → 若 rescue.active || rescue.available → toast「车辆救援中不能临时锁车」，直接拦截
-               → PUT /order/order/lockWithExpires {expires:40} → isLock = true
+               → PUT /order/order/lockWithExpires {expires:<硬编码超时常量>} → isLock = true
   • 重新开锁   onUnlockPop → Dialog「确认开锁吗?」→ onUnlock → PUT /order/order/unLock → isLock = false, scale=17
-  • 手动开锁   unlock()（头盔盒场景）→ PUT /ebike/box/{boxId}/command {command:17, param:{}, dataSource:6}
+  • 手动开锁   unlock()（头盔盒场景）→ 向头盔盒下发「开锁」指令（指令码存档于私有仓）
                → toast「开锁成功」
   • 区外救援   onOutsideRescue → POST /order/order/outsideRescue {}
                ← {expiresAt, remainingSeconds, distance, durationSeconds, nearestFencePoint}
@@ -157,7 +157,7 @@ GET /order/order/processing
   • 摆车任务   pages/stockHelpJob：GET /ebike/stock/help?carNo → 拍照上传 → POST /ebike/stock/help/job
 ```
 
-### 8.3 还车（结束行程）
+### 还车（结束行程）
 
 ```text
 onCompleteOrderPopUp
@@ -234,14 +234,14 @@ PUT /order/order/finish 的失败分支（服务端通过 response 里的开关�
   → handlePhotoLock → 拍照 → /oss/dispatchWorkOrder → 再走 endDialog 结束行程
 ```
 
-### 8.4 调度费与停车点优惠
+### 调度费与停车点优惠
 
 - 运营区配置（`GET /operation/region/intersect`）决定计费模型：`operationPattern`（0 禁停 / 1 收调度费 / 2 停车优惠）、`parkingPattern`、`dispatchCost`（停车区外）、`outRegionDispatchCost`（服务区外）、`enableDispatchCost`、`parkingDiscount{rate, content}`。金额字段服务端以**分**下发，前端统一 `/100`。
 - `freeOrderTimeLimited.freeTrip`（分钟）用于「区外车骑回区内还车免前 N 分钟时长费」，前端据此计算 `rideBackFree` 并在救援弹窗里追加文案。
 - 优惠停车点闭环：骑行中 → `MGParkingLotDiscountModal` → 分包 `recommendedParkingLot` → 选目的地（geovisearth POI/联想，前端用 `packages/business/utils/GEO/coordTransform.js` 做坐标系转换、用射线法 `computeSuggestionItemStatus` 判定「运营区内 / 临近运营区边缘 / 运营区外 / 无运营区」）→ `GET /operation/parkingLot/planning` 推荐停车点 → `POST /order/order/parkingLotDiscount {parkingLotId, target}` 绑定 → `GET /operation/parkingLot/navigation` 画线 → 首页 `userRealTarget` + `ParkingLotDiscountTarget` → 还车时 `payInfo.parkingAreaReturnDiscount` 体现返还。
 - `rejectedOrders`（`GET /account/user`）驱动首页「调度费被拒/返还」轮播（`dispatchDeductionTip`，3s 切换），一次性（`rejectedOrdersPop` 落 storage）。
 
-### 8.5 订单状态枚举与费用字段全表
+### 订单状态枚举与费用字段全表
 
 **订单状态 `order.state`**（`pages/journeyDetail/journeyDetail.js` `getOrderState()`，同一套枚举也解释了前面几处魔法数字）：
 
@@ -253,7 +253,7 @@ PUT /order/order/finish 的失败分支（服务端通过 response 里的开关�
 | 3 | 超时结束 | — |
 | 4 | 长时无移动结束 | — |
 | 5 | 后台结束订单 | — |
-| 6 | 系统结束订单 | **注意与 5.2 中 `getStock` 返回的 `state === 6`（车辆报失，走 `findLostTraction`）不是同一个字段的枚举** —— 后者是接口响应顶层的 `state`，`utils/util.js` 里 `6 !== (s||{}).state` 会抑制错误 toast |
+| 6 | 系统结束订单 | **注意与扫码车辆详情接口（见[车辆与开锁还车接口](../api/ride.md)）返回的 `state === 6`（车辆报失，走 `findLostTraction`）不是同一个字段的枚举** —— 后者是接口响应顶层的 `state`，请求层对该状态会抑制错误 toast |
 | 7 | 禁停区结束 | 对应 `payInfo.noParkingDispatchCost` |
 | 8 | 未支付 | 还车后 `state === 8` → `hasUnpayOrder = true`、`hasUnPayAmount = payInfo.rent.finalTotal`，首页弹「您有调度费或租金未付」，扫码被拦，必须先 `_recharge()` 补付 |
 | 其他 | 状态异常 | — |

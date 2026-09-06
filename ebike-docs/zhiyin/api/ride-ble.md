@@ -1,24 +1,17 @@
 ---
 title: 车辆 / 骑行控制接口（蓝牙通道）
 sidebar_label: 骑行控制(蓝牙)
-description: 蓝牙 token、蓝牙开锁/还车/临停上报与道钉检测等 11 个接口的完整清单与调用方标注。
+description: 蓝牙 token、蓝牙开锁/还车/临停上报与道钉检测等 11 个接口的能力类别摘要（完整清单与指令协议存档于私有仓）。
 sidebar_position: 5
 ---
 
-## 车辆 / 骑行控制——蓝牙通道（11）
+## 车辆 / 骑行控制（蓝牙通道）能力类别
 
-调用方：模块 `7c9e`（bleRidePermission→ridePermission；reportOpenBikeByBLE→rideReport；reportReturnBikeByBLE→returnReport）、模块 `17bd`（getBlueToothToken）、模块 `67ed`（getBlueToothTokenByTBIT）。BLE 指令协议细节见[蓝牙（BLE）指令"加密"](../crypto.md)，开锁链路见[车辆控制流程](../flows/unlock-return.md)。
+本组约 11 个接口。BLE 指令协议（帧格式、指令码、token 构造）已移入私有仓，公开侧见[蓝牙（BLE）指令层「加密」](../crypto.md)与[车辆控制流程](../flows/unlock-return.md)。
 
-| 接口路径 | 方法 | 函数名 | 用途(推断) | 模块 |
-|---|---|---|---|---|
-| `/client/fence/part/getBluetoothCheckPart` | POST | getBluetoothCheckPart | 蓝牙检测部件(道钉)配置 | 46e1 |
-| `/client/paas/device/getBlueToothToken` | POST | getBlueToothToken | 获取蓝牙 token（`{imei}`，小安锁） | 46e1 |
-| `/client/rent/blue/endParking` | POST | tempRideReport | 蓝牙结束临停上报 | 46e1 |
-| `/client/rent/blue/getReturnConfig` | POST | openConfig | 蓝牙还车配置(izBeacon 等) | 46e1 |
-| `/client/rent/blue/getTbitBlueToken` | POST | getBlueToothTokenByTBIT | 获取 TBIT 蓝牙 token（`{carId}`） | 46e1 |
-| `/client/rent/blue/return` | POST | returnReport | 蓝牙还车结果上报 | 46e1 |
-| `/client/rent/blue/ride` | POST | rideReport | 蓝牙开锁结果上报 | 46e1 |
-| `/client/rent/blue/ridePermission` | POST | ridePermission | 蓝牙开锁前权限校验（带 deviceToken） | 46e1 |
-| `/client/rent/blue/tempParking` | POST | tempReturnReport | 蓝牙临时锁车上报 | 46e1 |
-| `/client/rent/returnPermission` | POST | returnPermission | 还车前权限校验(是否可还/费用/人脸) | 46e1 |
-| `/client/system/getbackCarConfigByCarId` | POST | returnConfig | 按车辆ID获取还车配置 | 46e1 |
+- **蓝牙 token 下发**：小安锁按 imei、TBIT 锁按 carId 各有一个 token 下发端点（弱点：token 原文会随 BLE 日志上报日志服务器，见[加密模块](../crypto.md)）；
+- **蓝牙权限校验**：蓝牙开锁前权限校验（带 deviceToken）、蓝牙还车配置（是否需道钉检测）；
+- **结果上报**：蓝牙开锁、蓝牙还车、蓝牙临时锁车、蓝牙结束临停四个上报端点；
+- **配套**：还车前权限校验（是否可还/费用/人脸）、按车辆 ID 取还车配置、蓝牙道钉检测部件配置。
+
+调用方：用车 mixin（蓝牙权限/上报）、两类锁的 SDK 传输模块。完整接口清单存档于私有仓 `whu-ebike-re`。

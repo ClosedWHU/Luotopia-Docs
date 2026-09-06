@@ -1,81 +1,53 @@
 ---
 title: 加密模块
 sidebar_label: 加密模块
-description: 微信支付分签名死代码、AES-CBC 通用加解密、蓝牙指令"加密"、日志脱敏与加密原语清单。
+description: 微信支付分签名死代码、AES-CBC 通用加解密、蓝牙指令层「加密」（自研校验和）、日志脱敏与加密原语清单。
 sidebar_position: 4
 ---
 
-## 4.6 微信支付分客户端签名（模块 `b647`）——确认为死代码
+## 微信支付分客户端签名——确认为死代码
 
-```js
-// common/vendor.js 模块 "b647"（全文）
-createWechatSign(mch_id, service_id, out_request_no, timestamp, nonce_str, sign_type, key) {
-  var s = "mch_id="+mch_id+"&nonce_str="+nonce_str+"&out_request_no="+out_request_no
-        + "&service_id="+service_id+"&sign_type="+sign_type+"&timestamp="+timestamp+"&key="+key;
-  return HmacSHA256(s, key).toString().toUpperCase();     // 模块 "ed53"=CryptoJS HmacSHA256
-}
-```
+包内存在一个微信支付分客户端签名函数（mch_id/nonce_str 等字段拼接后 HmacSHA256），但全库（含两个分包）**零调用**；其所在模块的唯一引用是一处副作用空导入（逗号表达式丢弃返回值，webpack 打包遗留）→ **确认死代码**。
 
-全库（含 `pagesSub`/`pagesSub2`）对 `createWechatSign` **零调用**；`b647` 的唯一引用是 `pagesSub/wechatCreditScore/wechatCreditScore.js` 中的副作用空导入 `c=(t("b647"), …t("88bc"))`（逗号表达式，返回值被丢弃，webpack 打包遗留）→ **确认死代码**。支付分相关真实页面：
-- `pagesSub/wxPayScore/wxPayScore.js`（支付分授权开关页）：`wx.login` → `getScorePermissionRecord({code})`（`authorization_state==="AVAILABLE"` 判定已开通）、开关开启 → `scorePermission({code})` → `wx.navigateToMiniProgram({appId:"wxd8f3793ea3b935b8", path:"pages/use/enable", extraData:{apply_permissions_token:data}})`、关闭 → `closeScorePermission({code})`；
-- `pagesSub/wechatCreditScore/wechatCreditScore.js`（支付分展示页，mixin `88bc`）；
-- `pagesSub2/pay/wechatPayScoreOrder.js`、`pagesSub2/pay/payScoreOrder.js`（支付分订单结算页，mixins `90b5` payMoney/`1e5c`/`88bc`，onShow 起 **3s** `setInterval(refreshOrder)` 轮询订单）。
+支付分相关的真实链路中，确认订单参数（`wx.openBusinessView` 所需的 mch_id、package、timestamp、nonce_str、sign 等）**全部由服务端签发给客户端**，客户端不参与支付分签名（正面观察）。真实页面：`pagesSub/wxPayScore/wxPayScore.js`（授权开关）、`pagesSub/wechatCreditScore/wechatCreditScore.js`（展示）、`pagesSub2/pay/wechatPayScoreOrder.js` 与 `payScoreOrder.js`（支付分订单结算，3s 轮询订单状态）。
 
-另有服务端签发的支付分确认参数：`wx.openBusinessView({businessType:"wxpayScoreUse", extraData:{mch_id, package, timestamp, nonce_str, sign_type:"HMAC-SHA256", sign}})`——sign 由后端 `createOrderConfirm` 返回（`signStr`），客户端不计算（模块 `7c9e` gotoWechatBussinessConfirm）。
+## AES-CBC 通用加解密（有实际调用方）
 
-## 4.7 AES-CBC 通用加解密（模块 `aef2`，有实际调用方）
+通用加解密模块以字节数组混淆方式在包内硬编码 16 字节 ASCII 口令与 8 字节盐（值已脱敏；混淆还原配方存档于私有仓 `whu-ebike-re`），经**单轮 PBKDF2-SHA256** 派生 256 位密钥，IV 直接复用口令前 16 字节（弱点：非规范密钥派生、IV 与口令同源），提供 AES-256-CBC 的 encryptText/decryptText。
 
-```js
-// common/vendor.js 模块 "aef2"（摘录）：密钥/盐用 XOR(0x5A) 字节数组混淆
-password = [<字节数组，每字节 XOR 0x5A 还原>].map(b => b ^ 90) = "<已脱敏：AES 口令>"   // 16 字节 ASCII 口令
-salt     = [<字节数组，每字节 XOR 0x5A 还原>].map(b => b ^ 90) = "<已脱敏：AES 盐>"     // 8 字节 ASCII 盐
-key = CryptoJS.PBKDF2(password, salt, {keySize: 8 /*=256bit*/, iterations: 1, hasher: SHA256});
-iv  = CryptoJS.enc.Utf8.parse(password);                    // AES 口令前 16 字节
-encryptText: AES.encrypt(text, key, {iv, mode: CBC}).toString()   // 输出 OpenSSL base64 格式
-decryptText: AES.decrypt(cipher, key, {iv, mode: CBC}).toString(Utf8)
-```
+**两处调用方（均在 pagesSub2）**：
 
-**两处调用方（均在 pagesSub2，`n("aef2")`）**：
+1. **实名信息解密（无条件生效）**：`pagesSub2/verified/verified.js` —— 服务端返回的实名字段为密文（encryptionAuthName/encryptionAuthNo），页面用该模块本地解密后展示姓名/身份证号。**含义**：用户姓名与身份证号在传输层仅由这把硬编码于客户端的 AES 密钥「保护」（弱点类别：密钥分发边界失守，加密等同明文下发）。提交实名时又把密文字段原样回传（单次实名引用模式）。
+2. **短信登录敏感字段加密（配置开关，知音未启用）**：`pagesSub2/smsVerification/smsVerification.js` —— ext `security:true` 时对登录手机号/验证码加密后提交；知音 ext 为 `security:false`，当前走明文（见[登录流程](./auth.md)），该分支仅为其他租户/未来开关保留。
 
-1. **实名信息解密（无条件生效）**：`pagesSub2/verified/verified.js` —— 服务端返回的实名字段为密文 `encryptionAuthName`/`encryptionAuthNo`，页面用 `(0,s.decryptText)(...)` 本地解出 `decryptName`/`decryptNo` 展示（数据来自 `getUserAuthInfoListByPhone`/`getIzSupportSingleAuth` 等，`s=n("aef2")`）。**含义**：用户姓名与身份证号在传输层仅由这把硬编码 AES 密钥"保护"，而密钥/盐就打包在客户端（XOR 0x5A 混淆），拿到包即可解密任意密文——等同明文下发。提交实名时又把 `encryptionAuthName`/`encryptionAuthNo` 原样回传（单次实名 `quotePin`/`quoteTenantId` 引用模式）。
-2. **短信登录敏感字段加密（配置开关，知音未启用）**：`pagesSub2/smsVerification/smsVerification.js` —— `$getCfgFun("security")` 为真时 `encryptText("+86-"+phoneNum)`/`encryptText(code)` 并附 `security` 字段（`u=n("aef2")`）。知音 ext `security:false`（`app-config.json`，DEV/TEST 默认配置同为 `security:!1`），故当前走明文 `phone`/`messageCode`；该加密分支仅为其他租户/未来开关保留（见[登录流程](./auth.md)）。
+硬编码口令/盐已随包泄露，且被服务端用于实名信息加密——**属实际可利用的密钥暴露**（值与定位信息存档于私有仓 `whu-ebike-re`）。
 
-硬编码口令 `<已脱敏：AES 口令>`/盐 `<已脱敏：AES 盐>` 已泄露，且被服务端用于实名信息加密——**属实际可利用的密钥暴露**。
+## 蓝牙（BLE）指令层「加密」（自研校验和）
 
-## 4.8 蓝牙（BLE）指令"加密"
+存在两类锁协议（TBIT / 小安自研），命令层为**自研校验和 + 字符替换表**而非现代加密；操作 token 均由服务端下发（真正的鉴权在 token 上）。帧格式、指令码表、GATT 服务/特征 UUID、校验和构造、设备号匹配规则与 token 端点等协议细节已移入私有仓 `whu-ebike-re`。
 
-两套车锁协议，token 均由后端下发（真正的鉴权在 token 上，指令层只有校验和/替换表，无现代加密）：
+弱点评估：
 
-**A. 小安自研锁（imei 通道）**——模块 `f417`（SDK）+ `17bd`（传输）+ `6c2f`（指令表）+ `5217`（应答解析）：
-- token：`POST /client/paas/device/getBlueToothToken {imei}` → 数值 token，转 4 字节大端（失败兜底 `[10,10,5,5]`）；
-- 帧格式（`17bd.buildCmd`）：`cmd(1B) + len(1B) + token(4B) + params + checksum(1B)`，`checksum = (cmd + Σpayload字节 + len) & 0xFF`，hex 串写入特征值；
-- GATT（模块 `9861`）：Service `0783B03E-8535-B5A0-7140-A304D2495CB7`，写 RX `…CBA`，听 TX `…B8`；广播匹配：advertisData 第 3 段起含 12 位 imei；
-- 指令表（`6c2f`）：`START=44`（开锁）、`LOCK=43`（关锁/还车）、`PLAY_VOICE=40`（寻车铃）、`GET_STATE_INFO=42`、`GET_DEVICE_INFO=65`、`GET_LAST_BEACON_INFO=66`（道钉检测）、`GET_RFID=84`、`SET_DASHBOARD=106`、`SET_CYCLING_BACK_WHEEL=37`。
+- 指令层无加密与防重放设计，安全性完全依赖 token 保密性；
+- BLE 日志会把**蓝牙 token 原文**上报到厂商日志服务器（见下节日志脱敏），token 保密性在日志通道失守；
+- 存在取 token 失败时的**兜底占位 token**（值已脱敏），属实现质量缺陷；
+- BLE 开锁前后均有服务端权限校验与结果上报兜底（前置校验 + 开锁/还车/临停结果上报，见[车辆控制流程](./flows/unlock-return.md)），纯蓝牙重放不能绕过服务端订单闭环。
 
-**B. TBIT 锁（carId/ecuSn 通道）**——模块 `40c2`（封装）+ `67ed`（协议栈）+ `d2c0`（帧工具）+ `90ed`（应答解析）：
-- token：优先车辆详情 `ecuToken`，否则 `POST /client/rent/blue/getTbitBlueToken {carId}`；
-- 鉴权帧：payload `"02 00 01 " + keyLen(1B) + token(hex小写)`；应答含 `020101` 鉴权成功 / `020100` 失败；
-- 操作指令（`67ed.J`）：开锁 `03 00 02 01 00`（应答 `0300820100` 成功）、关锁 `03 00 01 01 01`（应答 `0300810100`；运动中拒绝 `0300810102`）、寻车 `03 00 04 01 01`、临时锁车 `03 00 01 01 30`、透传 `04 00 fd <len> <hex(text)>`；
-- 帧头（`d2c0.header`）：`"aa" + cmd + "2" + "00" + seq + payloadLen(2B) + CRC16`；CRC16 = Modbus 变体（init 0xFFFF、查表、按位取反）；40 hex 字符（20B）分包写 `FEF6` 服务；
-- 设备号匹配：广播数据 hex 的 `slice(4,13)` 经 `d2c0.encrypt()` ——**字符替换表**（hex 字符 `5A2B3C6D9E8F7410` ↔ `*+,-./0123456789`，即 charCode 42+i）变换后与 `ecuSn` 比对。
+## 日志脱敏与域名打码
 
-BLE 开锁前后均有服务端校验/上报：`/client/rent/blue/ridePermission`（前置，携带道钉检测结果 `result[]`）与 `/client/rent/blue/ride`、`/client/rent/blue/return`、`/client/rent/blue/tempParking`、`/client/rent/blue/endParking`（结果上报），见[车辆控制流程](./flows/unlock-return.md)。
+- 日志中手机号打码（保留前 3 后 4）、姓名打码（首尾保留）；
+- 日志内 URL 域名替换为短标识，属日志脱敏而非通信加密；
+- 但 BLE 日志会把**蓝牙 token 原文**随日志参数上报到日志服务器（弱点：凭据泄露至日志通道，且该路径不受日志级别开关限制）；请求层在调试日志级别下会把完整请求头（含 Authorization 与签名头）写入日志（弱点：凭据日志开关，知音生产配置为 info、发布版默认不触发，见[其他发现](./findings.md)）。
 
-## 4.9 日志脱敏与域名打码
+## 加密原语清单（CryptoJS 打包于 `common/vendor.js`）
 
-- 日志中手机号打码（保留前 3 后 4：`138****1234`）、姓名打码（首尾保留）（模块 `4250` 函数 `b`）；
-- 日志内 URL 域名替换为短标识（模块 `1244` 函数 `T` + 映射表 `P`，如 `ebike-client-prod2.xiaoantech.com → prod2.com`），属日志脱敏而非通信加密；
-- 但 BLE 日志会把 **TBIT `_key`（蓝牙 token）原文**随 `bleParams` 上报到日志服务器（模块 `67ed` 多处 `f.log({… _key:P})`）；请求层在 `logLevel:"debug"` 时会把完整 header（含 Authorization、_s）写入日志（模块 `1244` 行 767）。知音 ext 的 logLevel 为 `"info"`，header 不上报，但 BLE key 上报路径不受 logLevel 限制。
-
-## 4.10 加密原语清单（CryptoJS 打包于 `common/vendor.js`）
-
-| 模块 | 算法 | 实际用途 |
-|---|---|---|
-| `94f8` | SHA256 | `_s` 请求签名（见[请求与签名](./signing.md)）、juju 广告签名 |
-| `72fe` | MD5 | 同盾 openid 摘要 |
-| `ed53` | HmacSHA256 | 微信支付分 createWechatSign（b647，**死代码**，本页 §4.6） |
-| `3452`+`21bf`+`38ba`+`81bf` | AES/核心/CBC/ECB | aef2 通用加解密（verified 实名解密 / smsVerification security 加密，本页 §4.7） |
-| `1132`/`f8d5` | Base64/Utf8 | Basic 认证头 |
-| PBKDF2（3452 内） | PBKDF2-SHA256 | aef2 密钥派生 |
-| `d2c0` | CRC16 + 字符替换表 | TBIT 蓝牙帧 |
-| 无 | RSA/SM2/SM4 | 全库未检出 |
+| 算法 | 实际用途 |
+|---|---|
+| SHA256 | 请求头签名（见[请求与签名](./signing.md)）、第三方广告独立签名 |
+| MD5 | 设备指纹 openid 摘要 |
+| HmacSHA256 | 微信支付分客户端签名（**死代码**，见本页首节） |
+| AES（CBC/ECB 核心） | 通用加解密（实名解密 / 登录加密开关，见上文） |
+| Base64 / Utf8 | 认证头编码 |
+| PBKDF2-SHA256 | AES 密钥派生（单轮） |
+| CRC16 + 字符替换表 | 蓝牙帧校验（协议细节存档于私有仓） |
+| RSA / SM2 / SM4 | 全库未检出 |

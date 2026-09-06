@@ -1,100 +1,70 @@
 ---
 title: 支付与押金流程
 sidebar_label: 支付与押金
-description: 微信支付参数来源、押金状态机与免押（信用/付费）三条路径。
+description: 微信支付参数来源（服务端签名、客户端透传）、押金状态机与押金/免押路径。
 sidebar_position: 1
 ---
 
-## 7. 支付与押金流程
+## 微信支付参数来源
 
-### 7.1 微信支付参数来源
+**小程序端从不接触商户密钥，也不自行签名。** 统一模式：客户端按业务类型请求服务端创建支付单 → 服务端返回 `wx.requestPayment` 所需的五元组（timeStamp/nonceStr/package/signType/paySign，签名类型由服务端决定），客户端**原样透传、零加工** → 支付回调 `success` 与 `fail` **双分支都延时查询服务端支付结果校验接口**，以服务端返回的 `paid` 为准（用户可能在收银台完成但 JS 回调判失败）；卡券购买与骑行卡聚合封装还带重试。端点链与报文结构存档于私有仓 `whu-ebike-re`。
 
-**小程序端从不接触商户密钥，也不自行签名。** 统一模式：
+- 下单请求携带金额（单位为**分**）、渠道标识（恒为 `"miniMango"`，服务端据此区分小程序渠道与 APP 渠道）与 **openid——由客户端从全局状态带上**（后端本可凭 JWT 反查，此处冗余；弱点类别：openid 为客户端可控输入）。
+- 充值档位来自运营区配置（小程序内不可选的档位引导下载 APP）；充值页内置兜底档位 500/1000/2000/5000 分（赠 1/2/4/10 元）。
+- URL 表中的微信统一下单与 `wxPay` key **从未被调用**，是历史残留；`access_token` key 里还留着 `appid=APPID&secret=APPSECRET` 占位符，说明早期版本曾考虑客户端直连微信 API，现已放弃（小程序不可能直连商户 API，需商户证书）。
 
-```text
-客户端 → POST /miniMango/v1/finance/ticket/<某业务>  { amount(分), channel:"miniMango", openid }
-       ← { charge: { timeStamp, nonceStr, package, signType, sign }, ticket: { _id } }
-客户端 → wx.requestPayment({
-            timeStamp: charge.timeStamp,
-            nonceStr : charge.nonceStr,
-            package  : charge.package,        // 形如 prepay_id=wx...
-            signType : charge.signType,       // 由服务端决定（MD5/HMAC-SHA256/RSA）
-            paySign  : charge.sign            // 服务端用商户密钥算好的支付签名
-         })
-       → success / fail 都延时后 GET /miniMango/v1/finance/ticket/{ticket._id}/check
-       ← { paid: bool }   // 以服务端为准
-```
+调用支付的业务入口共 8 类：余额充值/补付、押金、免押卡、免押+通勤套餐、通勤卡、季卡、骑行卡商品、包车卡。押金页与通勤卡页各自实现成功回调，骑行卡聚合模块是最新的统一封装（Promise 化，含未登录/无效卡/下单失败/未支付/取消等错误语义）。
 
-- `charge` 五元组原样透传，**字段名与 `wx.requestPayment` 一一对应**，客户端零加工。
-- `openid` 由客户端从 `globalData.openid` 带上（后端本可凭 JWT 反查，此处冗余；也意味着 openid 是客户端可控输入）。
-- `channel` 恒为字符串 `"miniMango"`，用于服务端区分小程序渠道与 APP 渠道（APP 走 `mangoebike.com` 自有支付）。
-- `amount` 单位为**分**；充值档位来自 `getRegion` 的 `rechargeDiscount.rechargeAmount[]`（`{amount, rechargePresent, cornerMark, enableInMiniMango}`），`enableInMiniMango === false` 的档位在小程序内不可选（引导下载 APP）。`pages/recharge/recharge.js` 内置兜底档位 500/1000/2000/5000 分（赠 1/2/4/10 元）。
-- 支付结果**双分支都查 `check`**：`success` 延时 1–2s 查，`fail` 也延时查（用户可能在收银台完成但 JS 回调判失败）。`pages/cardProduct` 与 `utils/promoRideCard` 还带重试（分别最多 4 次 ×1.5s、1 次）。
-- `utils/util.js` 里的 `payfor`（`api.mch.weixin.qq.com/pay/unifiedorder`）与 `wxPay`（`/finance/ticket/wxPay`）两个 key **从未被调用**，是历史残留；`access_token` key 里还留着 `appid=APPID&secret=APPSECRET` 占位符，说明早期版本曾考虑客户端直连微信 API，现已放弃。
+商城订单支付在缺失的 shopping 分包里，无法确认是否复用同一支付单结构（见[未定位调用点](../api/uncalled.md)）。
 
-调用 `charge` 的业务入口共 8 个：`balance`(充值/补付)、`deposit`(押金)、`freeDeposit`(免押卡)、`freeDepositAndCommutingCard`(免押+通勤套餐)、`commutingCard`(通勤卡)、`commutingCard/seasonCard`(季卡)、`cardProduct`(骑行卡)、`charteredEbikeCard`(包车卡)。`pages/deposit/deposit.js` 与 `pages/commutingCard/commutingCard.js` 各自实现了 `successCallback`，`utils/promoRideCard.js` `payPromoRideCard` 是最新的统一封装（Promise 化，错误码 `not_login` / `invalid_card` / `order_fail` / `unpaid` / `cancel`）。
+## 押金状态机
 
-商城订单支付（`/mall/order/{id}/pay`）在缺失的 shopping 分包里，无法确认是否复用同一 `charge` 结构。
-
-### 7.2 押金状态机
-
-`utils/dataBase.js` 的 `depositState` 枚举（服务端 `clientShowState` / `wallet.deposit.paid` 的取值）：
+`utils/dataBase.js` 的 `depositState` 枚举（服务端下发的押金展示状态取值）：
 
 | 值 | 含义 | 前端行为 |
 |---|---|---|
-| 0 | 未交纳 | 扫码时跳 `pages/deposit/deposit`；`checkIndexStatus` 里若 `!enableRegionDeposit && !enableFreeDepositAndCommuting` 则提示「交纳押金，开始用车」 |
-| 1 | 可自动退款 | `pages/refund/refund.js` 走 `depositRefund` 自动退 |
+| 0 | 未交纳 | 扫码时跳押金页；若运营区既不可交押金也无免押套餐则提示「交纳押金，开始用车」 |
+| 1 | 可自动退款 | 退款页走自动退 |
 | 2 | 需手动退款 | 弹窗「由于支付商原因，您的押金不能自动退款，请联系客服进行退款」→ 客服 `400-023-8906` |
-| 3 | 退款中可撤销 | 显示 `deposit.ticket.refund.amount` 与 `willProcessAt`；可调 `cancelDepositRefund` |
+| 3 | 退款中可撤销 | 显示退款金额与预计处理时间；可撤销退款申请 |
 | 4 | 退款中不可撤销 | 同上但无撤销按钮 |
 | 5 | 退款失败 | — |
-| 6 | 冻结中 | `showRefundTipView` 里 toast「骑行中不能申请退押金」 |
-| 7 | 免押卡免押 | 账户页显示「已免押」；`showRenewal` 检查 `freeDeposit.isFreeDepositWarning` → 弹续费提示（`remainDays`） |
+| 6 | 冻结中 | toast「骑行中不能申请退押金」 |
+| 7 | 免押卡免押 | 账户页显示「已免押」；临期弹续费提示 |
 | 8 | 交押金且充值免押 | — |
 | 9 | 只充值免押 | 账户页显示「已充值免押」 |
 
-`pages/index/index.js` `linkToDepositPage` 的跳转映射：`0 → deposit?needBuyType=deposit`，`3/4 → refund`，`[0,7,9,3,4,5]` 之外一律按 `3` 处理（→ `refund`），兜底 `deposit`。
+首页跳转映射：`0 → 押金页`，`3/4 → 退款页`，枚举之外的值一律按 `3` 处理，兜底押金页。
 
-退款前置校验（`pages/refund/refund.js` `showRefundTipView`）：`balance < 0` → 「您的车费余额不足，请下载芒果电单车APP进行充值后再退款」（小程序内不给退，导流 APP）。退款金额显示：状态 3/4 用 `deposit.ticket.refund.amount`，否则用 `deposit.amount`；到账时间 `backtimeValue + backtimeUnit`，兜底 `backtime + "个工作日"`。
+退款前置校验：余额为负 → 「您的车费余额不足，请下载芒果电单车APP进行充值后再退款」（小程序内不给退，导流 APP）。退款金额显示与到账时间均有兜底文案。
 
-### 7.3 免押（信用/付费）三条路径
+## 押金与免押路径
 
-`pages/loginPre/loginPre.js` `checkCityPermissions` 与 `pages/index/index.js` 同名方法根据 `GET /operation/city` 的返回决定押金形态：
+城市权限接口返回决定押金形态（是否可小程序内交押金/买免押卡、免押文案与选项），写入全局状态后由押金页分支消费。
 
-```js
-globalData.freeDepositWay       = n[0].freeDepositWay;
-globalData.showText             = n[0].showText;
-globalData.enableMiniDepositCard= n[0].enableMiniDepositCard;   // 小程序内可买免押卡
-globalData.enableMiniDeposit    = n[0].enableMiniDeposit;       // 小程序内可交押金
-globalData.depositWay = (enableMiniDepositCard && enableMiniDeposit) ? n[0].miniDepositOption
-                      :  enableMiniDepositCard ? false            // 只能买卡
-                      :  true;                                   // 只能交押金
-```
-
-`pages/deposit/deposit.js` 的分支（`_goToPayDeposit`）：
+`pages/deposit/deposit.js` 的购买分支（按入口类型与运营区配置）：
 
 ```text
-needBuyType === "deposit"（从扫码/首页强制进入）
-├─ depositWay === true  → POST /finance/deposit            { channel, openid, depositAmount: regionDepositAmount }
-├─ freeDepositAndCommutingCard.enable === true
-│                        → stillBuyCard()
-│                            ├─ activeClass === "freeDepositAndCommutingCard"
-│                            │     → POST /finance/ticket/freeDepositAndCommutingCard { amount, channel, openid, regionId }
-│                            └─ 否则（选中某张通勤卡）
-│                                  → POST /finance/ticket/commutingCard { amount: card.actualAmount, channel, openid }
-│                                    （若 validDuration ∈ {30,31} 即月卡，支付成功后轮询 /mall/gift 领赠品）
-└─ 否则                  → POST /finance/ticket/freeDeposit { channel, openid, amount: freeCardPrice }
-needBuyType !== "deposit"（从账户页进入）→ 直接 stillBuyCard()
+强制进入（扫码/首页）
+├─ 只能交押金        → 交押金（金额取运营区配置）
+├─ 免押+通勤套餐开启  → 买套餐，或选中某张通勤卡单独购买
+│                      （月卡支付成功后轮询商城赠品接口领赠品）
+└─ 否则              → 买免押卡
+账户页进入 → 直接走买卡分支
 ```
 
-免押卡价格来源：`GET /account/wallet` → `freeDeposit.{actualAmount, originalAmount, validDuration}`；若 `freeDeposit` 为空对象则用兜底 `freeCardPrice: 990`（9.9 元）、`originPrice: 59990`、`freeCardDuration: 7`（7 天）。页面上还硬编码了 `regionDepositAmount: 29900`（299 元）作为兜底。
+各分支的端点与请求参数存档于私有仓 `whu-ebike-re`；能力类别见[支付与押金接口](../api/payment.md)。
 
-扫码时的免押判定（`pages/readyUnlock/readyUnlock.js` `getStock`）：服务端在 `GET /ebike/stock/number` 里返回 `needPayDeposit: true` + `message` 时，toast 后 `navigateTo ../deposit/deposit?needBuyType=deposit`，并通过 `eventChannel.on("depositPaySuccess")` 在支付成功后**自动重放 `getStock(number)`**（`pages/deposit/deposit.js` `successCallback` 里 `getOpenerEventChannel().emit("depositPaySuccess")`，兜底调 `prevPage.payDepositEnd()`）。
+免押卡价格来源：钱包接口的免押卡配置（实付/原价/有效期）；为空时用兜底价 990 分（9.9 元）、原价 59990、7 天；页面还硬编码押金兜底 29900 分（299 元）。
 
-`pages/index/index.js` `scannerCheckoutAccount` 的前置门禁顺序：
+扫码时的免押判定：服务端在车辆库存查询里返回「需交押金」标记时，toast 后跳押金页，并通过页面事件通道在支付成功后**自动重放库存查询**（兜底调用上一页回调）。
+
+首页扫码门禁顺序：
+
 ```text
-loginStatus? → (deposit !== 0 || isFreeDeposit)? → !hasUnpayOrder? → 武大授权协议弹窗? → readyUnlock
+登录态? → (押金已缴 || 免押)? → 无未付订单? → 武大授权协议弹窗? → 开锁页
 ```
-注意其中有一行 `g.globalData.deposit = 1`（在判断前**强行把押金态改成 1**），使 `0 !== deposit` 恒真 —— 押金门禁在首页扫码链路里实际被这行代码短路了，真正的押金校验落在服务端 `getStock` 的 `needPayDeposit`。同样的写法出现在 `checkIndexStatus()`（`t.globalData.deposit = 1`）。这看起来是运营侧临时放开小程序押金门槛的改动，属于**前端校验形同虚设**的典型例子（服务端仍是最终裁决者）。
 
-信用相关：`pages/credits/credits.js` 展示 `user.credit` 与 `GET /account/credit` 流水；`cancelMustNeedHelmet` 的弹窗文案明确「若发现多次恶意申请行为，将影响您的信用评分」；`illegalParkValid` 的违停停用三天也是信用体系的一部分。**未发现基于微信支付分/芝麻信用的免押接口**（`freeDepositWay` 由运营区配置决定，免押是付费卡模式而非信用免押）。
+**弱点**：门禁判断前存在把押金状态**硬写为已缴**的短路代码，使押金条件恒真——首页扫码链路的押金门禁实际被本地状态短路（弱点类别：客户端校验形同虚设），真正的押金校验落在服务端库存查询的「需交押金」标记。看起来是运营侧临时放开小程序押金门槛的改动，服务端仍是最终裁决者。具体写法存档于私有仓 `whu-ebike-re`。
+
+信用相关：信用分页展示用户信用与流水（按订单可查单笔变动）；头盔误用弹窗与违停停用三天均属信用体系。**未发现基于微信支付分/芝麻信用的免押接口**（免押形态由运营区配置决定，免押是付费卡模式而非信用免押）。

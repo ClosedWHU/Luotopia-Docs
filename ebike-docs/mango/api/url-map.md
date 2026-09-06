@@ -1,35 +1,20 @@
 ---
 title: URL 表全量 key（附录 A）
 sidebar_label: URL 表全量
-description: utils/util.js URL 表 100 个 key 的源码顺序全量清单与函数型 key 说明。
+description: utils/util.js URL 表的规模与结构特征（全量 key 清单存档于私有仓）。
 sidebar_position: 8
 ---
 
-## 附录 A：`utils/util.js` URL 表全量 key（100 个，按源码顺序）
+## URL 表结构概述
 
-```text
-serachForPath, getOpenId, getPhoneNumber, phoneCreateToken, sendCode, phoneWXCreateToken, auth,
-couponInfo, getWallet, getUserInfo, getShare, getStock, getStockInfo, stockCanUseCheck, createOrder,
-getRegion, nearStock, stockInfo, nearPark, plakingLotPlanning, plakingLotNavigation,
-setDiscountParkingLotId, getCurrentOrder, finishGetCurrentorder, completeOrder, temporaryLock,
-outsideRescue, unlock, payfor*, recharge, feedBack, checkRecharge, deposit, notInParkReason,
-badOrderReason, takePhotoFinishOrder, dispatchWorkOrder, wxqrcode, licenseAllow, access_token*,
-getQRCode, checkOperationCity, errorInfo, getUseRule, isFreeDeposit, freeDeposit, depositRefund,
-depositRefundApply, checkWHUTourDepositState, cancelDepositRefund, findRefundReason, wxPay,
-charterCardPay, getInstructions, getCommentTags, commitComment, bugCommutingCard, illegalParkValid,
-freeDepositAndCommutingCard, getHomeShopping, collectingShopping, payForfreeDepositAndCommuting,
-journeyList, journeyDetail, boxDetail, boxCmd, getWxkfId, wxkfUsedIncre, accountDestroy,
-getStockWithWarn, postStockHelpJob, reservationSubmit, creditByOrderId, credits,
-regionCommutingCard, payForCommutingCard, cardProducts, payForCardProduct, couponExchangeAPI,
-systemMonitorReport, cancelMustNeedHelmet, stockProblemFeedBack, createWorkOrder, workOrderList,
-workOrderDetail, commentWorkOrder, reportedAbuse, addressList, addressDetail, addressDefault,
-mallGoodsList, mallGoodsDetail, mallOrder, mallOrderDetail, mallOrderPay, mallOrderCancel,
-mallOrderRefund, mallOrderConfirm, mallGift, mallGiftRedeem
-```
-`*` = 非 `api.mangoebike.com`（`payfor` → `api.mch.weixin.qq.com`，`access_token` → `api.weixin.qq.com`），两者均未调用。
+`utils/util.js` 的 URL 表共 **100 个 key**（按源码顺序编排），其中：
 
-带路径参数的函数型 key（16 个）：`checkRecharge`、`notInParkReason`、`badOrderReason`、`journeyDetail`、`boxDetail`、`boxCmd`、`workOrderDetail`、`commentWorkOrder`、`addressDetail`、`addressDefault`、`mallGoodsDetail`、`mallOrderDetail`、`mallOrderPay`、`mallOrderCancel`、`mallOrderRefund`、`mallOrderConfirm`，统一形如：
+- **98 个**指向 `api.mangoebike.com`（前缀 `/miniMango/v1/*`，文件上传走 `/oss/*`）；
+- **2 个**为外部占位（微信统一下单与微信接口凭证端点），**均未调用**——凭证端点里还留着 `appid=APPID&secret=APPSECRET` 未替换占位符，属早期直连方案的残留；
+- **16 个**为带路径参数的函数型 key（订单/工单/支付校验/商城/地址等明细操作），统一形如「以参数拼接完整路径」；
+- **6 个 key 在已还原代码中从未被调用**（见[未定位调用点](./uncalled.md)）；
+- **6 组 key 两两指向同一路径**（库存/钱包/订单/工单/登录/二维码），属重复定义、维护成本高（见[其他发现](../findings.md)）；
+- 若干 key 名照抄了服务端路径拼写错误（search→serach、valid→vaild、parking→plaking、buy→bug），客户端无法纠正。
 
-```js
-checkRecharge: function (e) { var n = e.id; return r + "/miniMango/v1/finance/ticket/" + n + "/check" }
-```
+> [!NOTE]
+> 全量 key 清单（源码顺序）与函数型 key 的路径模板存档于私有仓 `whu-ebike-re`；各 key 的能力类别见本目录其余各页。
