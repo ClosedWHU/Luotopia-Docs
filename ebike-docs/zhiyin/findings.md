@@ -19,7 +19,7 @@ sidebar_position: 7
 | 腾讯位置服务 key | ext h5 sdkConfigs（小程序端未用） | 低 |
 | 服务商平台 appId/appKey | 疑为消息推送/短信/人脸等服务商侧配置（包内未见使用点） | 中 |
 | 平安团体保单号（pNo/vNo） | 骑行险保单查询链接硬编码 | 低 |
-| 设备指纹合作方标识 | 同盾插件初始化配置（非密钥；配置值存档于私有仓） | 低 |
+| 设备指纹合作方标识 | 同盾插件初始化配置（插件未启用，见[请求签名](./signing.md)；非密钥，配置值存档于私有仓） | 低 |
 | 蓝牙兜底 token 占位值 `<已脱敏>` | 蓝牙 token 获取失败时的占位（协议细节存档于私有仓） | 中 |
 
 上述凭据属**实际可利用的密钥/盐值暴露**（弱点类别：客户端信任边界失守）。
@@ -35,7 +35,7 @@ sidebar_position: 7
 
 | SDK/插件 | 用途 |
 |---|---|
-| `tdfp-plugin`（同盾） | 设备指纹 blackbox，开锁链路接口请求头附加 `deviceToken`，openid 以 MD5 摘要传入（合作方配置存档于私有仓） |
+| `tdfp-plugin`（同盾） | 设备指纹 blackbox 胶水代码（开锁链路接口定义 `deviceToken` 头位，openid 以 MD5 摘要传入）；**插件未在包配置中声明、实际未启用**——官方客户端并不发送该头（合作方配置存档于私有仓，见[请求签名](./signing.md)） |
 | `fuiou-pay`（富邦） | 插件支付通道（知音未启用） |
 | CryptoJS（webpack 内置） | SHA256/MD5/HmacSHA256/AES/PBKDF2/Base64 |
 | big.js | 金额精度计算（分→元） |
@@ -61,6 +61,6 @@ sidebar_position: 7
 2. **服务商平台 appId/appKey**（ext 顶层，值已脱敏）：全部已还原代码中未检索到使用点，用途不确定（疑为小安服务商平台的推送/短信/人脸服务商凭据，或供 `pagesSub3`/`pagesSub4` 使用）。
 3. **`payBaseApi: https://pay.xiaoantech.com`**：ext 中声明，但全部已还原 JS 未见直接请求（支付均走业务网关 `/ebike_pay/*`），可能供 `pagesSub3`/`pagesSub4` 或 H5 收银台使用，或为历史遗留。
 4. **`code-btn`「知音指令」组件**（见[支付流程](./flows/payment.md)）：`pagesSub2/pay/pay.wxml` 引用但 `app-config.json` usingComponents 未注册该组件，微信端渲染预期失败；其来源插件/多端复用背景无法从本包证实。
-5. **同盾 blackbox 内部算法**：在 `tdfp-plugin` 微信插件内（不在包内），无法分析；客户端仅透传 `deviceToken`。
+5. **同盾 blackbox 内部算法**：在 `tdfp-plugin` 微信插件内（宿主包仅胶水代码），无法静态分析；且插件未随本包声明、未启用——官方客户端实际从不发送 `deviceToken`，该算法目前无分析必要（见[请求签名](./signing.md)）。若官方未来重新启用，需另行获取插件包分析。
 6. **预约计费接口**：函数存在但 URL 常量缺失，为死代码，未计入接口总数。
 7. **接口计数口径**：总数 344 为「已解析 URL」计数；分包页面未引入任何新端点（无硬编码 URL，全部经 vendor API 模块）。同一 URL 被多模块封装的按主要模块计一次，去除跨模块重复路径后唯一业务路径约 339 个（另含 1 个第三方完整 URL）。

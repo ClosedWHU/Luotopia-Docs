@@ -67,7 +67,7 @@ sidebar_position: 1
 | 小程序 `wxd8f3793ea3b935b8` | 微信支付分 | `wx.navigateToMiniProgram` 开启支付分授权（页面调用方：`pagesSub/wxPayScore/wxPayScore.js`） | vendor 支付分模块 |
 | 小程序 `wx3cbe919f36710d1c` | 云闪付（天满通道） | 免密支付跳转/回跳识别 | vendor 支付模块 |
 | 小程序 `wx80ee2c1b322f6f91` | 小安系扫码小程序 | 启动场景 1037 来源识别（extraData.qrCode 直跳开锁） | `pages/launch/launch.js` |
-| 插件 `tdfp-plugin` | 同盾科技 | 设备指纹（见[请求签名](./signing.md)） | vendor 指纹模块 |
+| 插件 `tdfp-plugin` | 同盾科技 | 设备指纹（**未随包声明、未启用**，见[请求签名](./signing.md)） | vendor 指纹模块（仅胶水代码） |
 | 插件 `fuiou-pay` | 富邦银行 | 插件支付通道（知音未启用，channel=BAOFU_WXLITE） | vendor 支付模块 |
 | 腾讯位置服务 key `<已脱敏：腾讯位置服务 key>` | 腾讯地图 | 仅存在于 ext 的 **h5** sdkConfigs（小程序端未使用；逆地理编码走后端高德代理 `/client/management/gaode/*`） | `app-config.json` ext.platform.h5 |
 | `wx4ae1319476636ffd` / 支付宝 `2021004138688327` | 小安自营小程序 | 内置默认（fuwushang）配置中的 appid，非知音 | vendor 默认配置 |
