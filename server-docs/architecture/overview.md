@@ -4,7 +4,6 @@ title: 系统架构概览
 sidebar_label: 架构概览
 description: 模块化单体、domains 划分与请求链路
 ---
-# 系统架构概览
 
 **模块化单体**：业务在 `internal/domains/*`，底座在 `platform` + 中间件。
 
@@ -33,7 +32,7 @@ graph TD
     Gin --> Metrics[metrics 独立端口]
 ```
 
-业务 API 经 **`httpapi.Register`** 声明 Access / Rate；见 [HTTP 注册规范](../api/httpapi.md)。
+业务 API 经 **`httpapi.Register`** 声明 Access / Rate；见 [HTTP 注册规范](../api/http_api.md)。
 
 ## 域职责（摘要）
 
@@ -43,6 +42,7 @@ graph TD
 | forum | 帖评与审核相关 |
 | course_review | 课程、评价、给分 |
 | campus | 课表、日历、空闲教室等（非代持武大密码） |
+| dining | 食堂区域、楼宇楼层、档口、菜单、评价与投稿 |
 | search | 统一搜索 |
 | platform | DB、配置、缓存、metrics |
 

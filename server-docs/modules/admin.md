@@ -1,9 +1,8 @@
 ---
 title: 管理后台
 sidebar_label: 管理后台
-sidebar_position: 15
+sidebar_position: 6
 ---
-# 管理后台
 
 代码：`internal/domains/admin`。路径前缀：`/api/v1/admin/*`。
 
@@ -18,12 +17,17 @@ sidebar_position: 15
 - 用户与 API 凭证管理  
 - 队列 / worker / 缓存 / embedding 运维  
 - 内容与资料审核相关入口  
-- 课程外部映射等
+- 课程外部映射等  
+- 存储元数据巡检与清理：`GET /api/v1/admin/storage/invalid`、`DELETE /api/v1/admin/storage/invalid/{object_id}`、`POST /api/v1/admin/storage/invalid/purge`，权限 `storage:manage`
 
 ## 实现注意
 
 - Handler 在 `admin/http`  
 - 跨域数据访问应遵守模块边界；管理操作建议记审计日志  
 
----
-[返回目录](./index.md)
+## 相关
+
+- [模块详解](./index.md)
+- [安全策略](../architecture/security_policy.md)
+- [日志与审计](./platform/logging.md)
+

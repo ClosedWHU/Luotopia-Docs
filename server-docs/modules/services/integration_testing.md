@@ -1,9 +1,9 @@
 ---
 title: 集成测试
+slug: integration-testing
 sidebar_label: 集成测试
 sidebar_position: 3
 ---
-# 集成测试
 
 确保域在真实依赖（Postgres、Redis 等）下行为正确。细节以实现与 `internal/testutils` 为准。
 

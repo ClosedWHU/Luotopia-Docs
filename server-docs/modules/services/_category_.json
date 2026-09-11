@@ -1,8 +1,9 @@
 {
   "label": "内部服务",
-  "position": 6,
+  "position": 16,
   "link": {
-    "type": "generated-index",
-    "description": "搜索引擎、审核、集成测试等内部服务约定"
-  }
+    "type": "doc",
+    "id": "modules/services/index"
+  },
+  "description": "内容审核与集成测试等内部服务能力"
 }

@@ -1,12 +1,11 @@
 ---
 sidebar_position: 4
-title: Feature 架构约定
+title: Flutter Feature 架构约定
 sidebar_label: Feature 约定
 description: feature-first 布局、分层规则与迁移例外
 ---
-# Flutter Feature 架构约定
 
-与仓库 `docs/architecture-normalization-plan.md` Phase 0/1 对齐。
+约定源自内部架构规范化计划 Phase 0/1（该计划不随站发布）。
 
 ## 目标布局
 
@@ -20,6 +19,10 @@ lib/
       domain/          # 实体、状态、纯逻辑（无 Dio/OpenAPI/Widget）
       presentation/    # pages、widgets、providers
   shared/              # 跨 feature UI/工具
+  toolkit/             # AI Agent 工具运行时
+    application/       # 工具 / catalog 定义、runtime
+    credentials/       # 凭据 provider
+    data/              # 工具适配器（adapters）
 ```
 
 ## 规则
@@ -34,6 +37,7 @@ lib/
 5. **双 origin**：业务 `apiBaseUrl`（可被 `customServerUrl` 覆盖）与官网 `siteBaseUrl` **分开**。  
 6. Page 文件建议 **&lt; 400 行**；超出则拆 widget / notifier。  
 7. SnackBar 优先 `showAppSnackBar*`（root messenger），见 [UI 与组件](./components.md)。  
+8. **toolkit 边界**：`toolkit/data` 适配器可复用 features 的 data / domain 能力；features 页面经 `toolkit/application` 的 providers / runtime 接入，收银台 handoff 通过 `toolkit/data/payment_checkout_vault.dart` 交接，其余情况不依赖适配器内部实现。仓库级 `packages/`（`luotopia_toolkit_core`、`luotopia_agent_harness` 等本地包）承载与 Flutter 解耦的 Agent / 工具核心逻辑。
 
 ## 迁移状态（相对规范化计划）
 
@@ -45,6 +49,8 @@ lib/
 | `features/pages/ai` | 仍在 `pages/ai`（可后续升格） |
 | `features/weather` | 已有独立 feature；校园页卡片复用 |
 | 校园 `sub_apps/*` | 主路径；见 [子应用目录](./campus-sub-apps.md) |
+| `toolkit/` | AI Agent 工具运行时；application / credentials / data 三层 |
+| `packages/` | 本地包：`luotopia_toolkit_core`、`luotopia_agent_harness`、`luotopia_agent_tool_runtime`、`luotopia_flutter_bridge`、`luotopia_toolkit_virtual_cli` |
 
 迁移时用 **export 转发** 保持 import 稳定，避免一次全仓 rename。
 

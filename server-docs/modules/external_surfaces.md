@@ -1,10 +1,10 @@
 ---
 title: 官网与外部面
+slug: external-surfaces
 sidebar_label: 官网与外部面
 description: homepage、GitHub Releases、与业务服的边界
-sidebar_position: 1
+sidebar_position: 14
 ---
-# 官网与外部面
 
 业务服（本仓库 `server/`）不是客户端唯一后端。下列「面」与 App 强相关，但代码/部署不在 `server` 进程内。
 
@@ -37,5 +37,9 @@ sidebar_position: 1
 | 客户端 | [更新与热更新](pathname:///client/updates) |
 | 用户 | [设置](pathname:///user/settings) · [FAQ](pathname:///user/faq) |
 
----
-[返回模块总览](./index.md)
+## 相关
+
+- [系统管理](./system.md)
+- [模块详解](./index.md)
+- [已移除与迁移](../meta/removed_and_migrated.md)
+

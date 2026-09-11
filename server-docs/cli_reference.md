@@ -1,10 +1,10 @@
 ---
 sidebar_position: 6
 title: CLI 命令参考
+slug: cli-reference
 sidebar_label: CLI 参考
 description: serve / worker / cli 顶层命令
 ---
-# CLI 命令参考
 
 以 `server/cmd` 为准。二进制常见名 `luotopia-backend`。
 
@@ -97,5 +97,9 @@ unknown config field(s): monitoring.host, weather
 
 详见 [配置手册](./deployment/config.md) 与 `server/config/README.md`。
 
----
-[返回目录](./index.md)
+## 相关
+
+- [服务端概览](./index.md)
+- [配置手册](./deployment/config.md)
+- [环境搭建](./development/setup.md)
+

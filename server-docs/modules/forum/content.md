@@ -4,8 +4,6 @@ sidebar_label: 内容与搜索
 sidebar_position: 2
 ---
 
-# 论坛内容与搜索
-
 代码：`internal/domains/forum`。下列为**对外行为与设计边界**；排序权重、缓存键与 SQL 以实现为准，不在公开文档中固定公式。
 
 ## 1. 内容模型（概念）
@@ -44,6 +42,21 @@ sidebar_position: 2
 - 板块/标签的 `slug` 应规范化（小写、连字符等），与创建接口校验一致。  
 - 标题、正文长度上限以 OpenAPI / 服务端校验错误为准。  
 - 列表接口的分页参数与最大 `limit` 以 OpenAPI 为准。
+
+## 5. 帖子删除与 access_status 语义
+
+- **作者自删受限**：`DeletePost` 先检查帖子的 `ModerationActionID`；被处置过（存在审核动作）的帖子作者自删返回 403，只能走申诉/审核流程（`repo/repo.go`）。  
+- **access_status 计算**：帖子 API 输出的 `access_status` 由 `Visibility` / `ModerationStatus` / `ExpiresAt` 共同计算（`model/forum.go` 的 `computePostAccess`），取值：
+
+| access_status | 条件 |
+|---------------|------|
+| `deleted` | `Visibility` 为已删除 |
+| `hidden` | `Visibility` 为隐藏 |
+| `pending_review` | `ModerationStatus` 为待审核 |
+| `expired` | `ExpiresAt` 已过 |
+| `active` | 以上均不满足 |
+
+`access_status` 不再恒为 `active`；客户端应按该字段分支展示。
 
 ## 相关
 

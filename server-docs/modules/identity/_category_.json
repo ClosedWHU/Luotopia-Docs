@@ -2,7 +2,7 @@
   "label": "身份认证",
   "position": 1,
   "link": {
-    "type": "generated-index",
-    "description": "基于 OIDC 协议的统一身份中心，支持多租户与社交登录。"
+    "type": "doc",
+    "id": "modules/identity/index"
   }
 }

@@ -1,10 +1,10 @@
 ---
 title: 校园服务边界
+slug: campus-proxies
 sidebar_label: 校园边界
 description: 哪些走 App 直连，哪些走 Luotopia 服务端
-sidebar_position: 2
+sidebar_position: 10
 ---
-# 校园服务边界
 
 ## 原则
 
@@ -40,6 +40,6 @@ sidebar_position: 2
 ## 相关
 
 - [用户：武大 vs 珞家账号](pathname:///user/accounts)
-- [HAM vs 教务](./identity/whu_auth.md)
+- [Ham 与教务](./identity/whu_auth.md)
 - [课表模块](./timetable.md)
 - [系统模块边界](./system.md)

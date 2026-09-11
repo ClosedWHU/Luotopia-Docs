@@ -1,11 +1,10 @@
 ---
 sidebar_position: 6
 title: MFA 与 Passkey
+slug: mfa-passkeys
 sidebar_label: MFA 与 Passkey
 description: SMTP、OTP、WebAuthn 域名关联
 ---
-
-# MFA 与 Passkey
 
 ## SMTP
 
@@ -50,3 +49,8 @@ Android asset links 须包含 `delegate_permission/common.get_login_creds`、包
   }
 ]
 ```
+
+## 相关
+
+- [身份认证模块](./index.md)
+- [安全与防御策略](./security.md)

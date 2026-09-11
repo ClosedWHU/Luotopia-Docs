@@ -4,7 +4,6 @@ sidebar_label: UI 与组件
 sidebar_position: 6
 description: Material 3、主题与组件约定
 ---
-# UI 与组件
 
 ## 约定
 
@@ -65,5 +64,5 @@ showAppSnackBarText(context, '已复制');
 
 ## 相关
 
-- [多端适配](./multi_platform.md)
+- [多端适配](./multi-platform.md)
 - [架构](./architecture.md)

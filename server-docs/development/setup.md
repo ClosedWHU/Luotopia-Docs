@@ -4,11 +4,10 @@ sidebar_label: 环境搭建
 description: Go 服务端本地运行：配置、数据库、serve / worker
 sidebar_position: 1
 ---
-# 本地开发环境搭建
 
 ## 前置
 
-- Go：与 `server/go.mod` 一致（1.26.x 量级）
+- Go：与 `server/go.mod` 一致（1.27.0）
 - PostgreSQL 14+（全文检索 / 扩展）
 - Redis 6+
 
@@ -24,17 +23,9 @@ docker compose up -d --build
 
 细节：[Docker 部署](../deployment/docker.md)。
 
-### 校历 JSON（可选但推荐）
+### 校历数据
 
-校历数据来自并列仓库 **WHU-sb-Calendar**（不要放在 `server/internal/domains/third_party`）。
-
-```powershell
-cd server
-# 若已在工作区并列检出 WHU-sb-Calendar：
-.\scripts\sync-calendar-data.ps1 -Source ..\WHU-sb-Calendar\data
-```
-
-Docker 将目录挂到 `/data/school-calendar`。见 [Docker · 校历数据卷](../deployment/docker.md#校历-json-数据卷方案-b)。
+校历学年数据内嵌于 Go 依赖 `github.com/ClosedWHU/WHU-Calendar`（`whucalendar.LoadAllYears()`），无需同步脚本与数据挂载。升级数据即升级依赖版本。见 [日历模块](../modules/calendar.md)。
 
 ## 本机直接跑 API
 
@@ -81,7 +72,7 @@ httpapi.Register(api, httpapi.Op{
 }, h.Handler)
 ```
 
-规范：[HTTP 注册规范](../api/httpapi.md)、仓库 `server/docs/api-conventions.md`。更细：[贡献规范](./contributing.md)。
+规范：[HTTP 注册规范](../api/http_api.md)、仓库 `server/docs/api-conventions.md`。更细：[服务端开发规范](./contributing.md)。
 
 ## 常见问题
 

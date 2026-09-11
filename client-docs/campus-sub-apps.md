@@ -4,7 +4,6 @@ title: 校园子应用目录
 sidebar_label: 子应用目录
 description: sub_apps 布局、共享边界与当前清单
 ---
-# 校园页子应用架构
 
 校园页主入口与具体子应用分开。路径均相对于 `app/lib/`。
 
@@ -37,6 +36,10 @@ description: sub_apps 布局、共享边界与当前清单
 | `bus/` | 校园巴士完整页 |
 | `zhihui_luojia/` | 智慧珞珈 WebView |
 | `library/` | 图书借阅（多为占位 / 进行中） |
+| `vpn/` | aTrust VPN（`flutter_sangfor`） |
+| `water_electric_fee/` | 水电费缴纳 |
+| `campus_map/` | 校园地图 |
+| `major_info/` | 专业信息 / 培养方案 |
 
 网格入口 ID 与显示顺序以 `campus_page.dart` 的 `gridApps` 与用户布局偏好为准。
 

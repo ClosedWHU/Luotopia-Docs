@@ -3,7 +3,7 @@
   "position": 4,
   "link": {
     "type": "generated-index",
-    "slug": "/deployment",
-    "description": "Docker 化、配置中心、CI/CD 及监控运维说明。"
+    "description": "Docker 化、配置中心、CI/CD 及监控运维说明。",
+    "slug": "/deployment"
   }
 }

@@ -4,7 +4,6 @@ sidebar_label: 功能模块
 sidebar_position: 14
 description: 已实现与开发中能力一览（对照 app/README）
 ---
-# 功能模块地图
 
 以仓库 `app/README.md` 为准；下表方便导航。
 
@@ -28,7 +27,9 @@ description: 已实现与开发中能力一览（对照 app/README）
 | 校历 | `sub_apps/calendar` |
 | 天气 | `features/weather` |
 | 列表 / 事项 / 提醒 | `pages/list`、`item_editor`、`item_detail` |
-| AI 会话 | `pages/ai` + 设置 AI |
+| AI 会话 | `pages/ai` + 设置 AI；含实时语音输入（ASR） |
+| AI Agent 代付（水电 / 校园网） | `pages/ai` + `lib/toolkit` + 收银台 handoff |
+| VPN（aTrust） | `sub_apps/vpn`（`flutter_sangfor`） |
 | 壁纸 / 主题 | 设置相关 pages |
 | 检查更新（安装包） | `features/app_update` → 官网 `GET /api/releases/latest` |
 | 热更新（JS 解析脚本） | `features/hot_update` → 官网 `/hot-update/manifest.json` |

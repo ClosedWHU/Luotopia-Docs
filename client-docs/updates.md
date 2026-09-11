@@ -4,7 +4,6 @@ sidebar_label: 更新与热更新
 sidebar_position: 15
 description: app_update / hot_update 与官网 homepage 边界
 ---
-# 安装包更新与热更新
 
 两套机制，**不要混用**：
 
@@ -15,7 +14,7 @@ description: app_update / hot_update 与官网 homepage 边界
 | 源 | 官网 `GET /api/releases/latest` | 官网 `/hot-update/manifest.json` |
 | 鉴权 | 无 | Ed25519 + checksum + 沙箱测试 |
 
-均 **不经过** 业务服 `:6262` 的 `system` 域（见 [服务端 system](pathname:///server/modules/system)）。
+均 **不经过** 业务服务器 `:6262` 的 `system` 域（见 [服务端 system](pathname:///server/modules/system)）。
 
 ## 安装包检查
 

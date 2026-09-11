@@ -1,10 +1,10 @@
 ---
-sidebar_position: 1
+sidebar_position: 4
 title: 性能调优指南
+slug: performance-tuning
 sidebar_label: 性能调优
 description: 数据库、缓存与服务端通用调优原则
 ---
-# 性能调优指南
 
 通用原则。**连接池数值、索引 DDL、缓存 TTL 以配置与代码为准**；下列为建议，勿不经评估照搬生产。
 
@@ -31,14 +31,14 @@ description: 数据库、缓存与服务端通用调优原则
 ## 3. HTTP 与业务
 
 - 强制分页与合理 `limit` 上限。  
-- 昂贵接口限流（默认 IP 配额 + 按操作 `httpapi.Op.Rate`；见 [HTTP 注册规范](../api/httpapi.md)）。  
+- 昂贵接口限流（默认 IP 配额 + 按操作 `httpapi.Op.Rate`；见 [HTTP 注册规范](../api/http_api.md)）。  
 - 避免在请求路径做全表扫描式搜索词。  
 
 ## 4. 搜索
 
 - 依赖 FTS 索引与扩展是否就绪。  
 - 宽查询词 + 大 limit 是常见慢因。  
-- 详见 [搜索服务](../modules/services/search_engine.md)。  
+- 详见 [搜索服务](../modules/search/index.md)。  
 
 ## 5. 监控（指标类型）
 
@@ -56,6 +56,10 @@ description: 数据库、缓存与服务端通用调优原则
 | 缓存失效风暴 | 失效粒度、TTL、互斥重建 |
 | 搜索超时 | 缩小 scope、分页、检查索引 |
 
----
+## 相关
 
-[返回开发指南](../development/)
+- [开发指南](pathname:///server/development)
+- [HTTP 注册规范](../api/http_api.md)
+- [搜索索引与全文检索](../modules/search/indexing.md)
+- [监控与 Metrics](../deployment/monitoring.md)
+

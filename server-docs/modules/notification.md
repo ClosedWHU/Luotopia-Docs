@@ -1,9 +1,8 @@
 ---
 title: 站内通知
 sidebar_label: 站内通知
-sidebar_position: 14
+sidebar_position: 12
 ---
-# 消息通知
 
 代码：`internal/domains/components/notification`。
 
@@ -31,5 +30,9 @@ sidebar_position: 14
 
 业务侧写入通知记录 + 客户端拉取；推送渠道若后续增加，应在 worker / 第三方适配层实现并更新本文。
 
----
-[返回模块总览](./index.md)
+## 相关
+
+- [模块详解](./index.md)
+- [隐私同意、设备与云同步](./identity/privacy_sync.md)
+- [论坛运营工具](./forum/operations.md)
+

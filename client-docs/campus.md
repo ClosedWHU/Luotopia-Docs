@@ -4,7 +4,6 @@ sidebar_label: 校园功能
 sidebar_position: 10
 description: 校园页子应用、whu_auth、WebView 约定
 ---
-# 校园功能开发
 
 校园页入口在 `features/pages/campus/`。子应用放在：
 
@@ -36,17 +35,17 @@ lib/features/pages/campus/sub_apps/<子应用名>/
 | 空闲教室 / 部分主数据 | UI + 可选 API | `campus/*` 域 |
 | E 卡 / 座位 / 场馆 | 多为本机会话 + WebView | 不代持密码 |
 | 课程评价资格 | 本地成绩 → 同步最小数据 | identity / course_review |
-| 校园巴士预览 | `CampusBusCard` + 布局偏好 | 不经过业务服 |
+| 校园巴士预览 | `CampusBusCard` + 布局偏好 | 不经过业务服务器 |
 | 安装包更新 / 热更新脚本 | 官网 `www.whu.sb` | 非 `system` 域（见下） |
 
-详见 [服务端 · 校园边界](pathname:///server/modules/campus_proxies)。
+详见 [服务端 · 校园边界](pathname:///server/modules/campus-proxies)。
 
 ## 校巴卡片 vs 网格
 
 `campus_page.dart`：
 
 ```text
-showBusPreview = layout.showBusPreviewCard && !kIsWeb
+showBusPreview = layout.showBusPreviewCard
 ```
 
 - 为 true：渲染预览卡片，`excludedAppIds` 含 `bus`（网格无图标）  

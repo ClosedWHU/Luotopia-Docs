@@ -1,17 +1,16 @@
 ---
-id: backend-build-and-deploy
 title: 后端构建与部署
+slug: backend-build-and-deploy
 sidebar_label: 后端构建与部署
 sidebar_position: 5
 description: 工作区 server/ 本地构建与 Docker 部署要点
 ---
-# 后端构建与部署指南
 
-针对 工作区中的 `server/`（Go）的构建与部署要点。更完整的 Compose 说明见 [Docker 部署](./docker.md)。
+针对工作区中的 `server/`（Go）的构建与部署要点。更完整的 Compose 说明见 [Docker 部署](./docker.md)。
 
 ## 环境
 
-- Go：**与 `server/go.mod` 一致**（当前为 1.26.x 量级）
+- Go：**与 `server/go.mod` 一致**（当前为 1.27.0）
 - 生产镜像：见 `server/Dockerfile`（多阶段，**CGO 开启**）
 - 配置：JSON/JSONC，路径 `CONFIG_PATH` 或 `--config`
 
@@ -47,7 +46,7 @@ docker run -d \
 - 生产 `public_base` 用 HTTPS
 - 勿把 metrics 无鉴权暴露公网
 
-## 相关文档
+## 相关
 
 - [配置手册](./config.md)
 - [Docker](./docker.md)
