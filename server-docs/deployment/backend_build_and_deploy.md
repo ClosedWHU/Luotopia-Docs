@@ -11,7 +11,7 @@ description: 工作区 server/ 本地构建与 Docker 部署要点
 ## 环境
 
 - Go：**与 `server/go.mod` 一致**（当前为 1.27.0）
-- 生产镜像：见 `server/Dockerfile`（多阶段，**CGO 开启**）
+- 生产镜像：见 `server/Dockerfile`（多阶段，**纯 Go 静态构建，CGO 关闭**；中文分词在 Postgres 侧由 pg_jieba 承担，SQLite 仅测试使用且为纯 Go 驱动）
 - 配置：JSON/JSONC，路径 `CONFIG_PATH` 或 `--config`
 
 ## 本地构建
