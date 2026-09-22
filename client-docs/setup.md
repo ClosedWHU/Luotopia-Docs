@@ -53,13 +53,15 @@ iOS / 桌面发布脚本见 `app/build-ios*.sh`、Windows MSIX 配置（`pubspec
 
 ## OpenAPI 客户端
 
-生成物在 `lib/core/api_client`。从运行中服务拉：
+生成物在 `lib/core/api_client`（`dart-dio` + built_value 模板）。在 `app/` 下运行一条命令即可端到端重生成：
 
-```bash
-curl http://localhost:6262/openapi.json -o server_api.json
+```powershell
+pwsh tool/generate_openapi_client.ps1
 ```
 
-再按仓库 `openapitools.json` / 脚本生成；勿手改生成文件。
+它会先 `go run scripts/export_openapi.go` 从后端导出 `server/openapi.json`，再用 openapi-generator（版本由 `app/openapitools.json` 锁定，当前 7.23.0）重生成 `lib/core/api_client`，并依次跑 `dart pub get`、`build_runner build`、`dart fix`、`dart format`。
+
+生成文件勿手改：`lib/` 源码入库，`.openapi-generator/`、`build/`、`.dart_tool/`、`doc/`、`test/` 已被忽略。采用前先 `dart analyze`。完整说明见 `server/scripts/README.md` 的 “OpenAPI contract” 一节。
 
 ## 常见问题
 
