@@ -1,5 +1,6 @@
 ---
 title: 云控（功能开关与参数下发）
+slug: cloud-control
 sidebar_label: 云控
 description: 子应用开关、功能开关与定向参数下发
 sidebar_position: 20
