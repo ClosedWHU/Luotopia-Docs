@@ -50,8 +50,15 @@ sidebar_position: 4
 
 ## 3. 管理员裁决
 
-- 核准违规、驳回举报、阶梯处罚（禁言、限制发帖等，以产品为准）。  
-- 用户申诉路径见 OpenAPI（如 appeals 相关端点）。  
+管理端路由前缀 `/api/v1/forum/admin/*`，细分权限码（见 [安全策略](../../architecture/security_policy.md)）：
+
+| 权限码 | 范围 |
+|--------|------|
+| `forum:moderate` | 举报认领 / 释放、裁决举报、审核帖子 / 评论、处理申诉 |
+| `forum:config` | 板块 / 标签 / 全局配置与配置变更日志（`GET /admin/config-changes`） |
+| `forum:manage-users` | 禁言 / 封禁 / 解封、调整声望（`POST /admin/users/{id}/status`、`/admin/users/{id}/karma`） |
+
+常见裁决流：认领举报（`POST /admin/reports/{id}/claim`）→ 裁决（`resolve`）→ 视情况处置帖子 / 评论或转申诉；处置动作写入公开管理日志（见 [治理与规则](./governance.md)）。
 
 ## 4. 常见问题
 

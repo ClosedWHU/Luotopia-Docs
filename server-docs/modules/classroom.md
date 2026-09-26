@@ -28,9 +28,10 @@ sidebar_position: 9
 ## 接口说明
 
 - `GET /api/v1/classrooms/empty`：查询指定时间点的空闲教室列表（参数以 OpenAPI 为准）。
+- **完整端点见 [校园接口参考](../api/campus.md)**。
 
 ## 相关
 
 - [模块详解](./index.md)
 - [校园边界](./campus_proxies.md)
-- [API 接口参考（摘要）](../api/full_reference.md)
+- [校园接口参考](../api/campus.md)

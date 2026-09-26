@@ -18,7 +18,7 @@ description: 知音出行与芒果电单车两家共享电单车小程序的架�
 | 运营方 | 湖北知音动漫有限公司 | mangoebike.com（南宁交投运营） |
 | 技术栈 | uni-app / Vue2（小安科技 SaaS 白标租户） | 原生小程序 |
 | 业务网关 | `https://ebike-client-prod2.xiaoantech.com` | `https://api.mangoebike.com`（前缀 `/miniMango/v1/*`） |
-| 接口风格 | 全部 POST + JSON，约 344 个 | RESTful（GET/POST/DELETE 混合），约 92 个路径 |
+| 接口风格 | 全部 POST + JSON，约 344 个 | RESTful（GET/POST/PUT/DELETE），约 92 个路径 |
 | 请求签名 | 客户端硬编码盐值的 SHA256 请求头签名（盐已脱敏；构造细节存档于私有仓 `whu-ebike-re`） | 客户端硬编码密钥的 HMAC-SHA256 请求头签名（密钥已脱敏；构造细节存档于私有仓 `whu-ebike-re`） |
 | 认证 | OAuth2：token 端点 → Bearer accessToken，静默刷新 | JWT Bearer |
 | 报文加密 | 实名字段 AES-256-CBC（口令已脱敏） | 设备信息 AES-256-CBC 上行、`joker` 标志响应 AES 下行（key/IV 已脱敏） |

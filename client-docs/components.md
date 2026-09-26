@@ -8,7 +8,7 @@ description: Material 3、主题与组件约定
 ## 约定
 
 - 使用 **`package:flutter/material.dart`**
-- 主题：`flex_color_scheme` + `ThemeData`
+- 主题：`core/theme/theme_factory.dart`（`ThemeFactory.build` → `ThemeData(useMaterial3: true)` + `ColorScheme.fromSeed`），配合 `dynamic_color` 与 M3E 组件
 
 ## 原则
 

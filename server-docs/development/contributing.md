@@ -26,7 +26,7 @@ sidebar_position: 3
 - `repo/`：持久化
 - `service/`：复杂业务（可选）
 
-底座：`internal/platform/`。入口：`cmd/`（仅 `serve` / `worker` / `cli`）。
+底座：`internal/platform/`。入口：`cmd/`（`serve` / `worker` / `cli` / `migrate` / `root` / `seed`）。
 
 ## API 开发流程
 

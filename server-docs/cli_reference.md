@@ -3,7 +3,7 @@ sidebar_position: 6
 title: CLI 命令参考
 slug: cli-reference
 sidebar_label: CLI 参考
-description: serve / worker / cli 顶层命令
+description: serve / worker / cli / migrate / root / seed 顶层命令
 ---
 
 以 `server/cmd` 为准。二进制常见名 `luotopia-backend`。
@@ -21,6 +21,9 @@ go run ./cmd <command> [args]
 | `serve` | 启动 HTTP API |
 | `worker` | 启动后台队列 worker |
 | `cli` | 交互式 / 单次运维 CLI |
+| `migrate` | 数据库迁移（`up` / `status` / `bootstrap`） |
+| `root` | 修复 root 管理员身份（`repair`） |
+| `seed` | 导入外部数据集（`master-timetable`） |
 
 配置路径优先级：`CONFIG_PATH` → `--config` → 默认 `config/config.json`。
 
@@ -83,7 +86,39 @@ go run ./cmd cli status
 go run ./cmd cli help   # 交互模式内 help / exit
 ```
 
-> **说明**：文档旧版中的顶层 `migrate` / `seed` / `user create` 等**不是**当前 `bootstrap` 注册的独立子命令。迁移与用户引导多在服务启动 `database.InitDB` 中完成；具体运维请以 `cli` 子命令与 `scripts/` 脚本为准。
+> **说明**：`migrate`（`up` / `status` / `bootstrap`）、`root repair`、`seed master-timetable` 为当前 `bootstrap` 注册的独立顶层命令，见下。生产迁移用 `migrate up`，本地开发/测试可用 `RUN_AUTOMIGRATE=1`（见 [数据库迁移](./architecture/migrations.md)）。
+
+---
+
+## migrate
+
+```bash
+go run ./cmd migrate up --config config/config.json
+go run ./cmd migrate status
+go run ./cmd migrate bootstrap
+```
+
+- `up`：应用全部待执行迁移；`status`：列出各版本状态；`bootstrap`：引导身份数据（角色 / 权限 / root / 匿名用户）。
+
+---
+
+## root
+
+```bash
+go run ./cmd root repair --config config/config.json
+```
+
+修复 root 管理员身份（密码取自 `LUOTOPIA_ROOT_PASSWORD` / `LUOTOPIA_ROOT_PASSWORD_FILE` / 配置 `identity.bootstrap.rootPassword`）。
+
+---
+
+## seed
+
+```bash
+go run ./cmd seed master-timetable --data-dir=../WHU-Master-Timetable/data [--year 2025] [--semester 1] [--force]
+```
+
+把 WHU-Master-Timetable 归档的学期数据导入 `master_courses`，让归档学期可检索。
 
 ---
 

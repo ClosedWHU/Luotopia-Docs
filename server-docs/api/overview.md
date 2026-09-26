@@ -77,6 +77,7 @@ http://localhost:6262/openapi.json  # 或仓库导出的 openapi.json
 ## 相关
 
 - [HTTP 注册规范](./http_api.md)
+- [接口参考索引](./full_reference.md)
 - [安全策略](../architecture/security_policy.md)
 - [业务调用摘要](./detailed_reference.md)
 - [已移除与迁移](../meta/removed_and_migrated.md)（旧协议 / 旧注册方式）

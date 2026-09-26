@@ -23,6 +23,7 @@ lib/
     application/       # 工具 / catalog 定义、runtime
     credentials/       # 凭据 provider
     data/              # 工具适配器（adapters）
+    upstream/          # 上游宿主集成（apple_shortcuts）
 ```
 
 ## 规则
@@ -45,12 +46,16 @@ lib/
 |------|------|
 | `features/forum` | 已独立 feature |
 | `features/course_review` | 已独立 feature |
+| `features/course_space` | 已独立 feature（课程信息共享） |
+| `features/social` | 已独立 feature（关注 / 拉黑 / 私信） |
+| `features/account_center` | 已独立 feature（账户 / 凭据中心） |
+| `features/dining` | 已独立 feature；校园页入口为 `sub_apps/dining` 薄壳 |
 | `features/app_update` / `hot_update` | 已独立 |
 | `features/pages/ai` | 仍在 `pages/ai`（可后续升格） |
 | `features/weather` | 已有独立 feature；校园页卡片复用 |
 | 校园 `sub_apps/*` | 主路径；见 [子应用目录](./campus-sub-apps.md) |
 | `toolkit/` | AI Agent 工具运行时；application / credentials / data 三层 |
-| `packages/` | 本地包：`luotopia_toolkit_core`、`luotopia_agent_harness`、`luotopia_agent_tool_runtime`、`luotopia_flutter_bridge`、`luotopia_toolkit_virtual_cli` |
+| `packages/` | 本地包：`luotopia_toolkit_core`、`luotopia_agent_harness`、`luotopia_agent_tool_runtime`、`luotopia_course_api`、`luotopia_flutter_bridge`、`luotopia_toolkit_virtual_cli` |
 
 迁移时用 **export 转发** 保持 import 稳定，避免一次全仓 rename。
 

@@ -10,11 +10,13 @@ sidebar_position: 0
 
 系统采用统一搜索服务（`UnifiedSearchService`）。目前主要基于 PostgreSQL 全文检索（FTS）。
 
-### 联合搜索
+### 作用域搜索
 
-- **跨模块检索**：一个接口即可同时搜索课程（`course`）、帖子（`forum`）、用户及学习资料。
-- **类型标记**：搜索结果会自动注入 `_type` 字段，方便客户端按需渲染。
+- **作用域（scope）**：当前仅 `courses` / `teachers` / `reviews`（名称以 API 为准）。
+- **类型标记**：搜索结果注入 `_type` 字段，方便客户端按需渲染。
 - **权重排序**：结果按相关度得分排序，支持分页（`limit` / `offset`）。
+
+> 注意：联合检索（federated）目前**未严格支持**（`FederatedSearch` 返回不支持错误）；不要依赖跨课程 / 论坛 / 用户 / 资料的统一搜索。
 
 ### 搜索建议
 
@@ -23,13 +25,7 @@ sidebar_position: 0
 
 ## 核心接口
 
-| 能力 | 说明 |
-|------|------|
-| `AdvancedSearch` | 支持多维参数筛选（如按校区、学期、分类） |
-| `FederatedSearch` | 全文模糊搜索入口 |
-| `SuggestCourses/Teachers/Reviews` | 分类联想建议 |
-
-HTTP 路径与参数以 OpenAPI 为准。
+`AdvancedSearch`（多维筛选）与 `SuggestCourses/Teachers/Reviews`（联想建议）；HTTP 路径与参数**完整端点见 [统一搜索接口参考](../../api/search.md)**。
 
 ## 技术实现
 

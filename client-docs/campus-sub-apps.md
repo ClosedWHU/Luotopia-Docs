@@ -26,6 +26,7 @@ description: sub_apps 布局、共享边界与当前清单
 | `empty_classroom/` | 空闲教室 |
 | `seat_reservation/` | 图书馆座位预约 |
 | `sports_reservation/` | 运动场馆 |
+| `lepao/` | 乐跑（步道乐跑：历史记录、轨迹、上传） |
 | `luojia_ecard/` | 珞珈 E 卡 WebView |
 | `water_control/` | 取水码 |
 | `school_net/` | 校园网 |
@@ -35,11 +36,16 @@ description: sub_apps 布局、共享边界与当前清单
 | `messages/` | 消息 |
 | `bus/` | 校园巴士完整页 |
 | `zhihui_luojia/` | 智慧珞珈 WebView |
-| `library/` | 图书借阅（多为占位 / 进行中） |
-| `vpn/` | aTrust VPN（`flutter_sangfor`） |
+| `library/` | 图书借阅（OPAC 借阅 / 到期提醒） |
+| `vpn/` | aTrust VPN（`flutter_sangfor_atrust`；`flutter_sangfor` 仅应用内 HTTP 代理） |
 | `water_electric_fee/` | 水电费缴纳 |
 | `campus_map/` | 校园地图 |
 | `major_info/` | 专业信息 / 培养方案 |
+| `dining/` | 食堂（薄壳，领域与数据在 `features/dining/`） |
+| `chaoxing/` | 超星学习通（课程、签到、视频） |
+| `cs_eban/` | CS 易办（评奖评优） |
+| `cg/` | 希冀平台（实验 / 课程平台） |
+| `ebike/` | 电单车（知音出行 / 芒果） |
 
 网格入口 ID 与显示顺序以 `campus_page.dart` 的 `gridApps` 与用户布局偏好为准。
 

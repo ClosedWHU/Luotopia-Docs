@@ -4,7 +4,7 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-论坛模块（`internal/domains/forum`）提供登录用户可见的社区能力。路由经 `httpapi.Register` 声明（User / Admin Access 与写限流）。**字段以 OpenAPI 为准**；排序权重与治理阈值为实现细节，公开文档只描述行为。
+论坛模块（`internal/domains/forum`）提供登录用户可见的社区能力。路由经 `httpapi.Register` 声明（User / Admin Access 与写限流）。**字段以 OpenAPI 为准**；排序权重与治理阈值为实现细节，公开文档只描述行为。**完整端点见 [论坛接口参考](../../api/forum.md) 与 [管理后台接口参考](../../api/admin.md)**。
 
 ## 子文档
 
@@ -12,8 +12,9 @@ sidebar_position: 0
 2. **[内容系统](content.md)**：帖子/标签与列表搜索行为  
 3. **[互动流](interaction.md)**：赞、评、收藏等  
 4. **[内容安全](moderation.md)**：举报、申诉、自动审核边界  
-5. **[运营工具](operations.md)**：通知、邀请等（若启用）  
+5. **[运营工具](operations.md)**：通知、邀请、校友验证等（若启用）  
 6. **[课评与身份策略](course_review_and_identity_policy.md)**：与课程评价资格的交叉约定  
+7. **[声望与等级](karma.md)**：karma 经济、等级、签到与排行榜  
 
 ## 目录结构
 

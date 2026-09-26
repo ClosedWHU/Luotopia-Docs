@@ -18,14 +18,14 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 
 业务服不再校验全站请求 HMAC；不得要求移动端硬编码全局 `api_secret`。
 
-## 独立 migrate 命令与全量 schema SQL
+## 进程内迁移（AutoMigrate）不再作为生产迁移路径
 
 | 旧预期 | 当前方式 |
 |--------|----------|
-| 顶层 `migrate` 子命令 | 启动 `serve` / `worker` 触发 `database.InitDB()` / AutoMigrate |
-| 仓库维护全量 schema SQL | 模型 + AutoMigrate；高风险重命名/删列由受控 SQL 处理 |
+| 启动 `serve` / `worker` 即迁移（`database.InitDB()`） | 生产用 `migrate up` / `status` / `bootstrap` 顶层命令；进程内 `MaybeAutoMigrate` 仅 `RUN_AUTOMIGRATE=1`（dev/test）触发，默认跳过 |
+| （无） | 全量初始 schema 内嵌于 `sql/001_initialize_schema.sql`，增量走版本化迁移 |
 
-详见 [数据库迁移](../architecture/migrations.md)。
+`database.InitDB()` 函数已不存在。详见 [数据库迁移](../architecture/migrations.md)。
 
 ## 平台翻译服务
 
@@ -33,7 +33,7 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 
 ## 尚未落地的 chat 域
 
-当前无 `internal/domains/chat`，不要依赖 `/api/v1/chat/*` 或历史 WebSocket 私聊说明。状态页见 [即时通讯](../modules/chat.md)。
+旧「chat 域」已落为 **`internal/domains/social`**（关注 / 拉黑 / 私信），仍无 `internal/domains/chat`，不要依赖 `/api/v1/chat/*` 或历史 WebSocket 私聊说明。当前说明见 [社交与私信](../modules/social.md)。
 
 ## 客户端成绩上传授资（transcript/sync）
 

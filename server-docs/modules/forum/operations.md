@@ -5,13 +5,13 @@ sidebar_position: 5
 ---
 
 代码：`internal/domains/forum`（运营 / 通知相关 repo）。
-站内通知列表也可能走 `components/notification`；**以 OpenAPI 为准**。邀请制是否启用取决于产品与配置，勿假设永远强制邀请注册。
+站内通知列表走 `internal/domains/notification`；**以 OpenAPI 为准**。邀请制是否启用取决于产品与配置，勿假设永远强制邀请注册。
 
 ## 通知系统
 
 论坛实现了站内信通知机制：
 
-- **种类（`NotificationKind`）**：包含 `reply`（回复）、`reaction`（点赞）、`moderation`（审核通知）、`appeal`（申诉结果）。
+- **种类（`NotificationKind`）**：`like`（点赞）、`favorite`（收藏）、`reply`（回复）、`alumni`（校友验证结果）、`appeal`（申诉结果）、`moderation`（审核）、`admin`（管理通知）、`system`（系统）。
 - **聚合逻辑**：为了防止骚扰，系统会对同类型的点赞进行一定程度的聚合。
 - **发送逻辑**：通知创建建议在事务末尾执行，以防业务回滚产生「幽灵通知」。
 
@@ -27,9 +27,11 @@ sidebar_position: 5
 - **Email 后缀校验**：核心逻辑在于 `Settings.AllowedEmailSuffixes`（默认为 `whu.edu.cn`）。
 - **验证流程**：
 
-    1. 用户提交 Email。
-    2. 系统通过 Worker 发送验证码。
-    3. 校验通过后，用户账户状态转为 `Active`。
+    1. 用户提交真实姓名、毕业年份、院系与凭证（`AlumniVerificationSubmitInput`）。
+    2. 记录以 `pending` 创建，等待管理员人工审核。
+    3. 管理员经 `POST /api/v1/forum/admin/alumni/verifications/{id}/review` 批准或驳回；通过后账户转为 `Active`。
+
+> 旧「提交 Email → Worker 发验证码 → 自动转 Active」的流程已改为人工审核，见上。
 
 ## 全局设置
 

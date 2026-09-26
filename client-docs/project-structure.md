@@ -16,12 +16,12 @@ app/lib/
 ├── core/             # 与业务无关的基础设施
 ├── features/         # 按功能切分（页面 / 账户 / 天气…）
 ├── shared/           # 跨 feature 的领域模型与通用 UI
-└── toolkit/          # AI Agent 工具运行时（application / credentials / data）
+└── toolkit/          # AI Agent 工具运行时（application / credentials / data / upstream）
 ```
 
-`toolkit/data/` 存放工具适配器（如 `payment_checkout_vault.dart`、`water_electric_adapters.dart`、`school_net_adapters.dart`），`toolkit/application/` 为工具与 catalog 定义，`toolkit/credentials/` 为凭据 provider。
+`toolkit/data/` 存放工具适配器（如 `payment_checkout_vault.dart`、`water_electric_adapters.dart`、`school_net_adapters.dart`），`toolkit/application/` 为工具与 catalog 定义，`toolkit/credentials/` 为凭据 provider，`toolkit/upstream/` 为上游宿主集成（如 `apple_shortcuts/`）。
 
-仓库级相关目录（`app/` 下）：`ohos/`（HarmonyOS 工程）、`packages/`（本地 Dart 包：`luotopia_agent_harness`、`luotopia_agent_tool_runtime`、`luotopia_flutter_bridge`、`luotopia_toolkit_core`、`luotopia_toolkit_virtual_cli`）、`native/`（Rust 原生组件）、`tool/ohos/`（鸿蒙构建脚本）。
+仓库级相关目录（`app/` 下）：`ohos/`（HarmonyOS 工程）、`packages/`（本地 Dart 包：`luotopia_agent_harness`、`luotopia_agent_tool_runtime`、`luotopia_course_api`、`luotopia_flutter_bridge`、`luotopia_toolkit_core`、`luotopia_toolkit_virtual_cli`）、`native/`（Rust 原生组件）、`tool/ohos/`（鸿蒙构建脚本）。
 
 ## core/
 
@@ -33,14 +33,16 @@ app/lib/
 
 | 区域 | 说明 |
 |------|------|
-| `features/pages/` | 完整页面：home、list、campus、settings、ai、forum… |
+| `features/pages/` | 完整页面：home、list、campus、settings、ai、weather… |
 | `features/luotopia_auth/` | 珞家账户 |
 | `features/whu_auth/` | 武大教务认证 |
 | `features/weather/` | 天气（直连第三方） |
 | `features/campus_bus/` | 校巴数据与预览卡片 |
 | `features/app_update/` | 安装包版本检查（官网 Pages Function） |
 | `features/hot_update/` | 解析脚本热更新（manifest + Ed25519） |
-| `features/forum/`、`course_review/` 等 | 其他独立能力 |
+| `features/forum/`、`course_review/`、`course_space/`、`social/`、`dining/` 等 | 其他独立领域能力 |
+| `features/account_center/` | 账户 / 凭据中心（多账户适配器聚合） |
+| `features/ecard_paycode/` | 珞珈 E 卡付款码 |
 
 页面内部可按需有 `presentation` / `domain` / `data`，**不为占位强行建空目录**。
 

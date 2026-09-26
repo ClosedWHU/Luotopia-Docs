@@ -22,7 +22,7 @@ go build -o bin/luotopia-backend ./cmd
 ./bin/luotopia-backend serve --config config/config.json
 ```
 
-入口命令只有：`serve` | `worker` | `cli`。
+入口命令：`serve` | `worker` | `cli` | `migrate` | `root` | `seed`。
 
 ## Docker
 

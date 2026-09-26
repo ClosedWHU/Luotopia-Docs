@@ -12,7 +12,7 @@ description: 平台分支、鸿蒙适配与宽屏布局约定
 - Desktop：提供 hover / focus 反馈（Material `InkWell` 等）  
 
 > [!NOTE]
-> 项目已移除全部 Flutter Web 支持（无 `web/` 目录，lib 中无 `kIsWeb` 残留）。目标平台为 Android / iOS / Windows / macOS / Linux / HarmonyOS NEXT（ohos）。
+> 项目已移除全部 Flutter Web 支持（无 `web/` 目录、无 Web 构建目标、`lib` 中无 `kIsWeb` 残留）。目标平台为 Android / iOS / Windows / macOS / Linux / HarmonyOS NEXT（ohos）。
 
 ## 平台分支
 

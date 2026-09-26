@@ -65,6 +65,7 @@ httpapi.Register(api, httpapi.Op{
 | Access | 文档 Security | 运行时 |
 |--------|---------------|--------|
 | `Public` | 空要求 `{}` | 无需登录 |
+| `Optional` | `[{bearerAuth:{}}, {}]` | 有有效凭证则认证，无 / 失效则匿名放行（如云控 `config`、课程信息共享读） |
 | `User` | `bearerAuth` | JWT / Session /（部分路径）API Key |
 | `Admin` | `bearerAuth` | admin 或 superadmin |
 | `SuperAdmin` | `bearerAuth` | 仅 superadmin |
@@ -116,7 +117,7 @@ return nil, middleware.ToHumaError(ctx, appErrors.NotFoundf("..."))
 
 ## 6. 模块覆盖
 
-identity、verification、system、agent、notification、campus（Huma）、dining、search、materials、course_review、admin、forum、platform cache 均经 `httpapi` 注册。通知等 OperationID 命名见 OpenAPI。
+identity、verification、system、agent、notification、campus（Huma）、dining、search、materials、course_review、course_space、social、cloudcontrol、admin、forum、platform cache 均经 `httpapi` 注册。通知等 OperationID 命名见 OpenAPI。
 
 ## 相关
 

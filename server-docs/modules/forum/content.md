@@ -12,6 +12,8 @@ sidebar_position: 2
 |------|------|
 | 板块 (Board) | 有稳定 `slug`、标题与描述 |
 | 帖子 (Post) | 正文与标签等；标签适合多值存储 |
+| 草稿 (Draft) | 未发布的帖子草稿，支持创建 / 更新 / 列表 / 发布（`/api/v1/forum/drafts`） |
+| 附件 (Attachment) | 帖子附件上传 / 认领 / 下载 / 删除（`/api/v1/forum/attachments`） |
 | 可见性 | 正常展示 / 隐藏（违规）/ 降权（质量较低时搜索与推荐权重下降） |
 
 字段级定义以 OpenAPI 与 GORM 模型为准。
@@ -53,6 +55,8 @@ sidebar_position: 2
 | `deleted` | `Visibility` 为已删除 |
 | `hidden` | `Visibility` 为隐藏 |
 | `pending_review` | `ModerationStatus` 为待审核 |
+| `rejected` | 已裁决 / 有审核动作且隐藏 |
+| `draft` | `Visibility` 为草稿 |
 | `expired` | `ExpiresAt` 已过 |
 | `active` | 以上均不满足 |
 

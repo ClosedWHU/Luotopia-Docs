@@ -7,7 +7,7 @@ sidebar_position: 2
 
 ## 模块概述
 
-本模块负责**自有给分样本库**、隐私安全的聚合统计，以及通过 **ham-gateway 只读补充** Ham 大盘分布。评价资格与给分贡献均要求校园教务完成凭据（有成绩 / 缺考 / 中期退课），不以 Cookie 或手填分作为资格。
+本模块负责**自有给分样本库**、隐私安全的聚合统计，以及通过 **ham-gateway** 补充 Ham 大盘分布（读）。ham-gateway 另有成绩贡献写路径（`ContributeScores`，见 [武大身份说明](../identity/whu_auth.md)）。评价资格与给分贡献均要求校园教务完成凭据（有成绩 / 缺考 / 中期退课），不以 Cookie 或手填分作为资格。
 
 种子评价数据可用 `go run scripts/main.go import -input scripts/courses.json ...`（见 `server/scripts/README.md`）。运行时给分样本写入自有表（如 `grade_submissions`，以模型为准）。
 
@@ -44,14 +44,7 @@ sidebar_position: 2
 
 ## 接口
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/v1/user/review-eligibility` | 已可评价的 `course_uids` |
-| POST | `/api/v1/user/review-eligibility/sync` | 由服务端核验教务成绩后导入评价资格（可选贡献给分样本） |
-| POST | `/api/v1/course/grades/resolve` | 解析 / 种子化课程与教师对 |
-| POST | `/api/v1/course/grades/prepare/{course_uid}` | 为课程预置教师 |
-| GET | `/api/v1/course/grades/teachers/{course_uid}` | 按教学团队分组的教师 |
-| GET | `/api/v1/course/grades/view/{course_uid}` | 自有 + 可选 Ham 合并视图 |
+评价资格（`/api/v1/user/review-eligibility*`）与给分视图（`/api/v1/course/grades/*`，含 `resolve` / `by-name` / `prepare` / `teachers` / `view`）**完整端点见 [课程与评价接口参考](../../api/course.md)**。
 
 字段与完整路径以 OpenAPI 为准。
 

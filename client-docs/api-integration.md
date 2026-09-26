@@ -10,13 +10,15 @@ description: Dio、Bearer JWT、customServerUrl
 | 项 | 位置 / 行为 |
 |----|-------------|
 | Dio（业务） | `core/api/api_providers.dart` |
-| OpenAPI 生成 | `core/api_client/` |
+| OpenAPI 生成 | `core/api_client/`（主）；课程信息共享另用 `packages/luotopia_course_api` 生成客户端 |
 | 珞家登录 | `features/luotopia_auth/` |
 | 认证头 | `Authorization: Bearer <token>` |
 | 401 | refresh 后重试 |
 | 自定义服务器 | 开发者 `customServerUrl` |
-| 请求签名 | **无**（个别校园第三方如座位预约另有 HMAC，与业务服务器无关） |
+| 请求签名 | **无 HMAC**（个别校园第三方如座位预约另有 HMAC，与业务服务器无关）；受保护操作经 Altcha 拦截器附带 `X-Altcha` 人机校验证明 |
 | 官网 HTTP | `package:http`（更新、热更新、友情链接等） |
+
+人机校验：`core/api/altcha_interceptor.dart`（`AltchaInterceptor`）在 `luotopiaBaseDioProvider` / 业务 Dio 上求解 Altcha 挑战并附带 `X-Altcha`（登录、注册、发邮件验证码等受保护操作）。这不是请求签名，见 [服务端 · 人机校验](pathname:///server/architecture/security-policy)。
 
 服务端总览：[API 使用指南](pathname:///server/api/overview)。
 

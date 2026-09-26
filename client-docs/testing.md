@@ -37,7 +37,7 @@ flutter test test/features/campus/
 | `test/features/hot_update/` | manifest 签名 / canonical JSON |
 | `test/features/app_update/` | 版本比较 |
 | `test/features/campus/` | 网格排除、布局设置 |
-| `test/features/item-detail/` 等 | 事项 / 动画相关 |
+| `test/features/item_detail/` 等 | 事项 / 动画相关 |
 
 ## 相关
 

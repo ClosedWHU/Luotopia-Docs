@@ -4,7 +4,7 @@ sidebar_label: 课程评价
 sidebar_position: 1
 ---
 
-代码：`internal/domains/course_review`（`http` / `service` / `repo`）。
+代码：`internal/domains/course_review`（`http` / `service` / `repo` / `model`，另有 `client/` 外部只读客户端、`textnorm/` 课程名归一化、`internal/coursewrite/` 课程写入）。
 
 ## 行为要点
 
@@ -13,16 +13,9 @@ sidebar_position: 1
 - 对外展示匿名；后端可保留作者 ID 用于反作弊与本人编辑删除。  
 - 审核 / 通过后的状态才进入统计（以 `is_approved` 等字段与服务逻辑为准）。
 
-## 相关 API（摘要）
+## 相关 API
 
-| 能力 | 说明 |
-|------|------|
-| 提交评价 | `POST` 评价相关路径（OpenAPI） |
-| 列表 / 详情 | 按课程 UID 等查询 |
-| 管理审核 | `/api/v1/admin/...` |
-| 教师列表（管理） | `GET /api/v1/admin/teachers`（支持 `deleted_only`），权限 `teacher:delete` |
-| 教师软删（管理） | `DELETE /api/v1/admin/teachers/{id}`，权限 `teacher:delete` |
-| 教师恢复（管理） | `PUT /api/v1/admin/teachers/{id}/restore`，权限 `teacher:delete` |
+评价提交 / 列表 / 详情 / 互动 / 举报与管理审核（含教师软删 / 恢复，权限 `teacher:delete`）**完整端点见 [课程与评价接口参考](../../api/course.md) 与 [管理后台接口参考](../../api/admin.md)**。
 
 ## 与给分
 

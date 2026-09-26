@@ -11,7 +11,7 @@ sidebar_position: 3
 | 模型 | 说明 |
 |------|------|
 | ReactionRecord | 记录用户对帖子或评论的反应（Upvote / Downvote） |
-| FavoriteRecord | 记录用户收藏的帖子 |
+| FavoriteRecord | 记录用户收藏的帖子（`PostFavoriteRecord`）或评论（`CommentFavoriteRecord`） |
 | Counts | 帖子记录中包含 `upvotes`、`downvotes`、`comment_count`、`view_count` 等冗余字段，用于加速读取 |
 
 ## 反应流逻辑
@@ -20,11 +20,12 @@ sidebar_position: 3
 
 - **原子性**：使用数据库事务确保计数更新与记录插入的一致性。
 - **互斥性**：同一用户对同一内容只能有一种反应。当前为 Upvote 时点击 Downvote，会自动取消 Upvote 并转为 Downvote。
+- **声望成本**：点赞消耗 1、点踩消耗 2 点声望（`VoteCostUp/Down`），每日免费配额按等级递增（见 [声望与等级](./karma.md)）；撤销退款（`vote_cost_refund`）。
 - **自动治理**：反应变更会触发基于反馈的自动处置检查；阈值与触发条件为实现细节，见 [治理与规则](./governance.md)。
 
 ### 收藏系统
 
-- 用户可以收藏帖子，收藏列表通过 `/api/v1/forum/me/favorites/posts` 分块获取。
+- 用户可以收藏**帖子或评论**，收藏列表通过 `/api/v1/forum/me/favorites/posts` 分块获取；评论收藏经 `/api/v1/forum/comments/{id}/favorites/toggle` 切换。
 - 收藏操作不影响帖子的热度分计算。
 
 ## 统计数据维护

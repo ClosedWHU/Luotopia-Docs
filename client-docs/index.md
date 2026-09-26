@@ -16,7 +16,7 @@ Flutter 跨平台 App（Riverpod + Material 3 + go_router）。代码在 monorep
 | 状态 / UI | [状态管理](./state-management.md) · [UI 与组件](./components.md) · [多端](./multi-platform.md) |
 | 登录与业务 API | [认证](./auth.md) · [API 对接](./api-integration.md) |
 | 校园子应用 | [校园功能](./campus.md) · [教务认证](./campus-whu-auth.md) · [子应用目录](./campus-sub-apps.md) · [WebView](./webview.md) |
-| 能力地图 / 更新 | [功能模块](./features.md) · [更新与热更新](./updates.md) |
+| 能力地图 / 更新 | [功能模块](./features.md) · [更新与热更新](./updates.md) · [云控](./cloud-control.md) |
 | 测试 / 迁移项 | [测试](./testing.md) · [已移除与迁移](./removed-and-migrated.md) |
 
 其他分区：

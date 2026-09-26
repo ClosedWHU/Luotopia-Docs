@@ -62,7 +62,7 @@ docker compose down
 docker compose up -d --build
 
 docker compose exec luotopia-api sh
-docker compose exec postgres psql -U postgres -d luotopia
+docker compose exec postgres psql -U luotopia -d luotopia
 docker compose exec redis redis-cli
 ```
 

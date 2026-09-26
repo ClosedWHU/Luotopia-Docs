@@ -8,14 +8,9 @@ sidebar_position: 13
 
 ## API（当前）
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/v1/system/update` | 业务服侧更新检查（若启用） |
-| GET | `/api/v1/system/config` | 远程配置 KV |
-
-设备推送 token 注册在 **identity**：
-
-- `POST /api/v1/devices/register`（需登录）
+- `GET /api/v1/system/update`（业务服侧更新检查，若启用）、`GET /api/v1/system/config`（远程配置 KV）
+- 设备推送 token 注册在 **identity**：`POST /api/v1/devices/register`（需登录）
+- **完整端点见 [系统与公共接口参考](../api/system.md)**。
 
 ## 与「App 商店式更新 / 热更新」的边界
 

@@ -21,17 +21,9 @@ sidebar_position: 7
 
 ## API 接口
 
-另有 `GET /api/v1/timetable/master` 等主数据接口（`/master/periods`、`/master/search`、`/master/suggestions`、`/master/import-jobs`，以 OpenAPI 为准）。
-**个人教务课表导入由 App 完成**，服务端不代持武大密码去爬教务。
+个人时间表条目 CRUD 与主数据接口（`/master/periods`、`/master/search`、`/master/suggestions`、`/master/history`、`/master/import-jobs`）**完整端点见 [校园接口参考](../api/campus.md)**。
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/v1/timetable` | 返回认证用户的时间表条目（可按 `year` / `semester` 过滤） |
-| POST | `/api/v1/timetable` | 创建时间表条目 |
-| PUT | `/api/v1/timetable/{id}` | 更新指定条目 |
-| DELETE | `/api/v1/timetable/{id}` | 删除指定条目（仅所有者） |
-
-请求体与响应字段以 OpenAPI 为准。
+**个人教务课表导入由 App 完成**；服务端不代持武大密码去爬教务。主课表贡献（`POST /api/v1/timetable/master/import-jobs`）接受一次性 CAS `ticket` 核验，管理端 `GET/POST /api/v1/admin/timetable/master/import-jobs`（含 `{id}/retry`、删除）与 `GET /api/v1/admin/timetable/master/export` 用于主课表运维（见 [管理后台接口参考](../api/admin.md)）。
 
 ## 性能与实现注意
 
@@ -39,7 +31,7 @@ sidebar_position: 7
 |------|------|
 | 查询 | 按用户 + 学年 / 学期过滤；分页与过滤参数以 OpenAPI 为准 |
 | 索引 / 缓存 | 由实现维护；key 与 TTL 非公开契约 |
-| 导入边界 | **个人教务课表由 App 导入**；服务端不代持武大密码爬教务 |
+| 导入边界 | **个人教务课表由 App 导入**；服务端不代持武大密码爬教务。主课表贡献经一次性 CAS 票据核验（见上） |
 | 字段权威 | 示例若与 OpenAPI 冲突，以 OpenAPI / 模型为准 |
 
 ## 相关

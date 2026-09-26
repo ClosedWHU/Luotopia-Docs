@@ -50,9 +50,10 @@ slug: security-policy
 ### 2.1 角色 / Access
 
 1. **Public**：无需登录（仅声明为 Public 的操作）。
-2. **User**：登录用户（JWT / Session；部分路径允许 API Key）。
-3. **Admin**：管理能力（admin 或 superadmin）。
-4. **SuperAdmin**：更敏感管理（用户、队列、缓存、embedding 等；路径与 Access 声明双重约束）。
+2. **Optional**：有有效凭证则认证，无 / 失效则匿名放行（不拒绝请求）。
+3. **User**：登录用户（JWT / Session；部分路径允许 API Key）。
+4. **Admin**：管理能力（admin 或 superadmin）。
+5. **SuperAdmin**：更敏感管理（用户、队列、缓存、embedding 等；路径与 Access 声明双重约束）。
 
 ### 2.2 路由保护
 
@@ -73,10 +74,11 @@ slug: security-policy
 | 用户 | `user:list` `user:view` `user:edit` `user:delete` `user:set_admin` `user:disable` `user:batch` `user:update-limits` `user:credentials` |
 | 缓存 / 运维 | `cache:clear` `cache:warmup` `task:manage` `queue:manage` `security:manage` `storage:manage` `embedding:create` |
 | 论坛 | `forum:config` `forum:moderate` `forum:manage-users` |
-| 食堂 | `dining:manage` |
+| 食堂 | `dining:manage` `dining:moderate` |
+| 云控 | `cloud-control:manage` |
 
 > [!IMPORTANT]
-> 个别权限码（如 `teacher:delete`）的种子化状态以部署为准：未种子化的权限码默认不授予任何角色，需在 RBAC 中手工创建并授予后方可通过校验。
+> 上表为**启动引导种子化**的权限码；未列出的权限码默认不授予任何角色，需在 RBAC 中手工创建并授予后方可通过校验。
 
 ## 3. 安全防御措施
 

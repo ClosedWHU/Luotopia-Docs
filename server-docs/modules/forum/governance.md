@@ -19,8 +19,10 @@ sidebar_position: 1
 | 角色 | 职责 |
 |------|------|
 | SuperAdmin | 最高权限，可修改全局配置 |
-| Admin | 访问审核队列、执行禁言、处理申诉 |
+| Admin | 访问审核队列、执行禁言 / 封禁（mute / ban）、处理申诉、调整声望（karma） |
 | User | 常规发帖与互动 |
+
+管理动作（禁言 / 解禁 / 封禁 / 解封、声望调整等）会写入公开管理日志（`GET /api/v1/forum/public-admin-logs`），供社区可见。
 
 ## 自动化处置
 

@@ -8,7 +8,7 @@ sidebar_position: 3
 > **权威来源**：运行中服务的 OpenAPI（`/openapi.json`）。本文为常用调用**规范与示例**，字段与路径冲突时以 OpenAPI / 代码为准。
 > 不在此文档中复制完整 schema；新增接口请改 OpenAPI 生成物，而非只改本文。
 
-本文说明核心调用形态与示例请求体，帮助客户端对接。端点索引见 [API 接口参考（摘要）](./full_reference.md)。
+本文说明核心调用形态与示例请求体，帮助客户端对接。端点索引见 [接口参考索引](./full_reference.md)。
 
 ## 认证
 
@@ -95,6 +95,6 @@ A：请检查 `Authorization` Header 格式。令牌过期时返回业务码 `10
 ## 相关
 
 - [API 使用指南](./overview.md)
-- [API 接口参考（摘要）](./full_reference.md)
+- [接口参考索引](./full_reference.md)
 - [错误码](./error_codes.md)
 - [HTTP 注册规范](./http_api.md)

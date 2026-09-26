@@ -59,15 +59,15 @@ erDiagram
 
 > [!NOTE]
 > `USER_API_CREDENTIAL` 为用户级集成凭证（请求头 `X-Api-Key` + `X-Api-Secret`），**不是**全站请求 HMAC。
-> 图中为概念示意；实际表 / schema 以 GORM 模型与 `database.InitDB` 为准。
+> 图中为概念示意；实际表 / schema 以 GORM 模型与版本化迁移（`migrate up`）为准。
 
 ## 通用基础模型
 
-所有业务模型都应嵌入 `Base` 结构体，提供标准化的审计字段：
+主体域模型（identity / forum / social / course_space 等）使用 **UUID 字符串主键**（`ID string`，`varchar(64)`）；仅 RBAC 与少量遗留 identity 表沿用自增 `uint64` 的 `Base` 结构体：
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| `id` | `uint64` | 主键，由数据库自增生成 |
+| `id` | `string`（UUID，`varchar(64)`） | 主键（多数域）；RBAC / 遗留表为 `uint64` 自增 |
 | `created_at` | `time.Time` | 记录创建时间 |
 | `updated_at` | `time.Time` | 记录最后一次更新时间 |
 | `deleted_at` | `gorm.DeletedAt` | 软删除标记，用于数据恢复与审计 |

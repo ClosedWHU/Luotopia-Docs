@@ -16,11 +16,12 @@ sidebar_position: 3
 ## 资料与安全
 
 - 资料更新、改密、会话列表等需 Bearer
-- 用户 **API 凭证**（Key + Secret）：集成脚本用，请求头直传，非 HMAC
+- 用户 **API 凭证**（Key + Secret）：集成脚本用，请求头直传，非 HMAC。端点：`GET/POST /api/v1/user/api-credentials`、`PATCH /api/v1/user/api-credentials/{id}`、`DELETE /api/v1/user/api-credentials/{key_id}`、`GET /api/v1/user/api-limits`。Secret 存哈希（`APISecretHash`）。
+- 武大身份绑定：`POST /api/v1/auth/whu/bind`、`POST /api/v1/auth/whu/unbind`、`POST /api/v1/user/register/whu/authorize`
 
 ## 与教务的关系
 
-绑定武大身份若存在，以 identity API 为准；**教务 Cookie 不在本模块代持**（见 [武大身份说明](./whu_auth.md)）。
+绑定武大身份以 identity API 为准；**教务 Cookie 不在本模块代持**（见 [武大身份说明](./whu_auth.md)）。
 
 ## 相关
 

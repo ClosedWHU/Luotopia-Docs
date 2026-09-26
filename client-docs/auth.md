@@ -31,17 +31,28 @@ description: 珞家 JWT、武大教务会话、开发者服务器
 
 | 配置 | 典型 |
 |------|------|
-| `AppConfig.apiBaseUrl` | 模拟器 `http://10.0.2.2:6262`，其他 `http://localhost:6262` |
-| 开发者 `customServerUrl` | 覆盖默认，如 `http://10.0.2.2:6262` |
+| `AppConfig.apiBaseUrl` | 默认 `https://api-whu-sb.tsinbei.cn`（可由 `LUOTOPIA_API_URL` 编译期覆盖） |
+| 开发者 `customServerUrl` | 覆盖默认，如模拟器 `http://10.0.2.2:6262`、真机 `http://<局域网 IP>:6262` |
 | `AppConfig.siteBaseUrl` | 官网 `https://www.whu.sb`（更新 / 热更新 / 法律 / 友情链接） |
 
 开启：设置 → 关于 → 连点版本 → 开发者设置。
 
 `customServerUrl` **只**覆盖珞家业务服务器，**不**改变 `siteBaseUrl`。
 
-## 武大教务
+## 珞家账户安全（`luotopia_auth`）
+
+`features/luotopia_auth/` 除注册登录与会话外，还承载账户安全能力：
+
+- **Passkey**（密码免密登录 / 第二因素 / 步进验证）、**TOTP**、MFA 恢复码、多会话管理（下线其他设备）
+- **API 凭证**（Key + Secret）签发与管理
+- **社交账号**（Ham OAuth2）绑定 / 解绑
+
+详见 [服务端 · 身份认证](pathname:///server/modules/identity)。
+
+## 武大教务（`whu_auth`）
 
 - 登录页 / 设置中的武大账户  
+- 能力：原生 CAS 登录、CAS TOTP、可信设备、教务（datarepo）与自费转诊（zyfzzd）服务
 - 生命周期：后台过久可主动刷新教务会话  
 - WebView 校园业务：统一用 `AppWebViewPage` 模式挂 Cookie / Header  
 

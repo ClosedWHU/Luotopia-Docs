@@ -42,13 +42,11 @@ sidebar_position: 11
 
 ### 核心 API
 
-- `GET /api/v1/materials`：资料列表与搜索。
-- `GET /api/v1/materials/{material_uid}/download`：触发文件下载并增加下载计数。
-- `POST /api/v1/materials/upload`：资料上传。
+资料列表 / 搜索 / 上传 / 下载 / 预览与审核管理（`approve` / `restore`）**完整端点见 [学习资料接口参考](../api/material.md) 与 [管理后台接口参考](../api/admin.md)**。
 
 ## 安全与维护
 
-- **速率限制**：下载接口受全局限流保护（配额以实现为准）。
+- **速率限制**：上传接口受操作级限流保护；下载接口不限流（配额以实现为准）。
 - **类型限制**：上传时会校验文件扩展名，防止上传可执行文件等危险附件。
 - **路径隔离**：HTTP 和业务 service 不接触绝对文件路径；local backend 拒绝越出 storage root 或旧 Materials root 的 key/path。
 - **就绪检查**：实例间通过共享存储哨兵校验挂载一致性；机制细节以实现为准（见 [Docker 部署](../deployment/docker.md#多实例存储要求)）。

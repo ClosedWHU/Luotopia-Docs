@@ -41,9 +41,14 @@ graph TD
 | identity | 登录注册、OIDC、会话、用户 API 凭证 |
 | forum | 帖评与审核相关 |
 | course_review | 课程、评价、给分 |
+| course_space | 教学班课程信息共享（信任模型） |
+| social | 关注 / 拉黑 / 私信 |
 | campus | 课表、日历、空闲教室等（非代持武大密码） |
 | dining | 食堂区域、楼宇楼层、档口、菜单、评价与投稿 |
 | search | 统一搜索 |
+| material | 学习资料 |
+| notification | 站内通知 |
+| cloudcontrol | 云控（子应用 / 功能开关与参数下发） |
 | platform | DB、配置、缓存、metrics |
 
 ## 登录请求（示意）

@@ -14,6 +14,8 @@ sidebar_position: 5
 - 提供商列表：`identity.social.providers`（`ham`、通用 OAuth2/OIDC 等）
 - 字段为 camelCase JSON（`clientId`、`authorizationEndpoint`…）
 - **Ham** 是 Luotopia 账号社交源，不是教务 CAS 代爬（见 [武大身份说明](./whu_auth.md)）
+- 社交账号管理：`GET /api/v1/user/social-accounts`、`GET/POST/DELETE /api/v1/user/social-accounts/{provider}...`
+- 浏览器 OAuth 跳转：`GET /auth/login/{provider}`、`GET /auth/callback/{provider}`
 
 ## 勿混淆
 

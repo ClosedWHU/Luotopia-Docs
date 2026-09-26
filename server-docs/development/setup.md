@@ -43,7 +43,7 @@ cp config/config.docker.json config/config.json
 
 ### 2. 数据库
 
-没有 `migrate` 子命令。启动 `serve` / `worker` 时会 `InitDB()`（AutoMigrate + 扩展）。
+生产用 `migrate up` 迁移（`go run ./cmd migrate up`）；本地开发/测试可设 `RUN_AUTOMIGRATE=1` 让 `serve` / `worker` 启动时执行进程内迁移（`MaybeAutoMigrate`，默认跳过）。扩展（`vector` / `pg_trgm` / `pg_jieba`）在启动时 `EnsureExtensions` 安装。
 
 ### 3. 启动
 
