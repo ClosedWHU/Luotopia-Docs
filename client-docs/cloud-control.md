@@ -5,7 +5,9 @@ sidebar_position: 18
 description: core/cloud_control 与 sub_app 开关
 ---
 
-云控用于「不发版即可开关功能 / 下发参数」。客户端经 `core/cloud_control/` 拉取配置，按 `role` / `user_id` 定向生效。
+云控用于「不发版即可开关功能 / 下发参数」。客户端经 `core/cloud_control/` 拉取配置，按 `role` / `user_id` 定向生效，优先级 **用户规则 > 角色规则 > flag 默认值**。
+
+`role` 规则可写裸代码（`admin`，即 `permission` 分组）或分组限定形式（`beta:cohort_a`），两者等价匹配；详见 [服务端 · 数据库设计](pathname:///server/architecture/database-design)。
 
 ## 代码位置
 
@@ -19,6 +21,7 @@ description: core/cloud_control 与 sub_app 开关
 |----------|------|
 | `subapp.*` | 校园子应用入口开关（如 `subapp.bus`、`subapp.dining`、`subapp.ebike`、`subapp.courseSharing`） |
 | 能力 key | 功能开关与参数（如 `courseSharing.*`） |
+| `developer.channel` | 稳定版开发者工具通道。默认关闭，由控制台按角色规则或用户规则授予——给测试者开调试面板不再需要把人提升为管理员 |
 
 默认值由服务端云控下发（见 [服务端 · 云控](pathname:///server/modules/cloud-control)）；客户端在服务端不可达时回落到本地默认（`_defaults.dart`）。
 

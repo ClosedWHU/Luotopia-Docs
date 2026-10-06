@@ -13,6 +13,7 @@ Luotopia Server 使用 PostgreSQL 作为核心关系型数据库，通过 GORM �
 erDiagram
     USER ||--o{ USER_ROLE : has
     ROLE ||--o{ USER_ROLE : assigned_to
+    ROLE_GROUP ||--o{ ROLE : partitions
     ROLE ||--o{ ROLE_PERMISSION : contains
     PERMISSION ||--o{ ROLE_PERMISSION : defining
     USER ||--o{ USER_SESSION : starts
@@ -25,14 +26,29 @@ erDiagram
         string email
         string password_hash
         string role
-        bool is_admin
         int status
+    }
+
+    ROLE_GROUP {
+        uint64 id PK
+        string name
+        string code UK
+        bool is_system
+        int sort
     }
 
     ROLE {
         uint64 id PK
         string name
-        string code
+        string code UK
+        string group_code
+        bool is_default
+    }
+
+    USER_ROLE {
+        string user_id PK
+        uint64 role_id PK
+        string group_code UK
     }
 
     PERMISSION {
@@ -76,10 +92,16 @@ erDiagram
 
 ### 权限控制（RBAC）
 
-系统采用标准的**基于角色的访问控制（RBAC）**模型：
+系统采用标准的**基于角色的访问控制（RBAC）**模型，角色按**分组（role group）**组织：
 
-- `UserRole`：多对多关联，一个用户可以拥有多个角色（当前实现偏向单角色，但结构支持多角色）。
-- `RolePermission`：多对多关联，定义角色所拥有的具体操作权限。
+- `RoleGroup`：角色维度。一个分组就是一条独立的判定轴——`permission`（权限层级）是内置且唯一在用的分组，未来可以加入内测批次、版务范围等而不必扩充权限词表。
+- `Role`：角色，通过 `group_code` 归属某个分组；`is_default` 标记该分组在用户未被显式分配时的回退角色（`permission` 组的默认角色是 `user`，因此未分配即无特权）。
+- `UserRole`：用户与角色的关联。主键仍是 `(user_id, role_id)`，**同一分组内互斥**由 `user_roles (user_id, group_code)` 唯一索引在数据库层保证——不依赖调用方记得先删后插。因此一个用户可以在多个分组各持有一个角色，但不能在一个分组里持有两个。
+- `RolePermission`：多对多关联，定义角色所拥有的具体操作权限。`HasPermission` 对用户所有分组的角色取并集。
+
+`identity_users.role` 是 `permission` 分组的标量镜像：JWT claim 携带它，客户端与云控规则也按它匹配，所以 `roles` 映射中的 `permission` 项永远与该列一致。
+
+引用角色时可用**裸代码**（`admin`，等价于 `permission` 组）或**分组限定形式**（`beta:cohort_a`）。云控规则两种写法都接受，匹配时统一规范化为 `组:代码`，因此历史规则无需迁移。
 
 权限码清单见 [安全策略](./security_policy.md)。
 
