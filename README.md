@@ -56,7 +56,7 @@ npm run serve
 
 **用户** `1→11`：概览 → 开始 → 账户 → 课表 → 成绩 → 校园 → 日程 → AI → 设置 → 隐私 → FAQ  
 
-**客户端** `0→17`：概览 → 环境 → 架构 → 目录 → Feature 约定 → 状态 → UI → 多端 → 认证 → API → 校园 → 教务认证 → 子应用 → WebView → 功能地图 → 更新 → 测试 → 已移除与迁移  
+**客户端** `0→19`：概览 → 环境 → 架构 → 目录 → Feature 约定 → 状态 → UI → 多端 → 认证 → API → 校园 → 教务认证 → 子应用 → WebView → 功能地图 → 更新 → 测试 → 已移除与迁移 → 云控 → 声明式 UI  
 
 **服务端顶层**：概览（0）→ 架构（1）→ 开发（2）→ API（3）→ 部署（4）→ 模块（5）→ CLI（6）→ 规范（7）（性能调优已并入「开发」）
 
@@ -85,6 +85,7 @@ npm run serve
 | 热更新影响导入 | `timetable.md`、`scores.md` | `updates.md` | — |
 | 官网 / Releases | `privacy-and-data.md` | `updates.md` | `modules/external_surfaces.md` |
 | Feature 迁址 | — | `feature-architecture.md` | — |
+| SDUI 组件词表 / token | — | `sdui.md`（`appSduiComponentReference()` 是机器可读来源） | — |
 
 电单车分区不随 App/Server 代码漂移：供应商小程序包更新时同步 `ebike-docs/`（公开侧与私有 `whu-ebike-re` 两侧同步脱敏）。
 
