@@ -24,7 +24,7 @@ sidebar_position: 4
 
 ## 端点与权限
 
-用户端均需登录（Bearer）；管理端 `/api/v1/dining/admin/*`（Admin Access）。**完整端点列表见 [食堂接口参考](../api/dining.md) 与 [管理后台接口参考](../api/admin.md)**。
+用户端均需登录（Bearer）；管理端 `/api/v1/dining/admin/*`（Admin Access）。完整端点列表见[食堂接口参考](../api/dining.md)与[管理后台接口参考](../api/admin.md)。
 
 管理端按能力细分权限码（见 [安全策略](../architecture/security_policy.md)）：
 

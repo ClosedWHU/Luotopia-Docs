@@ -1,10 +1,11 @@
 ---
-title: 系统与公共接口接口参考
+title: 系统与公共接口参考
 sidebar_label: 系统
 sidebar_position: 20
 description: 系统与公共接口相关端点索引（字段与完整路径以 OpenAPI 为准）
 ---
 
+> [!NOTE]
 > 端点索引（摘要）；**字段、参数、错误体与完整路径以运行中的 OpenAPI（/openapi.json）为准**。默认 /api/v1/* 需登录，公开接口以各操作 Security 声明为准。
 >
 > 业务行为与边界见 [系统与公共接口模块](../modules/system.md)。

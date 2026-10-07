@@ -5,6 +5,7 @@ sidebar_position: 12
 description: 课程与评价相关端点索引（字段与完整路径以 OpenAPI 为准）
 ---
 
+> [!NOTE]
 > 端点索引（摘要）；**字段、参数、错误体与完整路径以运行中的 OpenAPI（/openapi.json）为准**。默认 /api/v1/* 需登录，公开接口以各操作 Security 声明为准。
 >
 > 业务行为与边界见 [课程与评价模块](../modules/course/index.md)。

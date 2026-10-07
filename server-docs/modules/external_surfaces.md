@@ -23,7 +23,7 @@ sidebar_position: 14
 
 ## GitHub Releases
 
-安装包由 CI 挂到公开 GitHub Releases（仓库名以部署配置为准）。官网 Function 通过**环境变量**读取 token 与仓库名——**文档与仓库中不得出现真实 token**。
+安装包由 CI 挂到公开 GitHub Releases（仓库名以部署配置为准）。官网 Function 通过环境变量读取 token 与仓库名——**文档与仓库中不得出现真实 token**。
 
 ## 与 `system` 域
 

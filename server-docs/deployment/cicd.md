@@ -21,19 +21,21 @@ sidebar_position: 3
 | golangci-lint | `golangci-lint-action@v9`，版本 `v2.13.2` |
 | 架构边界检查 | `go run ./cmd/archcheck` |
 | OpenAPI 导出冒烟 | `go run ./scripts/export_openapi.go` |
-| 测试 | `push` 跑 `go test -p 1 -timeout 15m ./...`；PR 追加 `-coverprofile` 并设 20% 覆盖率门槛，上传覆盖率产物 |
+| 测试 | `push` 跑 `go test -p 1 -timeout 15m ./...`。PR 追加 `-coverprofile`，设 20% 覆盖率门槛，并上传覆盖率产物 |
 
-### 其它任务
+### 其他任务
 
 | 任务 | 说明 |
 |------|------|
 | Monitoring lint | `promtool` / `amtool` 校验告警规则与 `prometheus.yml`、`alertmanager.yml` |
 | Semgrep | `semgrep scan --config=p/default --metrics=off --error` |
-| Race | PR 时对选定包跑 `go test -race -p 1`（worker、monitoring、identity/service、database、authz、admin/http、course_review/repo、forum/repo 等） |
+| Race | PR 时对选定包跑 `go test -race -p 1` |
+
+Race 的选定包：worker、monitoring、identity/service、database、authz、admin/http、course_review/repo、forum/repo 等。
 
 ## 持续交付（CD）
 
-`cd.yml` 在推送 `v*` 标签、发布 Release 或手动触发时构建并推送镜像到 **GHCR**，随后触发 Watchtower 更新容器。
+`cd.yml` 在推送 `v*` 标签、发布 Release 或手动触发时构建镜像并推送到 GHCR，随后触发 Watchtower 更新容器。
 
 | 步骤 | 说明 |
 |------|------|

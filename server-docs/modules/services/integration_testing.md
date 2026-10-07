@@ -5,9 +5,10 @@ sidebar_label: 集成测试
 sidebar_position: 3
 ---
 
-确保域在真实依赖（Postgres、Redis 等）下行为正确。细节以实现与 `internal/testutils` 为准。
+集成测试验证各业务域在真实依赖（Postgres、Redis 等）下的行为。细节以实现与 `internal/testutils` 为准。
 
-> 状态：能力随仓库演进；下列为**约定**，非完整框架源码。
+> [!NOTE]
+> 状态：能力随仓库演进；下列为约定，非完整框架源码。
 
 ## 层次
 
@@ -21,10 +22,10 @@ sidebar_position: 3
 
 ## 环境
 
-- 集成测优先 **Postgres + Redis**（testcontainers 或 compose，见仓库）。  
+- 集成测优先 Postgres + Redis（testcontainers 或 compose，见仓库）。  
 - 需要 FTS / vector 时使用与开发一致的扩展镜像（`Dockerfile.db`）。  
 - **不要**默认 SQLite。  
-- 测试库账号密码仅用于本地/CI 隔离实例，**禁止**使用生产凭据。
+- 测试库账户密码仅用于本地/CI 隔离实例，**禁止**使用生产凭据。
 
 ## 约定
 

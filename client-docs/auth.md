@@ -5,7 +5,7 @@ sidebar_position: 8
 description: 珞家 JWT、武大教务会话、开发者服务器
 ---
 
-客户端有两套身份，**不要混用**。
+客户端存在两套彼此独立的身份体系，凭据与用途均不同，**不要交叉使用**。
 
 ## 对比
 
@@ -41,11 +41,11 @@ description: 珞家 JWT、武大教务会话、开发者服务器
 
 ## 珞家账户安全（`luotopia_auth`）
 
-`features/luotopia_auth/` 除注册登录与会话外，还承载账户安全能力：
+`features/luotopia_auth/` 同时负责以下账户安全能力（注册登录与会话见上文）：
 
-- **Passkey**（密码免密登录 / 第二因素 / 步进验证）、**TOTP**、MFA 恢复码、多会话管理（下线其他设备）
-- **API 凭证**（Key + Secret）签发与管理
-- **社交账号**（Ham OAuth2）绑定 / 解绑
+- Passkey（密码免密登录 / 第二因素 / 步进验证）、TOTP、MFA 恢复码、多会话管理（下线其他设备）
+- API 凭证（Key + Secret）签发与管理
+- 社交账户（Ham OAuth2）绑定 / 解绑
 
 详见 [服务端 · 身份认证](pathname:///server/modules/identity)。
 

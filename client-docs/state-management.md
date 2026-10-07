@@ -21,9 +21,9 @@ description: Riverpod 与 ViewModel / Notifier 约定
 
 ## 模式
 
-1. **domain** 定义接口与实体  
-2. **data** 实现仓储  
-3. **presentation** 的 Notifier 调仓储，暴露不可变 `State`  
+1. domain 定义接口与实体  
+2. data 实现仓储  
+3. presentation 的 Notifier 调仓储，暴露不可变 `State`  
 4. Widget 只 `watch` 状态、调用 Notifier 方法  
 
 示例类名以仓库为准；下面仅为结构示意：

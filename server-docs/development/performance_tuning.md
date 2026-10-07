@@ -6,7 +6,7 @@ sidebar_label: 性能调优
 description: 数据库、缓存与服务端通用调优原则
 ---
 
-通用原则。**连接池数值、索引 DDL、缓存 TTL 以配置与代码为准**；下列为建议，勿不经评估照搬生产。
+本页给出通用调优原则。**连接池数值、索引 DDL、缓存 TTL 以配置与代码为准**；下列为建议，勿不经评估照搬生产。
 
 搜索索引初始化见 `domains/search` 与 [搜索索引](../modules/search/indexing.md)。
 

@@ -6,19 +6,19 @@ sidebar_position: 2
 
 ## 1. 测试层次
 
-- **单元测试**：纯逻辑、Mock 依赖  
-- **集成测试**：Handler → Service → Repo，常用 **Postgres + Redis**（环境变量 / testcontainers，见 `internal/testutils`）  
-- **E2E**：真实 HTTP 请求（可选）
+- 单元测试：纯逻辑、Mock 依赖  
+- 集成测试：Handler → Service → Repo，常用 Postgres + Redis（环境变量 / testcontainers，见 `internal/testutils`）  
+- E2E：真实 HTTP 请求（可选）
 
 ## 2. 工具
 
-- `testing` + **testify**（`assert` / `require` / `mock`）  
+- `testing` + testify（`assert` / `require` / `mock`）  
 - 包级测试：`go test ./...`（在 `server/` 下）
 
 ## 3. 仓库约定
 
 - 复用 `internal/testutils`、`testfactory`（若存在）  
-- 集成测需要扩展时用带 **pgvector / 可选 jieba** 的镜像  
+- 集成测需要扩展时用带 pgvector / 可选 jieba 的镜像  
 - **不要**假设默认 SQLite  
 
 ## 4. 示例结构（示意）

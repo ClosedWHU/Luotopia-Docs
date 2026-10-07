@@ -6,18 +6,18 @@ sidebar_position: 0
 
 代码：`internal/domains/identity`。身份认证域提供基于 OIDC 协议的统一身份管理：注册登录、会话、社交登录（Ham）与用户 API 凭证。
 
-**完整端点见 [身份认证接口参考](../../api/identity.md)**。
+完整端点见[身份认证接口参考](../../api/identity.md)。
 
 ## 子文档
 
-- **[OIDC 协议实现](oidc.md)**：授权码流、令牌
-- **[Ham 与教务 CAS](whu_auth.md)**：社交登录与 App 教务会话边界
-- **[账户与资料](profile.md)**
-- **[安全与防御策略](security.md)**：JWT、Altcha、无全站 HMAC
-- **[MFA 与 Passkey](mfa_passkeys.md)**：SMTP、OTP、域名关联
-- **[租户与社交登录](tenant.md)**
-- **[账号注销策略](account_deletion.md)**
-- **[隐私同意、设备与云同步](privacy_sync.md)**
+- [OIDC 协议实现](oidc.md)：授权码流、令牌
+- [Ham 与教务 CAS](whu_auth.md)：社交登录与 App 教务会话边界
+- [账户与资料](profile.md)
+- [安全与防御策略](security.md)：JWT、Altcha、无全站 HMAC
+- [MFA 与 Passkey](mfa_passkeys.md)：SMTP、OTP、域名关联
+- [租户与社交登录](tenant.md)
+- [账户注销策略](account_deletion.md)
+- [隐私同意、设备与云同步](privacy_sync.md)
 
 ## 目录结构
 

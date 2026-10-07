@@ -11,7 +11,7 @@ sidebar_position: 1
 - PostgreSQL 14+（全文检索 / 扩展）
 - Redis 6+
 
-推荐 Postgres 用仓库 `Dockerfile.db`（**pgvector + pg_jieba + pg_trgm**）。
+推荐 Postgres 用仓库 `Dockerfile.db`（pgvector + pg_jieba + pg_trgm）。
 
 ## 最快路径（Compose）
 
@@ -38,7 +38,7 @@ cp config/config.docker.json config/config.json
 ```
 
 必改：`database`、`cache.redis_url`、`security.jwt_secret`。  
-库名须与 Postgres 一致（样例 **`luotopia`**）。  
+库名须与 Postgres 一致（样例 `luotopia`）。  
 **未知配置字段会启动失败**（避免拼错静默用默认值）。
 
 ### 2. 数据库
@@ -61,7 +61,7 @@ go run ./cmd worker run --config config/config.json
 
 1. 在对应 `internal/domains/<x>/model`（或 handler 旁）定义输入输出  
 2. `repo` / `service` 写逻辑  
-3. `http` 里使用 **`httpapi.Register`**，声明 `Access`（及可选 `Rate`）  
+3. `http` 中使用 `httpapi.Register`，声明 `Access`（及可选 `Rate`）  
 4. 启动后看 OpenAPI 是否更新  
 
 ```go

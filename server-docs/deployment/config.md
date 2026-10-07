@@ -58,7 +58,7 @@ unknown config field(s): ...
 
 ## LUOTOPIA_* 运行时覆盖
 
-`applyEnvironmentOverrides`（`internal/platform/config/env_overrides.go`）在配置文件与默认值**之后**应用显式运行时覆盖，适用于密钥与部署相关连接配置。仅当环境变量存在时生效。
+`applyEnvironmentOverrides`（`internal/platform/config/env_overrides.go`）在配置文件与默认值之后应用显式运行时覆盖，适用于密钥与部署相关连接配置。仅当环境变量存在时生效。
 
 | 变量 | 覆盖目标 |
 |------|----------|

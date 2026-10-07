@@ -12,10 +12,10 @@ sidebar_position: 20
 
 ## 能力
 
-- **公开配置读取**：客户端拉取自身可见的开关与参数（`GET /api/v1/cloud-control/config`）。
-- **管理端**：flags 与定向规则（targeting rules）的增删改查（`/api/v1/admin/cloud-control/*`）。
+- 公开配置读取：客户端拉取自身可见的开关与参数（`GET /api/v1/cloud-control/config`）。
+- 管理端：flags 与定向规则（targeting rules）的增删改查（`/api/v1/admin/cloud-control/*`）。
 
-**完整端点见 [云控接口参考](../api/cloud-control.md) 与 [管理后台接口参考](../api/admin.md)**。
+完整端点见[云控接口参考](../api/cloud-control.md)与[管理后台接口参考](../api/admin.md)。
 
 Flag 以 key 标识，带 `value_type` 与默认值（`default_value`）；定向规则（`Rule`）可按 `role` 或 `user_id` 覆盖默认值，受目标约束校验（`chk_cloud_control_rules_target`）与唯一约束。
 

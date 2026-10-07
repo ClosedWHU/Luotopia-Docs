@@ -12,9 +12,9 @@ description: Material 3、主题与组件约定
 
 ## 原则
 
-1. **语义色**：`Theme.of(context).colorScheme`，少硬编码颜色  
-2. **可复用**：稳定 UI 抽到 `shared` 或 feature widgets  
-3. **图标**：优先 `AppIcons`（若项目有统一入口），避免页面散落随意 `Icons.*`  
+1. 语义色：`Theme.of(context).colorScheme`，少硬编码颜色  
+2. 可复用：稳定 UI 抽到 `shared` 或 feature widgets  
+3. 图标：优先 `AppIcons`（若项目有统一入口），避免页面散落随意 `Icons.*`  
 
 ## 示例
 

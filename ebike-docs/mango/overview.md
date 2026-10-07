@@ -6,7 +6,7 @@ sidebar_position: 1
 ---
 
 > [!NOTE]
-> 完整未脱敏版存档于内部仓库 whu-ebike-re。
+> 完整未脱敏版存档于内部仓库 `whu-ebike-re`。
 
 - 小程序：芒果电单车（appid `wxbd322b1a1127faee`，南宁交投运营，mangoebike.com）
 - 分析对象：`mango-ebike/`（unveilr 还原的 wxapkg 源码，原生小程序构建，压缩单行 JS）
@@ -17,9 +17,9 @@ sidebar_position: 1
 
 ### 目录结构的真实含义
 
-根目录下的 `config/`、`lib/`、`api/`、`index.js`、`components/cell`、`components/groupCell`、`components/wxml-to-canvas`、`miniprogram_npm/*` **不是业务代码**，而是两个腾讯企业微信插件被解包工具摊平到根目录后的产物。证据：
+根目录下这些条目**不是业务代码**：`config/`、`lib/`、`api/`、`index.js`、`components/cell`、`components/groupCell`、`components/wxml-to-canvas`、`miniprogram_npm/*`。它们是解包工具把两个腾讯企业微信插件摊平到根目录后的产物。证据：
 
-- 原始包 `app-service.js`（编译合并 bundle，不收录于仓库）前 ~6420 行是 `plugin-private://wx104a1a20c3f81ec2` 与 `plugin-private://wx4d2deeab3aed6e5a` 的模块定义（其中 `define("config/app.config.js")`、`define("lib/request/request.js")`、`define("components/cell/cell.js")`、`define("components/groupCell/groupCell.js")` 各出现两次，分别属于两个插件）。
+- 原始包 `app-service.js`（编译合并 bundle，不收录于仓库）前 ~6420 行是 `plugin-private://wx104a1a20c3f81ec2` 与 `plugin-private://wx4d2deeab3aed6e5a` 的模块定义。其中 `define("config/app.config.js")`、`define("lib/request/request.js")`、`define("components/cell/cell.js")`、`define("components/groupCell/groupCell.js")` 各出现两次，分别属于两个插件。
 - `app-config.json` 的 `plugins` 字段：
   ```json
   "plugins": {

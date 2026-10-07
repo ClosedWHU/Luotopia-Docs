@@ -33,7 +33,7 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 
 ## 尚未落地的 chat 域
 
-旧「chat 域」已落为 **`internal/domains/social`**（关注 / 拉黑 / 私信），仍无 `internal/domains/chat`，不要依赖 `/api/v1/chat/*` 或历史 WebSocket 私聊说明。当前说明见 [社交与私信](../modules/social.md)。
+旧「chat 域」已落为 `internal/domains/social`（关注 / 拉黑 / 私信），仍无 `internal/domains/chat`，不要依赖 `/api/v1/chat/*` 或历史 WebSocket 私聊说明。当前说明见 [社交与私信](../modules/social.md)。
 
 ## 客户端成绩上传授资（transcript/sync）
 
@@ -56,8 +56,8 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 
 | 旧做法 | 当前替代 |
 |--------|----------|
-| 业务包直接 `huma.Register` + 手写 `Security` | **`httpapi.Register`**（`Access` + 可选 `Rate`） |
-| 用 `anonymousOperations` 路径大表维护匿名接口 | 注册时 **`Access: Public`**；运行时 Access 表为空则 `/api/v1/*` 默认需登录 |
+| 业务包直接 `huma.Register` + 手写 `Security` | `httpapi.Register`（`Access` + 可选 `Rate`） |
+| 用 `anonymousOperations` 路径大表维护匿名接口 | 注册时 `Access: Public`；运行时 Access 表为空则 `/api/v1/*` 默认需登录 |
 | Gin 内存全局限流作为主手段 | 操作级 `Rate` 配额 + 默认 IP 配额兜底（数值与机制以部署配置为准） |
 | Forum Huma Group + 包内鉴权中间件为主 | 完整 path 的 `httpapi.Register` + 全局鉴权/限流（`EnsureDefaults` 仍可用中间件钩子） |
 
@@ -74,7 +74,7 @@ description: 服务端废弃协议与迁移说明的唯一汇总；主文档只�
 
 ## 通知 OpenAPI OperationID
 
-通知域 **OperationID** 由 camelCase 改为 kebab（**HTTP 路径未变**）：
+通知域 OperationID 由 camelCase 改为 kebab（**HTTP 路径未变**）：
 
 | 旧 OperationID | 当前 OperationID |
 |----------------|------------------|

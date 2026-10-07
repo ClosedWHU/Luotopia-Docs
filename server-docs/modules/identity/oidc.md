@@ -10,14 +10,15 @@ sidebar_position: 1
 
 ## 对外端点（OIDC Tag）
 
-对外暴露 OIDC 发现（`/.well-known/openid-configuration`）、JWKS（`/oidc/jwks`）、UserInfo（`/oidc/userinfo`）与 Passkey 关联（`/.well-known/assetlinks.json`、`apple-app-site-association`）。**完整端点见 [身份认证接口参考](../../api/identity.md)**。
+对外暴露 OIDC 发现（`/.well-known/openid-configuration`）、JWKS（`/oidc/jwks`）、UserInfo（`/oidc/userinfo`）与 Passkey 关联（`/.well-known/assetlinks.json`、`apple-app-site-association`）。完整端点见[身份认证接口参考](../../api/identity.md)。
 
+> [!NOTE]
 > 业务 API 的 Bearer access token 与 OIDC ID Token 不是同一概念：业务 JWT 默认使用 `security.jwt_secret`（HS256），见 [安全策略](../../architecture/security_policy.md)。
 
 ## 令牌管理（`service/tokens.go`）
 
-- **ID Token**：含用户核心声明（`sub`、`email`、`name` 等，以实际 claims 为准）；签名材料由 `identity.oidc` 配置提供（密钥只放环境 / 密钥管理，不进文档与 git）。
-- **Access Token / Refresh**：业务 API 访问与刷新轮换；TTL 见配置（`identity.oidc.*`）。
+- ID Token：含用户核心声明（`sub`、`email`、`name` 等，以实际 claims 为准）；签名材料由 `identity.oidc` 配置提供（密钥只放环境 / 密钥管理，不进文档与 git）。
+- Access Token / Refresh：业务 API 访问与刷新轮换；TTL 见配置（`identity.oidc.*`）。
 
 ## OAuth 应用与同意（service 级）
 
@@ -29,7 +30,7 @@ sidebar_position: 1
 
 **Q：为什么 ID Token 的签名验证失败？**
 
-A：请确保使用从 `/oidc/jwks` 端点获取的最新公钥。密钥轮转后旧公钥失效。
+A：使用从 `/oidc/jwks` 端点获取的最新公钥。密钥轮转后旧公钥失效。
 
 ## 相关
 

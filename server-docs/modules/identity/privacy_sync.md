@@ -7,7 +7,7 @@ sidebar_position: 7
 
 ## 目标
 
-在**不上传教务 Cookie / 精确 GPS** 的前提下，支持：
+在**不上传教务 Cookie / 精确 GPS**的前提下，支持：
 
 1. 设备注册 → 精准推送端点  
 2. 目的同意（purpose consent）→ 门禁云同步与分析  
@@ -50,7 +50,7 @@ sidebar_position: 7
 
 - 优先按 `(user_id, device_id)` 更新；否则按 `push_token` upsert  
 - 表：`user_devices`  
-- **与登录会话分离**：踢会话 ≠ 自动删推送 token（可一并调 DELETE）
+- 与登录会话分离：踢会话 ≠ 自动删推送 token（可一并调 DELETE）
 
 ## 隐私同意（非 OAuth 客户端授权）
 
@@ -119,6 +119,6 @@ Purpose 白名单：
 ## 相关
 
 - [身份认证模块](./index.md)
-- [账号注销策略](./account_deletion.md)
+- [账户注销策略](./account_deletion.md)
 - [给分与统计](../course/course_grades.md)
 

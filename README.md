@@ -35,11 +35,11 @@ npm run serve
 
 - `docusaurus.config.ts`：四个 `@docusaurus/plugin-content-docs` 实例（`docs: false` 关闭默认插件）
 - 侧边栏：`sidebarsUser.ts` / `sidebarsClient.ts` / `sidebarsServer.ts` / `sidebarsEbike.ts`
-- **跨分区链接**须用 `pathname:///user/` 等形式（相对 `.md` 链不能跨 plugin）
+- 跨分区链接须用 `pathname:///user/` 等形式（相对 `.md` 链不能跨 plugin）
 - 告警框用 `> [!NOTE]` 等 GitHub 风格语法（`remark-github-blockquote-alert` 已注入四个实例，CSS 在 `src/css/custom.css` 引入）
 - 站点启用 `future.v4`：Docusaurus 原生 `:::` 告警的自定义标题须写 `:::note[标题]` 方括号形式
-- **标题单一来源**：front matter `title` 即页首 H1，正文不再写 `# H1`
-- **命名与 URL**：文件名 `snake_case`（server-docs）/ `kebab-case`（其余三套）；公开 URL 一律 kebab-case，server-docs 多词页经 front matter `slug:` 转换，旧下划线 URL 在 redirects 兜底
+- 标题单一来源：front matter `title` 即页首 H1，正文不再写 `# H1`
+- 命名与 URL：文件名 `snake_case`（server-docs）/ `kebab-case`（其余三套）；公开 URL 一律 kebab-case，server-docs 多词页经 front matter `slug:` 转换，旧下划线 URL 在 redirects 兜底
 
 ## 维护
 
@@ -54,17 +54,17 @@ npm run serve
 
 ### 推荐侧栏顺序
 
-**用户** `1→11`：概览 → 开始 → 账号 → 课表 → 成绩 → 校园 → 日程 → AI → 设置 → 隐私 → FAQ  
+**用户** `1→11`：概览 → 开始 → 账户 → 课表 → 成绩 → 校园 → 日程 → AI → 设置 → 隐私 → FAQ  
 
 **客户端** `0→17`：概览 → 环境 → 架构 → 目录 → Feature 约定 → 状态 → UI → 多端 → 认证 → API → 校园 → 教务认证 → 子应用 → WebView → 功能地图 → 更新 → 测试 → 已移除与迁移  
 
-**服务端顶层**：概览(0) → 架构(1) → 开发(2) → API(3) → 部署(4) → 模块(5) → CLI(6) → 规范(7)（性能调优已并入「开发」）
+**服务端顶层**：概览（0）→ 架构（1）→ 开发（2）→ API（3）→ 部署（4）→ 模块（5）→ CLI（6）→ 规范（7）（性能调优已并入「开发」）
 
 **服务端 API**：使用指南 → HTTP 注册规范 → 调用规范 → 接口参考索引（按域拆分 `identity` / `forum` / `course` / `course-space` / `social` / `dining` / `notification` / `material` / `search` / `campus` / `system` / `cloud-control` / `agent` / `admin`）→ 错误码。端点列表集中在 `api/`，`modules/` 只写概念与边界并链接到 `api/`。
 
-**服务端模块**：分类 身份(1) 论坛(2) 课程(3) 食堂(4) 搜索(5) 基础设施(15) 内部服务(16)；散页 管理(6) → 课表/日历/教室/校园边界(7-10) → 资料/通知(11-12) → 系统/外部面(13-14) → 天气(17) → 社交与私信(18) → 课程信息共享(19) → 云控(20)
+**服务端模块**：分类 身份（1）论坛（2）课程（3）食堂（4）搜索（5）基础设施（15）内部服务（16）；散页 管理（6）→ 课表/日历/教室/校园边界（7-10）→ 资料/通知（11-12）→ 系统/外部面（13-14）→ 天气（17）→ 社交与私信（18）→ 课程信息共享（19）→ 云控（20）
 
-**电单车**：总览(0) → 知音出行（概览 → 认证 → 签名 → 加密 → 接口 → 流程 → 发现）→ 芒果电单车（同构）
+**电单车**：总览（0）→ 知音出行（概览 → 认证 → 签名 → 加密 → 接口 → 流程 → 发现）→ 芒果电单车（同构）
 
 废弃协议、目录迁移与未落地能力不在各页面重复铺陈：
 
@@ -92,8 +92,8 @@ npm run serve
 
 文档站开源；App / Server / 业务实现默认闭源。写作时：
 
-- **要**：协议与边界、模块职责、联调步骤、OpenAPI 摘要、工程约定  
-- **不要**：密钥、可复现的第三方逆向、未公开 API、大段闭源实现  
+- 要：协议与边界、模块职责、联调步骤、OpenAPI 摘要、工程约定  
+- 不要：密钥、可复现的第三方逆向、未公开 API、大段闭源实现  
 
 完整规则：[server-docs/meta/public_docs_policy.md](./server-docs/meta/public_docs_policy.md)（站点内 `/server/meta/public-docs-policy` 以 slug 为准）。
 

@@ -4,17 +4,17 @@ sidebar_label: 概览
 sidebar_position: 0
 ---
 
-论坛模块（`internal/domains/forum`）提供登录用户可见的社区能力。路由经 `httpapi.Register` 声明（User / Admin Access 与写限流）。**字段以 OpenAPI 为准**；排序权重与治理阈值为实现细节，公开文档只描述行为。**完整端点见 [论坛接口参考](../../api/forum.md) 与 [管理后台接口参考](../../api/admin.md)**。
+代码：`internal/domains/forum`，对登录用户开放。路由经 `httpapi.Register` 声明（User / Admin Access 与写限流）。**字段以 OpenAPI 为准**；排序权重与治理阈值为实现细节，公开文档只描述行为。完整端点见[论坛接口参考](../../api/forum.md)与[管理后台接口参考](../../api/admin.md)。
 
 ## 子文档
 
-1. **[治理与规则](governance.md)**：角色、禁言、审核职责  
-2. **[内容系统](content.md)**：帖子/标签与列表搜索行为  
-3. **[互动流](interaction.md)**：赞、评、收藏等  
-4. **[内容安全](moderation.md)**：举报、申诉、自动审核边界  
-5. **[运营工具](operations.md)**：通知、邀请、校友验证等（若启用）  
-6. **[课评与身份策略](course_review_and_identity_policy.md)**：与课程评价资格的交叉约定  
-7. **[声望与等级](karma.md)**：karma 经济、等级、签到与排行榜  
+1. [治理与规则](governance.md)：角色、禁言、审核职责  
+2. [内容系统](content.md)：帖子/标签与列表搜索行为  
+3. [互动流](interaction.md)：赞、评、收藏等  
+4. [内容安全](moderation.md)：举报、申诉、自动审核边界  
+5. [运营工具](operations.md)：通知、邀请、校友验证等（若启用）  
+6. [课评与身份策略](course_review_and_identity_policy.md)：与课程评价资格的交叉约定  
+7. [声望与等级](karma.md)：karma 经济、等级、签到与排行榜  
 
 ## 目录结构
 
@@ -29,22 +29,21 @@ internal/domains/forum/
 ## 信息流排序（行为）
 
 - 支持按时间、热门等排序（参数以 API 为准）。  
-- **热门**：结合互动与时间衰减，使优质且较新的内容更易露出；具体权重**不对外固定**。  
+- 热门：结合互动与时间衰减，权重不对外固定；完整行为约定见[论坛内容与搜索](./content.md)。  
 - 互动后更新排序相关字段；列表查询读冗余分值，避免每次全表重算。  
 
 客户端只依赖排序模式语义，不依赖某一版公式。
 
 ## 常见问题
 
-**Q: 热度是否实时？**  
-A: 在互动写路径更新；读路径使用已存储分值（以实现为准）。
+**Q：热度是否实时？**  
+A：在互动写路径更新；读路径使用已存储分值（以实现为准）。
 
-**Q: 新帖为何可能靠前？**  
-A: 时间衰减使新内容有初始曝光机会。
+**Q：新帖为何可能靠前？**  
+A：时间衰减使新内容有初始曝光机会。
 
 ## 相关
 
 - [治理与规则](./governance.md)
 - [内容安全](./moderation.md)
 - [模块详解](../index.md)
-

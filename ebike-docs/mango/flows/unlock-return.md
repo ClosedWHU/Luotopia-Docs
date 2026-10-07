@@ -48,7 +48,7 @@ exports.default = { conn: e };
 | 扫码态等待 | 1 s（`clearInterval` 条件满足后停） | 纯本地轮询 `globalData` | `pages/index/index.js` `onLoad` |
 | 地图 `regionchange` 结束 | 800 ms 节流 | `GET /operation/parkingLot/near` | `pages/index/index.js` `regionchange` → `serchParkLot()` |
 
-`onHide` 只清 `_homeNoticeTimer`，**不清 `this.timer`（10s 订单轮询）与 30s 预约轮询**；`onUnload` 也不清（只清救援相关定时器）。配合 `app.json` 的 `requiredBackgroundModes: ["location"]` 与 `scope.startLocationUpdateBackground`，小程序在后台仍持续定位并轮询订单 —— 这是骑行中保持状态更新的实现方式，代价是后台常驻网络请求。
+`onHide` 只清 `_homeNoticeTimer`，**不清 `this.timer`（10s 订单轮询）与 30s 预约轮询**；`onUnload` 也不清（只清救援相关定时器）。配合 `app.json` 的 `requiredBackgroundModes: ["location"]` 与 `scope.startLocationUpdateBackground`，小程序在后台仍持续定位并轮询订单——这是骑行中保持状态更新的实现方式，代价是后台常驻网络请求。
 
 5. 定位推送方向是**客户端 → 服务端**：`utils/encapsulation/WXFeature.js` `listenLocationChange()` 调 `wx.startLocationUpdateBackground()` + `wx.onLocationChange(cb)`，回调只更新 `globalData.location`（供下一次请求的 `mg-dvi` 与 `center` 使用），**不主动上报**。没有单独的轨迹上传接口；轨迹由服务端根据订单 `route` 自行计算（前端只读 `order.route.distance` 与 `route.end.lngLat`）。
 
@@ -253,7 +253,7 @@ PUT /order/order/finish 的失败分支（服务端通过 response 里的开关�
 | 3 | 超时结束 | — |
 | 4 | 长时无移动结束 | — |
 | 5 | 后台结束订单 | — |
-| 6 | 系统结束订单 | **注意与扫码车辆详情接口（见[车辆与开锁还车接口](../api/ride.md)）返回的 `state === 6`（车辆报失，走 `findLostTraction`）不是同一个字段的枚举** —— 后者是接口响应顶层的 `state`，请求层对该状态会抑制错误 toast |
+| 6 | 系统结束订单 | **注意与扫码车辆详情接口（见[车辆与开锁还车接口](../api/ride.md)）返回的 `state === 6`（车辆报失，走 `findLostTraction`）不是同一个字段的枚举**——后者是接口响应顶层的 `state`，请求层对该状态会抑制错误 toast |
 | 7 | 禁停区结束 | 对应 `payInfo.noParkingDispatchCost` |
 | 8 | 未支付 | 还车后 `state === 8` → `hasUnpayOrder = true`、`hasUnPayAmount = payInfo.rent.finalTotal`，首页弹「您有调度费或租金未付」，扫码被拦，必须先 `_recharge()` 补付 |
 | 其他 | 状态异常 | — |
@@ -302,9 +302,9 @@ PUT /order/order/finish 的失败分支（服务端通过 response 里的开关�
 
 显示开关规则（`setValue()`）：`visible = always || parseFloat(value) !== 0`，即**没有 `always` 标记的费用项为 0 时整行隐藏**；`isMergedDispatchCost === true` 时额外把带 `mergedHidden` 的两行强制 `visible = false`。`descFrom` 机制会把 `freeNoParkingDispatchReason` 的文案包成 `[...]` 附在对应行下方。
 
-另外两处细节：`needPayAmount` 只取 `payInfo.rent.finalTotal/100`（不含各项罚费/减免，说明「待支付金额」就是租金部分）；`isPaid = (order.orderSource||{}).paid || order.state === 2`；`confirm()` 有 300ms 的 `lockState` 防重入（连点 toast「您点的有点快哦~」）；`needHelper()` 走 WebView 打开承满点客服，URL 同样明文带 `phone` 与 `region`。
+另有几处细节：`needPayAmount` 只取 `payInfo.rent.finalTotal/100`（不含各项罚费/减免，说明「待支付金额」就是租金部分）；`isPaid = (order.orderSource||{}).paid || order.state === 2`；`confirm()` 有 300ms 的 `lockState` 防重入（连点 toast「您点的有点快哦~」）；`needHelper()` 走 WebView 打开承满点客服，URL 同样明文带 `phone` 与 `region`。
 
-`isMergedDispatchCost` 说明服务端存在两种账目形态：**分列**（调度费单列）与**合并**（调度费折进 `rent`）。前端只做展示切换，不参与计算 —— 所有金额都由服务端算好下发，客户端无法通过改本地数据影响计费，但也意味着**还车失败重试（`forceReturn:true`）时的最终金额完全由服务端决定**，前端文案已明示「最终结算费用有可能有些许浮动」。
+`isMergedDispatchCost` 说明服务端存在两种账目形态：**分列**（调度费单列）与**合并**（调度费折进 `rent`）。前端只做展示切换，不参与计算——所有金额都由服务端算好下发，客户端无法通过改本地数据影响计费，但也意味着**还车失败重试（`forceReturn:true`）时的最终金额完全由服务端决定**，前端文案已明示「最终结算费用有可能有些许浮动」。
 
 另有两处非 `payInfo` 的金额来源：
 - `charteredEbikeCard.amount`（包车卡费用，单独一行展示，`isCharterOrder = !!order.charteredEbikeCard`）；

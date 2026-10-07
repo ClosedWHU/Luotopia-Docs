@@ -15,7 +15,7 @@ REST + [Huma v2](https://huma.rocks/)。**完整路径与字段以 OpenAPI 为�
 |----|-----|
 | 前缀 | `/api/v1` |
 | 格式 | `application/json`（失败多为 `application/problem+json`） |
-| 端口 | 配置 `server.port`（Docker 样例 **6262**） |
+| 端口 | 配置 `server.port`（Docker 样例 6262） |
 | 健康检查 | `GET /health`、就绪 `GET /ready` |
 
 ## 认证
@@ -38,8 +38,8 @@ X-Api-Key: <key>
 X-Api-Secret: <secret>
 ```
 
-- 用户在账号里创建的个人凭证  
-- **不是**对 body 的 HMAC；**不是**全站 `api_secret`  
+- 用户在个人账户中创建的凭证  
+- 只用于标识调用方：不签名 body，也不使用全站 `api_secret`  
 - 权限窄，多为部分只读 GET；另有凭证级配额  
 
 ### Web / OIDC
@@ -63,7 +63,7 @@ http://localhost:6262/openapi.json  # 或仓库导出的 openapi.json
 
 ## 不在本 API 的客户端能力
 
-下列由 **官网 homepage** 或 **App 直连第三方** 提供，不要在 OpenAPI 里找主路径：
+下列能力由官网 homepage 或 App 直连第三方提供，主路径不在 OpenAPI 中：
 
 | 能力 | 来源 |
 |------|------|

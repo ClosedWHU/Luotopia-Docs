@@ -7,11 +7,11 @@ sidebar_position: 21
 
 代码：`internal/domains/agent`（`http`、`llm`、`model`、`prompt`、`service`、`tools`）。**字段与完整路径以 OpenAPI 为准**。
 
-服务端 AI 助手域提供带工具调用的 LLM 循环（区别于 App 内用户自配模型的客户端 AI，见 [用户指南 · AI](pathname:///user/ai)）。公开文档只描述**接口与工具边界**，不展开提示词 / 模型实现细节。
+服务端 AI 助手域运行带工具调用的 LLM 循环（区别于 App 内用户自配模型的客户端 AI，见 [用户指南 · AI](pathname:///user/ai)）。公开文档只描述接口与工具边界，不展开提示词 / 模型实现细节。
 
 ## 接口
 
-`POST /api/v1/agent/chat`（对话，登录 + 操作级限流）与 `GET /api/v1/agent/tools`（工具目录）。**完整端点见 [AI 助手接口参考](../api/agent.md)**。
+`POST /api/v1/agent/chat`（对话，登录 + 操作级限流）与 `GET /api/v1/agent/tools`（工具目录）。完整端点见 [AI 助手接口参考](../api/agent.md)。
 
 LLM 循环：最多 N 轮工具调用（实现以内置参数为准，如 5 轮 / 1200 tokens），`llm/` 为 Provider 抽象（含 OpenAI 客户端），`prompt/` 为系统提示词。
 

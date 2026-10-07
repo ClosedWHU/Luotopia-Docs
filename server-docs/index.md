@@ -7,11 +7,12 @@ description: Go 后端：架构、开发、API、部署与模块
 
 Go 模块化单体（Huma + Gin + Postgres + Redis）。入口：`serve` | `worker` | `cli` | `migrate` | `root` | `seed`。
 
-**字段级 API 以 OpenAPI 为准。**
+字段级 API 以 OpenAPI 为准。
 
 其他分区：[用户指南](pathname:///user/) · [客户端开发](pathname:///client/)
 
-> **边界提示**：App 的 **安装包更新 / 热更新脚本 / 天气** 主路径在官网或第三方，不在本仓库业务 API。见 [system](./modules/system.md)、[校园边界](./modules/campus_proxies.md)。
+> [!NOTE]
+> App 的安装包更新、热更新脚本与天气的主路径在官网或第三方，不在本仓库业务 API。见 [system](./modules/system.md)、[校园边界](./modules/campus_proxies.md)。
 
 ## 先读
 
@@ -27,13 +28,24 @@ Go 模块化单体（Huma + Gin + Postgres + Redis）。入口：`serve` | `work
 
 ## 侧栏结构（自上而下）
 
-1. **概览**（本页）  
-2. **系统架构** → 概览 / 库表 / 安全 / 迁移  
-3. **开发指南** → 环境 / 测试 / 开发规范 / 性能调优  
-4. **接口文档** → 使用指南 / [HTTP 注册规范](./api/http_api.md) / 调用规范 / [接口参考索引](./api/full_reference.md)（按域拆分：身份、论坛、课程、课程信息共享、社交、食堂、通知、资料、搜索、校园、系统、云控、AI 助手、管理后台）/ 错误码（**以 OpenAPI 为准**）  
-5. **运维部署** → 配置 / Docker / CI/CD / 监控 / 构建  
-6. **模块详解** → 身份 → 论坛 → 课程 → 食堂 → 搜索 → 管理 → 课表 / 日历 / 教室 / 校园边界 → 资料 / 通知 → 系统 / 外部面 → 基础设施 → 内部服务 → 天气 → 社交与私信 → 课程信息共享 → 云控  
-7. **CLI 参考**  
-8. **规范与社区** → 风格 / [公开文档边界](./meta/public_docs_policy.md) / [已移除与迁移](./meta/removed_and_migrated.md) / 贡献  
+1. 概览（本页）
+2. 系统架构：概览 / 库表 / 安全 / 迁移
+3. 开发指南：环境 / 测试 / 开发规范 / 性能调优
+4. 接口文档：
+    - 使用指南、调用规范、错误码
+    - [HTTP 注册规范](./api/http_api.md)
+    - [接口参考索引](./api/full_reference.md)按域拆分：
+        - 身份、论坛、课程、课程信息共享、社交、食堂、通知
+        - 资料、搜索、校园、系统、云控、AI 助手、管理后台
+5. 运维部署：配置 / Docker / CI/CD / 监控 / 构建
+6. 模块详解：
+    - 身份 → 论坛 → 课程 → 食堂 → 搜索 → 管理
+    - 课表 / 日历 / 教室 / 校园边界
+    - 资料 / 通知
+    - 系统 / 外部面
+    - 基础设施 → 内部服务
+    - 天气 → 社交与私信 → 课程信息共享 → 云控
+7. CLI 参考
+8. 规范与社区：风格 / [公开文档边界](./meta/public_docs_policy.md) / [已移除与迁移](./meta/removed_and_migrated.md) / 贡献
 
 模块入口：[模块详解](./modules/index.md)

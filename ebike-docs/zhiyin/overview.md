@@ -6,11 +6,15 @@ sidebar_position: 1
 ---
 
 > [!NOTE]
-> 完整未脱敏版存档于内部仓库 whu-ebike-re。
+> 完整未脱敏版存档于内部仓库 `whu-ebike-re`。
 
 ## 概述
 
-- 「知音出行」是湖北知音动漫有限公司运营的共享电单车小程序，但它是**小安科技（xiaoantech）共享两轮车 SaaS 的白标（OEM）租户端**：代码内部名称为「电驴出行」，所有后端域名、静态资源、配置体系均属 `xiaoantech.com`。租户身份通过微信第三方平台的 `ext.json`（运行时 `wx.getExtConfigSync()`）注入，本包的 ext 配置完整保留在 **`app-config.json` 的 `"ext"` 字段**中。
+- 「知音出行」是湖北知音动漫有限公司运营的共享电单车小程序，但它实际是**小安科技（xiaoantech）共享两轮车 SaaS 的白标（OEM）租户端**：
+  - 代码内部名称为「电驴出行」；
+  - 所有后端域名、静态资源与配置体系均属 `xiaoantech.com`；
+  - 租户身份由微信第三方平台的 `ext.json` 注入，运行时经 `wx.getExtConfigSync()` 读取；
+  - 本包的 ext 配置完整保留在 **`app-config.json` 的 `"ext"` 字段**中。
 - 关键租户参数（`app-config.json` → ext）：
   - `name: "知音出行"`，`alias: "zhiyin"`
   - `platformTenantId: "1534"`，`platformSecret: "<已脱敏：platformSecret>"`
@@ -21,8 +25,13 @@ sidebar_position: 1
   - `platform.mp-weixin.appid: "wx8df7475fde0271c6"`；`pay.channelType: "BAOFU_WXLITE"`（宝付支付通道）；`pay.payBaseApi: "https://pay.xiaoantech.com"`
   - `faceCheckType: "chuangLan"`（创蓝人脸核身）
 - 客户端版本号 `version: "5.23.0"`，随每个请求 body 上报。
-- **代码完整度**：主包页面（`pages/map`、`pages/launch`、`pages/webview` 等）、`components/`、`common/`（vendor/main/runtime）、分包 `pagesSub`（79 页，含 precycling/riding 确认页、charge、order、repair、发票、identityAuth 等）与 `pagesSub2`（24 页，含 quickLogin/phoneLogin/smsVerification、riding、pay、paymentResult、verified 等）为完整代码。`pagesSub3`（7 页：interactivePopup、review/submit、creditScore、rideTask、oneCardBind、busDiscountHome、takePhotoAi）与 `pagesSub4`（7 页：ridingReport、luckyLot、annualRidingReport2024、lotteryActivity×3）无对应 wxapkg，仅存 `.json` 页面配置，涉及条目见[未决问题](./findings.md)。分包页面 JS 中**无任何硬编码接口 URL**（全部经 vendor API 定义模块调用）。
-- 业务 API 总数：**344 个已解析接口**（另含 3 个未走业务网关的独立端点：域名池配置拉取、日志 `/log/app`、`/log/event`），全部为 POST + JSON。未发现任何 WebSocket（`wss://`）地址，`connectSocket` 仅出现在超时配置中（`app-config.json` networkTimeout）。接口级清单存档于私有仓 `whu-ebike-re`，公开侧见[接口能力类别](./api/auth-user.md)各页。
+- 代码完整度：
+  - 完整代码：主包页面（`pages/map`、`pages/launch`、`pages/webview` 等）、`components/`、`common/`（vendor/main/runtime）、分包 `pagesSub`（79 页，含 precycling/riding 确认页、charge、order、repair、发票、identityAuth 等）、分包 `pagesSub2`（24 页，含 quickLogin/phoneLogin/smsVerification、riding、pay、paymentResult、verified 等）。
+  - 源码缺失：`pagesSub3`（7 页：interactivePopup、review/submit、creditScore、rideTask、oneCardBind、busDiscountHome、takePhotoAi）与 `pagesSub4`（7 页：ridingReport、luckyLot、annualRidingReport2024、lotteryActivity×3）无对应 wxapkg，仅存 `.json` 页面配置，涉及条目见[未决问题](./findings.md)。
+  - 分包页面 JS 中**无任何硬编码接口 URL**，全部经 vendor API 定义模块调用。
+- 业务 API 总数：**344 个已解析接口**，全部为 POST + JSON。另有 3 个未走业务网关的独立端点：域名池配置拉取、日志 `/log/app` 与 `/log/event`。
+- 未发现任何 WebSocket（`wss://`）地址，`connectSocket` 仅出现在超时配置中（`app-config.json` networkTimeout）。
+- 接口级清单存档于私有仓 `whu-ebike-re`，公开侧见[接口能力类别](./api/auth-user.md)各页。
 
 ## API 主机与环境
 

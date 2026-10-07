@@ -10,9 +10,9 @@ sidebar_position: 17
 服务端无此模块：
 
 - 无 `internal/weather`、无 `/api/v1/weather/*`
-- 配置里写 `weather` 会因 **unknown 字段** 启动失败
+- 配置中写 `weather` 会因 unknown 字段启动失败
 
-天气由 **Flutter 客户端**直连第三方（OpenMeteo / 小米 / AccuWeather 等），本地缓存与重试。
+天气由 Flutter 客户端直连第三方（OpenMeteo / 小米 / AccuWeather 等），本地缓存与重试。
 
 ## 可选后续
 

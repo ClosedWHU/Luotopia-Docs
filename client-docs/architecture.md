@@ -54,7 +54,7 @@ flowchart TB
 
 ## UI
 
-- **Material 3**（含 M3E 组件）  
+- Material 3（含 M3E 组件）  
 - 通用组件：`shared` 或 feature 内 widgets  
 - 全局 SnackBar：`showAppSnackBar*` / `rootScaffoldMessengerKey`  
 

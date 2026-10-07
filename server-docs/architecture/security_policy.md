@@ -7,17 +7,17 @@ slug: security-policy
 
 当前安全模型：HTTPS + Bearer JWT（或会话 / 用户 API 凭证）+ 服务端鉴权与限流。
 
-- **不做**：全站请求 HMAC / `X-Api-Sign`（说明见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)）。
+- 不做：全站请求 HMAC / `X-Api-Sign`（说明见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)）。
 - 实现：`internal/middleware/huma_auth.go`、`httpapi` Access 注册表、限流中间件。
 
 ## 1. 认证机制
 
 ### 1.1 JWT 令牌（主路径）
 
-- **签署算法**：HS256，密钥为 `security.jwt_secret`。
-- **载荷 (Claims)**：含用户 ID、用户名、角色、是否管理员、可选 `session_id`，以及标准 `exp`。
-- **使用方式**：`Authorization: Bearer <access_token>`。
-- **会话绑定**：若 JWT 含 `session_id`，服务端会校验会话是否仍有效；吊销会话后 token 立即失效。
+- 签署算法：HS256，密钥为 `security.jwt_secret`。
+- 载荷（Claims）：含用户 ID、用户名、角色、是否管理员、可选 `session_id`，以及标准 `exp`。
+- 使用方式：`Authorization: Bearer <access_token>`。
+- 会话绑定：若 JWT 含 `session_id`，服务端会校验会话是否仍有效；吊销会话后 token 立即失效。
 
 ### 1.2 OIDC / SSO 会话
 
@@ -27,14 +27,14 @@ slug: security-policy
 ### 1.3 用户 API 凭证（集成用）
 
 - 用户可创建自己的 `API Key` + `API Secret`（个人开发者/脚本集成）。
-- **用法**：请求头同时携带 `X-Api-Key` 与 `X-Api-Secret`（明文比对/哈希校验凭证本身）。
-- **不是** 全站共享的请求 HMAC 签名；也**不**对 body 做 `X-Api-Sign`。
+- 用法：请求头同时携带 `X-Api-Key` 与 `X-Api-Secret`（明文比对/哈希校验凭证本身）。
+- **不是**全站共享的请求 HMAC 签名；也不对 body 做 `X-Api-Sign`。
 - 权限较窄：默认仅允许部分只读 GET（如 courses / teachers / reviews / search / random）。
 - 另有凭证级 RPM / RPH / 日 / 月配额（与接口限流叠加）。
 
 ### 1.4 匿名与 Access 声明
 
-`/api/v1/*` **默认需要认证**。公开接口在注册时声明 **`Access: Public`**（`httpapi.Register`），同时写入 OpenAPI Security 与运行时 Access 表。
+`/api/v1/*` **默认需要认证**。公开接口在注册时声明 `Access: Public`（`httpapi.Register`），同时写入 OpenAPI Security 与运行时 Access 表。
 
 典型公开能力包括（完整列表以 OpenAPI 与代码注册为准）：
 
@@ -49,17 +49,17 @@ slug: security-policy
 
 ### 2.1 角色 / Access
 
-1. **Public**：无需登录（仅声明为 Public 的操作）。
-2. **Optional**：有有效凭证则认证，无 / 失效则匿名放行（不拒绝请求）。
-3. **User**：登录用户（JWT / Session；部分路径允许 API Key）。
-4. **Admin**：管理能力（admin 或 superadmin）。
-5. **SuperAdmin**：更敏感管理（用户、队列、缓存、embedding 等；路径与 Access 声明双重约束）。
+1. Public：无需登录（仅声明为 Public 的操作）。
+2. Optional：有有效凭证则认证，无 / 失效则匿名放行（不拒绝请求）。
+3. User：登录用户（JWT / Session；部分路径允许 API Key）。
+4. Admin：管理能力（admin 或 superadmin）。
+5. SuperAdmin：更敏感管理（用户、队列、缓存、embedding 等；路径与 Access 声明双重约束）。
 
 ### 2.2 路由保护
 
 - 业务 API 经 `httpapi.Register` 声明 `Access`；`NewHumaAuthMiddleware` 按 Access 注册表与路径规则强制执行。
 - OpenAPI 的 `Security` 由 Access 生成。
-- 传输层安全依赖 **HTTPS**（生产 `server.public_base` 应为 `https://`）。
+- 传输层安全依赖 HTTPS（生产 `server.public_base` 应为 `https://`）。
 
 ### 2.3 系统权限码
 
@@ -78,15 +78,15 @@ slug: security-policy
 | 云控 | `cloud-control:manage` |
 
 > [!IMPORTANT]
-> 上表为**启动引导种子化**的权限码；未列出的权限码默认不授予任何角色，需在 RBAC 中手工创建并授予后方可通过校验。
+> 上表为启动引导种子化的权限码；未列出的权限码默认不授予任何角色，需在 RBAC 中手工创建并授予后方可通过校验。
 
 ## 3. 安全防御措施
 
 ### 3.1 速率限制
 
-- **默认**：未单独声明 Rate 的操作回落到默认 IP 配额；配额与窗口机制以部署配置（`security.rate_limit`）为准。
-- **按操作声明**：敏感操作可在注册时通过 `httpapi.Op.Rate` 单独声明配额。
-- **豁免**：基础设施与静态读路径可豁免限流，清单以实现为准。
+- 默认：未单独声明 Rate 的操作回落到默认 IP 配额；配额与窗口机制以部署配置（`security.rate_limit`）为准。
+- 按操作声明：敏感操作可在注册时通过 `httpapi.Op.Rate` 单独声明配额。
+- 豁免：基础设施与静态读路径可豁免限流，清单以实现为准。
 - 登录等路径仍可叠加 identity 侧尝试次数限制。
 
 详见 [HTTP 注册规范 · 限流](../api/http_api.md#4-限流)。
@@ -111,9 +111,9 @@ slug: security-policy
 
 ## 4. 当前请求安全模型
 
-1. **TLS（HTTPS）** 保护信道  
-2. **用户级 JWT / Session / API 凭证** 证明身份  
-3. **服务端授权与限流**（Access + Rate）
+1. TLS（HTTPS）保护信道  
+2. 用户级 JWT / Session / API 凭证证明身份  
+3. 服务端授权与限流（Access + Rate）
 
 ## 5. 漏洞反馈
 
@@ -121,17 +121,17 @@ slug: security-policy
 
 ## 6. FAQ
 
-**Q: 为什么没有请求体签名？**  
-A: 当前模型为 HTTPS + 用户凭证；旧全站 HMAC 见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)。
+**Q：为什么没有请求体签名？**  
+A：当前模型为 HTTPS + 用户凭证；旧全站 HMAC 见 [已移除与迁移](../meta/removed_and_migrated.md#全站请求-hmac)。
 
-**Q: JWT 密钥泄露后怎么办？**  
-A: 立即轮换 `security.jwt_secret`，并视情况吊销会话；已签发的 access token 在旧密钥下仍可能有效至过期，应配合短 TTL 与会话绑定。
+**Q：JWT 密钥泄露后怎么办？**  
+A：立即轮换 `security.jwt_secret`，并视情况吊销会话；已签发的 access token 在旧密钥下仍可能有效至过期，应配合短 TTL 与会话绑定。
 
-**Q: 不需要登录的接口如何声明？**  
-A: 注册时使用 `Access: Public`。见 [HTTP 注册规范](../api/http_api.md)。
+**Q：不需要登录的接口如何声明？**  
+A：注册时使用 `Access: Public`。见 [HTTP 注册规范](../api/http_api.md)。
 
-**Q: 旧的匿名路径表 / huma.Register 去哪了？**  
-A: 见 [已移除与迁移 · HTTP 路由注册](../meta/removed_and_migrated.md#http-路由注册huma--httpapi)。
+**Q：旧的匿名路径表 / huma.Register 去哪了？**  
+A：见 [已移除与迁移 · HTTP 路由注册](../meta/removed_and_migrated.md#http-路由注册huma--httpapi)。
 
 ## 相关
 

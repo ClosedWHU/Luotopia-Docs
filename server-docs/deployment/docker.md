@@ -7,7 +7,7 @@ sidebar_position: 2
 
 仓库：`server/docker-compose.yml`。
 
-## 一键
+## 快速部署
 
 ```bash
 cd server
@@ -25,7 +25,7 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 | 服务 | 作用 |
 |------|------|
-| `postgres` | `Dockerfile.db`：pg18 + **pgvector** + **pg_jieba** |
+| `postgres` | `Dockerfile.db`：pg18 + pgvector + pg_jieba |
 | `redis` | 缓存 / 队列 |
 | `luotopia-api` | `serve` |
 | `luotopia-worker` | 后台任务 |
@@ -46,9 +46,9 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 ## 必对齐的三项
 
-1. **库名**：`POSTGRES_DB` = 配置 `database.name`（样例 **`luotopia`**）  
-2. **配置路径**：`CONFIG_PATH=config/config.docker.json`（或你挂载的文件）  
-3. **端口映射**：宿主机端口 → 容器内真实 `server.port`（勿把 6262 映射到 8080）  
+1. 库名：`POSTGRES_DB` = 配置 `database.name`（样例 `luotopia`）  
+2. 配置路径：`CONFIG_PATH=config/config.docker.json`（或实际挂载的文件）  
+3. 端口映射：宿主机端口 → 容器内真实 `server.port`（勿把 6262 映射到 8080）  
 
 容器内 DB/Redis 主机名是 `postgres` / `redis`，不是 `localhost`。
 
@@ -79,7 +79,10 @@ docker compose exec redis redis-cli
 
 ## 数据持久化
 
-官方 compose 使用 `./docker-volumes/postgres`、Redis volume 与 `storage-data:/app/storage`（以当前 yml 为准）。API 和 worker 必须挂载同一个 `storage-data`，否则上传、下载、异步删除和 reconcile 会看到不同的对象集合。`docker compose down` 不会删除 volume；需清理时再 `down -v` 或手动删除数据目录。
+官方 compose 使用 `./docker-volumes/postgres`、Redis volume 与 `storage-data:/app/storage`（以当前 yml 为准）。
+
+- API 和 worker 必须挂载同一个 `storage-data`，否则上传、下载、异步删除和 reconcile 会看到不同的对象集合。
+- `docker compose down` 不会删除 volume；需清理时改用 `down -v`，或手动删除数据目录。
 
 ### 多实例存储要求
 
@@ -92,16 +95,21 @@ docker compose exec redis redis-cli
 - 不得为每个 Pod/主机配置独立本地盘，即使容器内路径都显示为 `/app/storage`。
 - rolling update 前先执行数据库迁移（readiness 依赖的探测表由迁移创建）。
 
-API 的 `GET /ready` 与 worker 启动会校验共享存储：实例间通过共享存储哨兵校验挂载一致性；机制细节以实现为准。如果实例挂载到不同 namespace、后端不可写或校验不一致，API 将返回不就绪，worker 将拒绝启动 dispatcher/reconcile。HTTP 响应只暴露稳定的 `storage unavailable`，具体错误留在服务日志中。
+API 的 `GET /ready` 与 worker 启动都会校验共享存储：实例间通过共享存储哨兵校验挂载一致性，机制细节以实现为准。
+
+如果实例挂载到不同 namespace、后端不可写或校验不一致，API 返回不就绪，worker 拒绝启动 dispatcher/reconcile。HTTP 响应只暴露稳定的 `storage unavailable`，具体错误留在服务日志中。
 
 > [!CAUTION]
-> readiness 能阻止新启动的 split mount 实例接流量，但不能替代存储监控、容量告警和备份。变更共享卷前应在预发布环境验证两个独立 API 实例间上传/下载，并验证 worker 能处理另一实例生成的 deletion intent；否则可能导致素材丢失或不一致。
+> readiness 能阻止新启动的 split mount 实例接流量，但不能替代存储监控、容量告警和备份。变更共享卷前应在预发布环境验证以下两点，否则可能导致素材丢失或不一致：
+>
+> - 两个独立 API 实例之间的上传与下载
+> - worker 能处理另一实例生成的 deletion intent
 
 ## Postgres 插件
 
 Compose 不挂载或执行数据库 `init.sql`；API/Worker 启动时统一运行应用内 migration 和 bootstrap。
 
-`Dockerfile.db` 在镜像内编译安装 **pg_jieba**；`vector`、`pg_trgm` 在运行时 `CREATE EXTENSION`。不要用官方裸 `pgvector` 镜像替代并期望有 jieba。
+`Dockerfile.db` 在镜像内编译安装 pg_jieba；`vector`、`pg_trgm` 在运行时 `CREATE EXTENSION`。不要用官方裸 `pgvector` 镜像替代并期望有 jieba。
 
 ## 单容器示例
 

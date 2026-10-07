@@ -5,7 +5,8 @@ sidebar_label: 接口参考索引
 sidebar_position: 4
 ---
 
-> **权威来源**：运行中服务导出的 OpenAPI（`/openapi.json` 或 `/docs`）。本页为**索引**，按域拆分的完整端点列表见下列各页；字段类型、枚举、错误体以 OpenAPI 为准。
+> [!NOTE]
+> **权威来源**：运行中服务导出的 OpenAPI（`/openapi.json` 或 `/docs`）。本页为索引，按域拆分的完整端点列表见下列各页；字段类型、枚举、错误体以 OpenAPI 为准。
 >
 > 认证：`Authorization: Bearer`；`/api/v1` 默认需登录（声明 `AccessPublic` 的除外）。无全站 `X-Api-Sign`。安装包更新 / 热更新 **不在** 本 API 主路径，见 [官网与外部面](../modules/external_surfaces.md)。
 

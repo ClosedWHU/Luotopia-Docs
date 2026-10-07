@@ -9,24 +9,24 @@ sidebar_position: 8
 
 ## 1. Ham 社交登录（服务端 identity）
 
-Luotopia **账号**可通过配置的社交提供商 **Ham**（武汉大学另一款校园应用）绑定 / 登录（`identity.social.providers` 中 `id: ham`），以 Ham 账号作为社交登录源。
+Luotopia 账户可绑定社交提供商 Ham（武汉大学另一款校园应用）并用它登录，Ham 账户即社交登录源。提供商在 `identity.social.providers` 中配置，Ham 对应 `id: ham`。
 
 - 协议：OAuth2 / OIDC 风格跳转 → code → token → userinfo
 - 实现：`internal/domains/identity`（社交登录 handler / `service/oidc_flow.go`）；Ham 评分客户端（读大盘 + 写成绩贡献）在 `course_review/client/ham.go`
-- 结果：建立 **Luotopia 用户会话 / JWT**，不是武大教务 Cookie
+- 结果：建立 Luotopia 用户会话 / JWT，不是武大教务 Cookie
 
-配置字段以 `IdentitySocialProvider` 为准（如 `clientId`、`authorizationEndpoint` 等 camelCase JSON），不是过时文档里的 `client_id` 随意写法。
+配置字段以 `IdentitySocialProvider` 为准（如 `clientId`、`authorizationEndpoint` 等 camelCase JSON）；过时文档中的 `client_id` 写法已不适用。
 
 ## 2. 武大统一身份认证（CAS）/ 教务
 
-课表导入、空闲教室用教务数据、图书馆、场馆等**依赖武大个人会话**的能力，主路径在 **Flutter App** 的 `whu_auth` 中完成；Cookie / Token **只在设备本地**。
+课表导入、空闲教室的教务数据、图书馆与场馆等能力依赖武大个人会话，主路径在 Flutter App 的 `whu_auth` 中完成。Cookie / Token **只在设备本地**。
 
-服务端会**一次性核验**武大会话/票据（不持久化会话），且注册/绑定同时支持**本科 jwgl** 与**研究生 newyjs** 两个渠道（`cas_service` 选择器，`undergraduate` / `graduate`）：
+服务端**一次性核验**武大会话/票据，不持久化会话。注册与绑定同时支持本科 jwgl 与研究生 newyjs 两个渠道，由 `cas_service` 选择器切换（`undergraduate` / `graduate`）：
 
-- 评价资格同步：`POST /api/v1/user/review-eligibility/sync` 需 `cas_ticket` **和** `captcha_token`，由 `course_review/client/jwgl.go` 消费票据核验成绩。
+- 评价资格同步：`POST /api/v1/user/review-eligibility/sync` 需 `cas_ticket` 和 `captcha_token`，由 `course_review/client/jwgl.go` 消费票据核验成绩。
 - 主课表贡献：`POST /api/v1/timetable/master/import-jobs` 接受 CAS `ticket`。
 - 武大绑定 / 解绑：`POST /api/v1/auth/whu/bind`、`POST /api/v1/auth/whu/unbind`。
-- 注册授权：`POST /api/v1/user/register/whu/authorize`（需 `cas_cookie_header`，服务端**瞬时接收** CAS 会话 Cookie 用于邮箱验证，不保存）。
+- 注册授权：`POST /api/v1/user/register/whu/authorize` 需 `cas_cookie_header`；服务端**瞬时接收** CAS 会话 Cookie 用于邮箱验证，不保存。
 
 详见：
 
@@ -34,8 +34,6 @@ Luotopia **账号**可通过配置的社交提供商 **Ham**（武汉大学另�
 - 服务端边界：[校园边界](../campus_proxies.md)
 
 ## 3. 已不成立的旧描述
-
-以下旧说法不成立：
 
 | 旧说法 | 事实 |
 |------|------|
@@ -45,7 +43,7 @@ Luotopia **账号**可通过配置的社交提供商 **Ham**（武汉大学另�
 
 ## 4. ham-gateway（可选）
 
-`ham.gateway_url` 指向的 **ham-gateway** 用于外部数据交互（读大盘统计 + 写成绩贡献 `ContributeScores`），与教务登录会话无关。网关未部署时相关读写失败，不应拖垮主业务。
+`ham.gateway_url` 指向的 ham-gateway 用于外部数据交互（读大盘统计 + 写成绩贡献 `ContributeScores`），与教务登录会话无关。网关未部署时相关读写失败，不应拖垮主业务。
 
 ## 相关
 

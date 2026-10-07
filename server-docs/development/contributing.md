@@ -4,18 +4,18 @@ sidebar_label: 开发规范
 sidebar_position: 3
 ---
 
-为确保 Luotopia Server 的代码质量与一致性，服务端开发遵守以下规范。文档站贡献约定见 [文档站贡献指南](../meta/contribution.md)。
+Luotopia Server 的服务端开发遵守以下规范。文档站贡献约定见 [文档站贡献指南](../meta/contribution.md)。
 
 ## 代码风格
 
-本项目严格遵循官方 Go 代码规范：
+本项目遵循 Go 官方代码规范（CI 中 `gofmt` 检查为告警级，不阻断合并）：
 
-- **格式化**：提交前必须运行 `go fmt ./...`。
-- **命名**：
+- 格式化：提交前必须运行 `go fmt ./...`。
+- 命名：
     - 文件夹、文件名使用 `snake_case`（如 `user_auth.go`）。
     - 变量、函数、结构体使用 `camelCase` 或 `PascalCase`。
     - 尽量保持命名简洁，避免冗余的前缀（如在名为 `user` 的包中使用 `Info` 而不是 `UserInfo`）。
-- **注释**：所有导出的函数、结构体应包含描述性注释（golint 友好）。
+- 注释：所有导出的函数、结构体应包含描述性注释（golint 友好）。
 
 ## 目录结构规范
 
@@ -30,7 +30,7 @@ sidebar_position: 3
 
 ## API 开发流程
 
-使用 Huma v2 生成 OpenAPI，业务路由统一经 **`httpapi.Register`**（禁止业务包直接 `huma.Register`）：
+使用 Huma v2 生成 OpenAPI，业务路由统一经 `httpapi.Register`；**禁止**业务包直接调用 `huma.Register`：
 
 1. 定义 `Input` / `Output` 结构体（Huma tag + JSON snake_case）。
 2. 在 `http/` 实现 Handler；错误用 `httpapi.Error` / `ToHumaError`，勿向客户端透传底层 `err.Error()`。
@@ -41,14 +41,14 @@ sidebar_position: 3
 
 ## Git 工作流
 
-- **分支管理**：开发新功能请创建 `feat/feature-name` 分支。
-- **Commit Message**：使用中文描述，并遵循以下格式：
+- 分支管理：开发新功能请创建 `feat/feature-name` 分支。
+- Commit Message：使用中文描述，并遵循以下格式：
     - `feat:`：新功能
-    - `fix:`：修复 Bug
+    - `fix:`：修复 bug
     - `style:`：格式化、命名调整（不改变逻辑）
     - `refactor:`：重构
     - `docs:`：文档更新
-- **安全性**：**严禁**将任何配置文件（`config.json`）、凭据文件（`*.txt`、`*.key`）提交至仓库；请务必检查 `.gitignore`。
+- 安全性：**禁止**把配置文件（`config.json`）与凭据文件（`*.txt`、`*.key`）提交到仓库；提交前检查 `.gitignore`。
 
 ## 测试
 

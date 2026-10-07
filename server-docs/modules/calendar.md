@@ -8,12 +8,9 @@ sidebar_position: 8
 
 JSON 日历 API 以 OpenAPI / `httpapi` 为准。订阅用 ICS 下载：`GET /api/v1/calendar/export.ics`（Gin；可选鉴权；失败为 problem+json）。
 
-## 功能特性
+## 能力范围
 
-| 能力 | 说明 |
-|------|------|
-| ICS / Feed | 校历 + 用户课表合成标准 iCalendar（`FeedService`） |
-| 手动事件管理 | 用户自建事件 CRUD |
+`FeedService` 把校历与用户课表合成标准 iCalendar，输出 ICS 文件与 feed 订阅链接；同时管理用户自建事件的 CRUD。
 
 ## 校历数据（内嵌）
 
@@ -27,17 +24,16 @@ JSON 日历 API 以 OpenAPI / `httpapi` 为准。订阅用 ICS 下载：`GET /ap
 ### 用户事件（概念）
 
 用户可创建手动日历事件。常见字段：标题、描述、地点、起止时间、是否全天。
-**字段名与类型以 OpenAPI 为准。**
 
 校历主数据来自 `whucalendar` Go 包（见上文），与用户事件分离。
 
 ## API 接口
 
-用户事件 CRUD、ICS 导出（`/export`、`/export.ics`）与校历 feed **完整端点见 [校园接口参考](../api/campus.md)**。
+用户事件 CRUD、ICS 导出（`/export`、`/export.ics`）与校历 feed 的完整端点见[校园接口参考](../api/campus.md)。
 
 ### 创建事件请求体（摘要）
 
-字段名以 OpenAPI 为准（JSON 为 camelCase）：
+请求体为 JSON，字段名 camelCase：
 
 ```json
 {
@@ -51,19 +47,15 @@ JSON 日历 API 以 OpenAPI / `httpapi` 为准。订阅用 ICS 下载：`GET /ap
 }
 ```
 
-## 使用场景
+## 导出到外部日历
 
-### 导出到外部日历
+用户在 Luotopia App 触发「导出日历」，服务端生成 ICS 内容或返回订阅链接。用户随后在外部日历应用（如 Apple Calendar）导入 `.ics` 文件，或直接订阅 feed。
 
-1. 用户在 Luotopia App 中触发「导出日历」。
-2. 系统生成 ICS 内容或提供订阅链接。
-3. 用户在外部日历应用（如 Apple Calendar）中导入 `.ics` 或订阅 feed。
+## 时间与查询约定
 
-## 最佳实践
-
-- **时区处理**：时间统一使用 RFC3339 时间戳，客户端负责时区转换。
-- **ICS 标准**：严格遵循 RFC 5545 标准，确保兼容性。
-- **性能优化**：事件查询按时间范围过滤；分页与上限以 OpenAPI 为准。
+- 时间统一使用 RFC3339 时间戳，客户端负责时区转换。
+- ICS 输出遵循 RFC 5545。
+- 查询与分页：事件查询按时间范围过滤，分页与上限见 OpenAPI。
 
 ## 相关
 

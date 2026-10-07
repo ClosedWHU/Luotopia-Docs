@@ -5,7 +5,7 @@ sidebar_position: 0
 description: internal/services 进程内横切能力（AI、worker）
 ---
 
-`internal/services/` 存放**进程内横切能力**（多业务域复用、不归属于单一业务域）。公开文档写**职责与边界**，实现细节见代码。
+`internal/services/` 存放进程内横切能力（多业务域复用、不归属于单一业务域）。公开文档写职责与边界，实现细节见代码。
 
 ## 服务列表
 

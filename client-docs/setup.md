@@ -47,7 +47,7 @@ iOS / 桌面发布脚本见 `app/build-ios*.sh`、Windows MSIX 配置（`pubspec
    - 真机：`http://<电脑局域网IP>:6262`
 4. 可选：扫描局域网探测 `:6262/health`。
 
-默认 Auth 与 OpenAPI 端口可能不一致——联调务必用自定义 URL **统一**。
+默认 Auth 与 OpenAPI 端口可能不一致。联调时请用自定义 URL 将两者**统一**。
 
 官网（检查更新 / 热更新 / 友情链接）不走该自定义服务器，仍访问 `https://www.whu.sb`。
 
@@ -59,9 +59,13 @@ iOS / 桌面发布脚本见 `app/build-ios*.sh`、Windows MSIX 配置（`pubspec
 pwsh tool/generate_openapi_client.ps1
 ```
 
-它会先 `go run scripts/export_openapi.go` 从后端导出 `server/openapi.json`，再用 openapi-generator（版本由 `app/openapitools.json` 锁定，当前 7.23.0）重生成 `lib/core/api_client`，并依次跑 `dart pub get`、`build_runner build`、`dart fix`、`dart format`。
+它会依次执行：
 
-生成文件勿手改：`lib/` 源码入库，`.openapi-generator/`、`build/`、`.dart_tool/`、`doc/`、`test/` 已被忽略。采用前先 `dart analyze`。完整说明见 `server/scripts/README.md` 的 “OpenAPI contract” 一节。
+1. `go run scripts/export_openapi.go`，从后端导出 `server/openapi.json`；
+2. 用 openapi-generator 重生成 `lib/core/api_client`（版本由 `app/openapitools.json` 锁定，当前 7.23.0）；
+3. `dart pub get`、`build_runner build`、`dart fix`、`dart format`。
+
+生成文件勿手改：`lib/` 源码入库，`.openapi-generator/`、`build/`、`.dart_tool/`、`doc/`、`test/` 已被忽略。采用前先 `dart analyze`。完整说明见 `server/scripts/README.md` 的「OpenAPI contract」一节。
 
 ## 常见问题
 

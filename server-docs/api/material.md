@@ -5,6 +5,7 @@ sidebar_position: 17
 description: 学习资料相关端点索引（字段与完整路径以 OpenAPI 为准）
 ---
 
+> [!NOTE]
 > 端点索引（摘要）；**字段、参数、错误体与完整路径以运行中的 OpenAPI（/openapi.json）为准**。默认 /api/v1/* 需登录，公开接口以各操作 Security 声明为准。
 >
 > 业务行为与边界见 [学习资料模块](../modules/materials.md)。

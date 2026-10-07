@@ -6,6 +6,7 @@ description: 课程信息共享相关端点索引（字段与完整路径以 Ope
 slug: course-space
 ---
 
+> [!NOTE]
 > 端点索引（摘要）；**字段、参数、错误体与完整路径以运行中的 OpenAPI（/openapi.json）为准**。默认 /api/v1/* 需登录，公开接口以各操作 Security 声明为准。
 >
 > 业务行为与边界见 [课程信息共享模块](../modules/course_space.md)。

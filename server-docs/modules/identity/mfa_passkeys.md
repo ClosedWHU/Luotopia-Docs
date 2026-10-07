@@ -30,8 +30,8 @@ description: SMTP、OTP、WebAuthn 域名关联
 
 除 SMTP OTP 与 Passkey 外，还支持 TOTP 与步进验证：
 
-- **TOTP**：`POST /api/v1/user/totp/enroll/begin`、`POST /api/v1/user/totp/enroll/confirm`、`DELETE /api/v1/user/totp`
-- **步进验证**：`POST /api/v1/user/verification/begin`、`/verification/email`、`/verification/complete`、`POST /api/v1/user/verification/passkey/begin`、`/verification/passkey/finish`
+- TOTP：`POST /api/v1/user/totp/enroll/begin`、`POST /api/v1/user/totp/enroll/confirm`、`DELETE /api/v1/user/totp`
+- 步进验证：`POST /api/v1/user/verification/begin`、`/verification/email`、`/verification/complete`、`POST /api/v1/user/verification/passkey/begin`、`/verification/passkey/finish`
 
 敏感操作（改 2FA 策略、吊销 API 凭证等）可要求步进验证（`ConsumeStepUpVerification`），以当前密码或步进挑战授权。
 

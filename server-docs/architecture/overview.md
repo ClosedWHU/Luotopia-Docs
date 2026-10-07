@@ -5,13 +5,13 @@ sidebar_label: 架构概览
 description: 模块化单体、domains 划分与请求链路
 ---
 
-**模块化单体**：业务在 `internal/domains/*`，底座在 `platform` + 中间件。
+模块化单体：业务在 `internal/domains/*`，底座在 `platform` + 中间件。
 
 ## 原则
 
-1. **按域分包**：identity、forum、course_review、campus、search…  
-2. **禁止跨域直接摸表**：只通过 Service / DTO  
-3. **配置与观测统一**：`platform/config`、`platform/monitoring`  
+1. 按域分包：identity、forum、course_review、campus、search…  
+2. 禁止跨域直接摸表：只通过 Service / DTO  
+3. 配置与观测统一：`platform/config`、`platform/monitoring`  
 
 ## 组件关系
 
@@ -32,7 +32,7 @@ graph TD
     Gin --> Metrics[metrics 独立端口]
 ```
 
-业务 API 经 **`httpapi.Register`** 声明 Access / Rate；见 [HTTP 注册规范](../api/http_api.md)。
+业务 API 经 `httpapi.Register` 声明 Access / Rate；见 [HTTP 注册规范](../api/http_api.md)。
 
 ## 域职责（摘要）
 

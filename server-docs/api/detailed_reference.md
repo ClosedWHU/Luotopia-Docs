@@ -5,10 +5,11 @@ slug: detailed-reference
 sidebar_position: 3
 ---
 
-> **权威来源**：运行中服务的 OpenAPI（`/openapi.json`）。本文为常用调用**规范与示例**，字段与路径冲突时以 OpenAPI / 代码为准。
+> [!NOTE]
+> **权威来源**：运行中服务的 OpenAPI（`/openapi.json`）。本文为常用调用规范与示例，字段与路径冲突时以 OpenAPI / 代码为准。
 > 不在此文档中复制完整 schema；新增接口请改 OpenAPI 生成物，而非只改本文。
 
-本文说明核心调用形态与示例请求体，帮助客户端对接。端点索引见 [接口参考索引](./full_reference.md)。
+本文给出核心调用形态与示例请求体。端点索引见 [接口参考索引](./full_reference.md)。
 
 ## 认证
 
@@ -18,9 +19,9 @@ sidebar_position: 3
 
 ### 提交评价 `POST /api/v1/reviews`
 
-支持用户对课程进行多维度评分，需携带 `Authorization`，且要求已具备评价资格（见 [课评身份与资格策略](../modules/forum/course_review_and_identity_policy.md)）。
+用户对课程分维度评分（`rating`、`difficulty`、`workload`、`teaching_quality`、`course_interest`），需携带 `Authorization`，且要求已具备评价资格（见 [课评身份与资格策略](../modules/forum/course_review_and_identity_policy.md)）。
 
-**请求体**（字段全集以 OpenAPI 为准）：
+请求体：
 
 ```json
 {
@@ -50,7 +51,7 @@ sidebar_position: 3
 
 ### 发布帖子 `POST /api/v1/forum/posts`
 
-**请求体**：
+请求体：
 
 ```json
 {
@@ -63,7 +64,7 @@ sidebar_position: 3
 
 ### 帖子互动 `POST /api/v1/forum/posts/{id}/reactions`
 
-**请求体**：
+请求体：
 
 ```json
 {
@@ -77,14 +78,14 @@ sidebar_position: 3
 
 校园侧数据（教务、图书馆、场馆等）不由本 API 代理：
 
-- 依赖**武大个人会话**的能力由 App 直连，服务端不接收教务 Cookie / 密码，见 [校园边界](../modules/campus_proxies.md)。
+- 依赖武大个人会话的能力由 App 直连，服务端不接收教务 Cookie / 密码，见 [校园边界](../modules/campus_proxies.md)。
 - 外部只读数据补充（如给分大盘）由服务端内部客户端拉取，**不对外暴露代理路由**，见 [给分与统计](../modules/course/course_grades.md)。
 
 ## 集成 FAQ
 
 ### 列表性能
 
-列表接口支持分页参数（`page` / `limit` 或 `limit` / `cursor`，以 OpenAPI 为准）。客户端无限滚动时建议 `limit` 保持在 20 左右。
+列表接口支持分页参数（`page` / `limit` 或 `limit` / `cursor`）。客户端无限滚动时建议 `limit` 保持在 20 左右。
 
 ### 响应异常排查
 

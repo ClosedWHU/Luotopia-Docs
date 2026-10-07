@@ -15,13 +15,13 @@ sidebar_position: 7
 | 插件段 `lib/conn/conn.js` | `enableConsole(bool)`，默认开启 | 插件日志默认开启 |
 | `utils/util.js` | `joker` 解密分支里 `console.log` | **明文 URL + 解密后完整响应体进 console**（见[报文加密](./crypto.md#响应体解密joker)） |
 | 全站 | `console.log` 大量保留：登录响应、token 获取、自动重登、扫码、客服、车辆状态、计价提示等 | 配合 `debug:true` 可实时观察 token、openid、订单、计价、运营区配置 |
-| `pages/index/index.js` | 首页门禁函数中把押金状态硬写为已缴 | **客户端押金门禁被本地状态短路**（弱点类别：客户端校验形同虚设；见[押金与免押路径](./flows/payment-deposit.md#押金与免押路径)） |
+| `pages/index/index.js` | 首页门禁函数中把押金状态硬写为已缴 | **本地状态短路了客户端押金门禁**（弱点类别：客户端校验形同虚设；见[押金与免押路径](./flows/payment-deposit.md#押金与免押路径)） |
 | `orderComponents/comment/comment.js` | `orderId: this.data.orderId || "12345678"` | 评价接口的测试兜底 ID 残留 |
 
 ## 硬编码业务 ID / 常量
 
 - 运营区 ID 白名单（`pages/index/index.js` `checkCityPermissions`、`pages/loginPre/loginPre.js`）：
-  - 关闭首单免费的 8 个区：`1905231014892`(南宁交投)、`1802061057849`、`1908161356897`(张家界，另触发「配合创文，张家界暂停营运」弹窗)、`1810171152871`、`1912211149908`、`2001061148911`、`1811231438878`、`1812041206880`
+  - 关闭首单免费的 8 个区：`1905231014892`（南宁交投）、`1802061057849`、`1908161356897`（张家界，另触发「配合创文，张家界暂停营运」弹窗）、`1810171152871`、`1912211149908`、`2001061148911`、`1811231438878`、`1812041206880`
   - `1803131728852` → `isDongxihu`（武汉东西湖）
   - `1703110248001`、`1703152031003` → `isWuHan`
   - `<武汉大学区域 ID>` → 武汉大学（触发信息授权协议 + 骑行规则视频 + 客服 FAQ 增项 + 武大游客押金接口，端点细节存档于私有仓）
@@ -32,8 +32,11 @@ sidebar_position: 7
 - `channel: "miniMango"`（所有支付请求）；`source: "miniMango"`（异常回捞）；`endpoint: "mini"` / `plat: "miniMango"`（`mg-dvi`）
 - 客服渠道号 `<已脱敏：IM channel-no>`；geovisearth token `<已脱敏：第三方地图 token，32 位十六进制>`
 - 客服电话 `4000238906`、`02039715531`
-- **首页导航输入框的默认值是武汉的开发测试地址**：`pages/index/index.js` 的 `data` 里 `inputValue: "关山大道369-8号"`、`inputValue2: "洪山区新玉路"`。这两个值就是路径规划请求的起点/终点默认输入——提交时只校验终点非空，起点为空才回落到当前定位，因此**用户不改起点直接点搜索，会把武汉洪山区的地址当起点发到服务端**。属未清理的开发残留，也说明该功能主要在武汉联调。
-- 兜底金额：押金 `29900`(299元)、免押卡 `990`(9.9元)/原价 `59990`/`7`天、充值档位 `500/1000/2000/5000` 赠 `100/200/400/1000`
+- **首页导航输入框的默认值是武汉的开发测试地址**：`pages/index/index.js` 的 `data` 里 `inputValue: "关山大道369-8号"`、`inputValue2: "洪山区新玉路"`。
+  - 这两个值是路径规划请求的起点/终点默认输入。提交时只校验终点非空，起点为空才回落到当前定位。
+  - 因此**用户不改起点直接点搜索，会把武汉洪山区的地址当起点发到服务端**。
+  - 属未清理的开发残留，可推断该功能主要在武汉联调。
+- 兜底金额：押金 `29900`（299 元）、免押卡 `990`（9.9 元）/原价 `59990`/`7` 天、充值档位 `500/1000/2000/5000` 赠 `100/200/400/1000`
 
 ## 插件（企业微信）
 
@@ -42,7 +45,7 @@ sidebar_position: 7
 | `wx104a1a20c3f81ec2` | `contactPlugin` v1.4.3 | **腾讯企业微信「联系我」/客服名片插件**。渲染企业成员头像+昵称+「联系我/立即联系/咨询服务/在线咨询/联系客服」按钮，可生成海报二维码 | 插件段 `components/cell/cell.js`（多种展示样式、配置查询、成员信息换取、`wxml-to-canvas` 海报）；iOS/Android 微信版本门槛，企业微信环境直接放行 |
 | `wx4d2deeab3aed6e5a` | `materialPlugin` v1.0.5 | **企业微信「群聊/素材」插件**（客户群活码卡片） | 插件段 `components/groupCell/groupCell.js`（活码 URL 校验、群聊素材资源、群海报生成） |
 
-两个插件的 `package.json` / `package-lock.json` 被原样打进了包里（`app-service.js` 中的 `global.__wxAppCode__['plugin-private://.../package.json']`），可直接读到内部信息：
+包里原样保留了两个插件的 `package.json` / `package-lock.json`（`app-service.js` 中的 `global.__wxAppCode__['plugin-private://.../package.json']`），可直接读到内部信息：
 
 ```jsonc
 // plugin-private://wx104a1a20c3f81ec2/package.json
@@ -65,11 +68,11 @@ sidebar_position: 7
 
 即：`contactPlugin` = **contact-plugin-miniprogram**（企业微信「联系我」成员名片/客服），`materialPlugin` = **chatgroup-plugin-miniprogram**（企业微信客户群活码/群海报）。`miniprogram_npm/widget-ui`、`miniprogram_npm/eventemitter3`、`miniprogram_npm/@tencent/wwui-wxml2canvas` 都是这两个插件的依赖，不是业务代码。`package-lock.json` 里的 `resolved` 指向 `<第三方内网 registry>`（HTTP 明文 + 内网域名），`integrity` 为 sha512 base64。
 
-两个插件共享同一套企业微信基础设施，被解包工具摊平到根目录：`config/app.config.js`（api 前缀、`app_type: 4`、`max_try: 3`）、`lib/request/request.js`、`lib/storage/storage.js`、`lib/conn/conn.js`、`lib/notify/index.js`（插件内观察者，非网络通知）、`lib/util/index.js`（`compareVersion` + 埋点）、`api/data.js` + `index.js`（内存变量模块）。
+两个插件共享同一套企业微信基础设施，解包工具把它们摊平到了根目录：`config/app.config.js`（api 前缀、`app_type: 4`、`max_try: 3`）、`lib/request/request.js`、`lib/storage/storage.js`、`lib/conn/conn.js`、`lib/notify/index.js`（插件内观察者，非网络通知）、`lib/util/index.js`（`compareVersion` + 埋点）、`api/data.js` + `index.js`（内存变量模块）。
 
 插件自有会话机制（与业务 JWT 完全独立）：`wx.login()` → 企业微信登录端点（form 提交，带 cookie）→ 会话四元组存入 `WEWORK_STORAGE_CACHE.session`；后续请求把会话字段**合并进 data**（不是 header），错误码指示失效时自动重登（最多 `max_try=3` 次，带请求排队与并发锁）。
 
-小程序侧只在客服类型为 `qywx` 的运营区启用：按运营区取微信客服账号 ID 填入 `<cell>` 插件组件；会话结束回调触发使用计数。非 `qywx` 区域走 WebView 打开承满点 IM（URL 上带 `phone` 与 `region`，见[隐私与合规观察](#隐私与合规观察)）。
+小程序侧只在客服类型为 `qywx` 的运营区启用：按运营区取微信客服账户 ID 填入 `<cell>` 插件组件；会话结束回调触发使用计数。非 `qywx` 区域走 WebView 打开承满点 IM（URL 上带 `phone` 与 `region`，见[隐私与合规观察](#隐私与合规观察)）。
 
 ## 第三方 SDK / npm
 
@@ -89,8 +92,8 @@ sidebar_position: 7
 
 ## 隐私与合规观察
 
-1. **`session_key` 下发客户端并落盘**（静默登录返回 + `wx.setStorageSync("sessionKey")`），并在手机号一键登录解密请求中回传给服务端。session_key 本应仅存服务端（见[认证与会话](./auth.md)）。
-2. **实名认证失败时，姓名 + 完整身份证号被二次上报**到前端异常回捞端点的 `frontData`（`pages/auth/auth.js`），失败凭证二次落库。
+1. **`session_key` 下发客户端并落盘**：静默登录返回体中带 `session_key`，客户端以 `wx.setStorageSync("sessionKey")` 落盘，手机号一键登录的解密请求又把它回传服务端。session_key 本应仅存服务端（见[认证与会话](./auth.md)）。
+2. **实名认证失败时，客户端会把姓名 + 完整身份证号二次上报**到前端异常回捞端点的 `frontData`（`pages/auth/auth.js`），失败凭证二次落库。
 3. **JWT 出现在 WebView URL query**（会员中心、押金购卡活动 H5），会进入 H5 历史/Referer/日志。
 4. **手机号通过 `wx.reportEvent("phone_login", …)` 上报微信自定义分析**（`pages/login/login.js`），逆序 + `_` 分隔只是弱变形。
 5. **手机号明文拼进客服 IM URL**（且 `region` 参数拼接缺少 `=`），第三方域名 `mg.im.chengmandian.com.cn` 可直接读到。
@@ -121,6 +124,6 @@ sidebar_position: 7
 | `orderComponents/comment/comment.js` | `orderId || "12345678"` 测试兜底 |
 | `pages/readyUnlock/readyUnlock.js` | 与 `<武汉大学区域 ID（疑似另一校区）>` 的比较为逗号表达式，判断结果被丢弃 |
 | `pages/index/index.js` | 大量中文文案在源文件中以 `\uXXXX` 转义与直接 UTF-8 混存（解包产物特征），grep 时需注意编码 |
-| 服务端路径拼写 | `serachForPath`(search)、`vaildCanUse`(valid)、`plakingLot*`(parking)、`bugCommutingCard`(buy) —— 客户端只能照抄 |
+| 服务端路径拼写 | `serachForPath`（search）、`vaildCanUse`（valid）、`plakingLot*`（parking）、`bugCommutingCard`（buy）——客户端只能照抄 |
 
 复现请求的最小要素与签名构造细节已移入私有仓 `whu-ebike-re`（另见[请求签名](./signing.md)的机制概述与弱点评估）。

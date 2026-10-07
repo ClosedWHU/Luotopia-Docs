@@ -33,7 +33,7 @@ sidebar_position: 0
 | 校巴等 | `campus/bus` 等 | [校园边界](./campus_proxies.md) |
 | CAS 客户端（薄） | `campus/cas` | [校园边界](./campus_proxies.md) |
 
-**边界**：教务 / CAS / 馆 / 场馆等**个人武大会话**由 **App 直连**；服务端不保存密码或 Cookie，仅瞬时核验一次性 CAS 票据（注册授权 / 评价资格 / 主课表贡献）。`campus/cas` 为薄 WHU CAS 客户端；实际票据核验在 `course_review/client/jwgl.go` 与 timetable 侧。详见 [campus_proxies](./campus_proxies.md)。
+边界：教务 / CAS / 馆 / 场馆等个人武大会话由 App 直连。服务端不保存密码或 Cookie，仅瞬时核验一次性 CAS 票据（注册授权 / 评价资格 / 主课表贡献）。`campus/cas` 为薄 WHU CAS 客户端；实际票据核验在 `course_review/client/jwgl.go` 与 timetable 侧。详见 [campus_proxies](./campus_proxies.md)。
 
 ## 资料 / 通知
 

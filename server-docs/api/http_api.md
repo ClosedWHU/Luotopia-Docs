@@ -6,9 +6,9 @@ description: httpapi.Register、Access、限流与错误契约
 sidebar_position: 2
 ---
 
-本文描述 Go 业务 API 的**当前**注册方式、鉴权声明与限流。字段级路径与 schema 仍以 **OpenAPI** 为准。
+本文描述 Go 业务 API 的当前注册方式、鉴权声明与限流。字段级路径与 schema 仍以 OpenAPI 为准。
 
-弃用写法、旧白名单、OperationID 重命名等见 **[已移除与迁移](../meta/removed_and_migrated.md#http-路由注册huma--httpapi)**。
+弃用写法、旧白名单、OperationID 重命名等见[已移除与迁移](../meta/removed_and_migrated.md#http-路由注册huma--httpapi)。
 
 权威实现：
 
@@ -49,7 +49,7 @@ httpapi.Register(api, httpapi.Op{
 }, h.PostPosts)
 ```
 
-配额数值与降级策略以实现为准，不在公开文档中固定。
+配额数值与降级策略不在公开文档中固定。
 
 业务包不要直接调用 `huma.Register`（仅由 `httpapi.Register` 内部调用）。
 
@@ -74,7 +74,7 @@ httpapi.Register(api, httpapi.Op{
 
 ## 3. 错误契约
 
-失败响应为 **problem+json**（扩展字段）：
+失败响应为 problem+json（扩展字段）：
 
 | 字段 | 含义 |
 |------|------|

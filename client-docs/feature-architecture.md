@@ -31,14 +31,14 @@ lib/
 1. **业务代码进 `features/<name>`**，不要把可复用逻辑只放在 `features/pages/...` 的 page 文件里。  
 2. **`presentation` 禁止**直接写 API 路径字符串；统一走 `data/*_repository.dart`。  
 3. **`domain` 禁止** import `package:dio`、`package:openapi`、Flutter widget。  
-4. **网络**：  
+4. 网络：  
    - 未登录 / Auth：`luotopiaBaseDioProvider`（`core/api/luotopia_http.dart`）  
    - 业务：`dioProvider` / OpenAPI（`core/api/api_providers.dart`）  
    - 官网（更新 / 热更新 / 法律 / 友情链接）：`package:http` + `AppConfig.siteBaseUrl`  
-5. **双 origin**：业务 `apiBaseUrl`（可被 `customServerUrl` 覆盖）与官网 `siteBaseUrl` **分开**。  
+5. 双 origin：业务 `apiBaseUrl`（可被 `customServerUrl` 覆盖）与官网 `siteBaseUrl` **分开**。  
 6. Page 文件建议 **&lt; 400 行**；超出则拆 widget / notifier。  
 7. SnackBar 优先 `showAppSnackBar*`（root messenger），见 [UI 与组件](./components.md)。  
-8. **toolkit 边界**：`toolkit/data` 适配器可复用 features 的 data / domain 能力；features 页面经 `toolkit/application` 的 providers / runtime 接入，收银台 handoff 通过 `toolkit/data/payment_checkout_vault.dart` 交接，其余情况不依赖适配器内部实现。仓库级 `packages/`（`luotopia_toolkit_core`、`luotopia_agent_harness` 等本地包）承载与 Flutter 解耦的 Agent / 工具核心逻辑。
+8. toolkit 边界：`toolkit/data` 适配器可复用 features 的 data / domain 能力；features 页面经 `toolkit/application` 的 providers / runtime 接入，收银台 handoff 通过 `toolkit/data/payment_checkout_vault.dart` 交接，其余情况不依赖适配器内部实现。仓库级 `packages/`（`luotopia_toolkit_core`、`luotopia_agent_harness` 等本地包）承载与 Flutter 解耦的 Agent / 工具核心逻辑。
 
 ## 迁移状态（相对规范化计划）
 
