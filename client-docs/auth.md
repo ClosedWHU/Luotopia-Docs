@@ -35,7 +35,7 @@ description: 珞家 JWT、武大教务会话、开发者服务器
 | 开发者 `customServerUrl` | 覆盖默认，如模拟器 `http://10.0.2.2:6262`、真机 `http://<局域网 IP>:6262` |
 | `AppConfig.siteBaseUrl` | 官网 `https://www.whu.sb`（更新 / 热更新 / 法律 / 友情链接） |
 
-开启：设置 → 关于 → 连点版本 → 开发者设置。
+开启：debug/profile 构建下开发者模式默认开启；稳定版由云控 `developer.channel` 授予。入口为 **设置 → 开发者**。
 
 `customServerUrl` **只**覆盖珞家业务服务器，**不**改变 `siteBaseUrl`。
 

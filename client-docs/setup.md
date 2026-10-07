@@ -41,7 +41,7 @@ iOS / 桌面发布脚本见 `app/build-ios*.sh`、Windows MSIX 配置（`pubspec
 ## 联调后端
 
 1. 启动服务端（[服务端环境搭建](pathname:///server/development/setup)），端口样例 **6262**。  
-2. App：**设置 → 关于**，连点版本打开 **开发者模式**。  
+2. App：debug/profile 构建下 **开发者模式** 默认开启；稳定版需云控 `developer.channel` 授予。  
 3. **开发者设置** 填自定义服务器（Auth 与业务 API 共用）：
    - 模拟器：`http://10.0.2.2:6262`
    - 真机：`http://<电脑局域网IP>:6262`
