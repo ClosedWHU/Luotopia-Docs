@@ -18,6 +18,9 @@ description: 身份认证相关端点索引（字段与完整路径以 OpenAPI �
 | `POST` | `/api/v1/auth/whu/bind` | Bind WHU account to the current user |
 | `POST` | `/api/v1/auth/whu/unbind` | Unbind WHU account from the current user |
 | `GET` | `/api/v1/avatars/{id}` | Get a stored avatar |
+| `GET` | `/api/v1/device/attestation` | Read the stored attestation for an install |
+| `POST` | `/api/v1/device/attestation` | Submit a device attestation proof and receive its trust grade |
+| `GET` | `/api/v1/device/attestation/challenge` | Issue a one-time device attestation challenge |
 | `GET` | `/api/v1/devices` | List registered push devices (no raw tokens) |
 | `DELETE` | `/api/v1/devices/{id}` | Remove a push device registration |
 | `POST` | `/api/v1/devices/register` | Register a device for push notifications |

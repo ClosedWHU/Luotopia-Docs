@@ -26,6 +26,7 @@ sidebar_position: 1
 | `monitoring.metrics_basic_auth_*` | metrics Basic Auth | 可选 |
 | `storage.deletion_retention` | 删除意图（deletion intent）保留时长 | 默认 `30d`；Docker 样例 `720h` |
 | `forum.moderation.enabled` | 发帖后 AI 审核开关 | 默认 `false` |
+| `client_versions.*` | 客户端版本兼容门禁（最低版本 / 弃用公告），见 [安全策略 · 3.5](../architecture/security_policy.md) | 默认关闭 |
 | `ai_service.*` | 服务端 AI 提供商 | 按需 |
 
 ## Identity（摘要）
